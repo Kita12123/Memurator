@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!--select句のselected判定をどうにかしたい。ifで全て書いていくのは微妙な気がする-->
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>M端末</title>
+    <link rel="stylesheet" href="./static/css/style.css">
+    <script type="text/javascript" src="./static/js/script.js"></script>
+  </head>
+  <body>
+    <!-- タイトル画面 -->
+    <div class="title">
+      売上データ参照
+    </div><!--title-->
+    <!-- メイン画面 -->
+    <div class="content">
+      <div class="subtitle">
+        データ抽出
+      </div><!--subtitle-->
+      <div class="main-form">
+        <form method="post">
+        <!--Query DataBase-->
+          <label for="first_yyyy_mm_dd">開始日付:</label>
+          <input type="date" name="first_yyyy_mm_dd" value="{{ first_yyyy_mm_dd }}">
+          <label for="last_yyyy_mm_dd">終了日付:</label>
+          <input type="date" name="last_yyyy_mm_dd" value="{{ last_yyyy_mm_dd }}">
+          <br>
+          <label for="tokuisaki_cd">得意先コード：</label>
+          <input id="tokuisaki-cd" type="text" name="tokuisaki_cd" value="{{ tokuisaki_cd }}">
+          <br>
+          <label for="zatu_cd">雑コード：</label>
+          <input id="zatu-cd" type="text" name="zatu_cd" value="{{ zatu_cd }}">
+          <br>
+          <label for="soukasaki_cd">送荷先コード：</label>
+          <input id="soukasaki-cd" type="text" name="soukasaki_cd" value="{{ soukasaki_cd }}">
+          <br>
+          <label for="seihin_buhin_cd">製品部品コード：</label>
+          <input id="seihin-buhin-cd" type="text" name="seihin_buhin_cd" value="{{ seihin_buhin_cd }}">
+          <label for="seihin_buhin_flg"> ← </label>
+          <select name="seihin_buhin_flg">
+            {% if seihin_buhin_flg   == "seihin" %}
+              <option value=""></option>
+              <option value="seihin" selected>製品のみ</option>
+              <option value="buhin">部品のみ</option>
+            {% elif seihin_buhin_flg == "buhin" %}
+              <option value=""></option>
+              <option value="seihin">製品のみ</option>
+              <option value="buhin" selected>部品のみ</option>
+            {% else %}
+              <option value="" selected></option>
+              <option value="seihin">製品のみ</option>
+              <option value="buhin">部品のみ</option>
+            {% endif %}
+          </select>
+          <br>
+          <div class="comments">
+            ※カンマ(,)で区切ることで、複数条件を抽出することができます
+          </div>
+          {% if sort_type == "昇順" %}
+            <input type="checkbox" name="sort_type", value="昇順" checked>
+          {% else %}
+            <input type="checkbox" name="sort_type", value="昇順">
+          {% endif %}
+          <label for="sort_column">昇順:</label>
+          <select name="sort_column">
+            <option value="" selected></option>
+            {% for column in headers %}
+              {% if column == sort_column %}
+                <option value="{{ column }}" selected>{{ column }}</option>
+              {% else %}
+                <option value="{{ column }}">{{ column }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <br>
+          <div class="bigbutton">
+            <input type="submit" value="検索" onclick="showLoading();">
+          </div>
+        </form>
+      </div><!--main-form-->
+      <div class="subtitle">
+        データテーブル
+      </div><!--subtitle-->
+      <!--Display Loading-->
+      <div id="loading" style="display:none;"></div>
+      <div id="datatable">
+        <!--Message of Totall Data-->
+        {% for m in messages %}
+          {{ m }} &emsp;&emsp;
+        {% endfor %}
+        <!--Download data to csv-->
+        <form action="{{ url_for('download') }}" method="post">
+          <input type="hidden" name="sql_where_sqlite3" value="{{ sql_where_sqlite3 }}">
+          <input type="hidden" name="sort_column" value="{{ sort_column }}">
+          <div class="bigbutton">
+            <input type="submit" value="ダウンロード">
+          </div><!--bigbutton-->
+        </form>
+      </div><!--datatable-->
+    </div><!--content-->
+    <!--Table of Data-->
+    <table class="dataframe">
+      <thead>
+        <tr>
+          {% for header in headers %}
+          <th>
+            {{ header }}
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+          <tr>
+            {% for rec in record %}
+            <td>{{ rec }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

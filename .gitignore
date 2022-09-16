@@ -1,0 +1,10 @@
+.win/
+ProgramData/
+ProgramFiles/__pycache__/
+ProgramFiles/db/__pycache__/
+ProgramFiles/flaskr/__pycache__/
+ProgramFiles/log/
+flask_run_test.py
+flask_run.bat
+flask_run.py
+readme.txt
