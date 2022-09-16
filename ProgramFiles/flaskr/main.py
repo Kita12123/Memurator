@@ -40,9 +40,12 @@ def create_sql_seihin_buhin_cd(cd: str, flg: str) -> str:
     """製品部品コードのSQLコードを作成"""
     def func(c: str):
         c = c.replace(" ", "")
-        if len(c) == 5:
-            return f" OR ( 製品部品コード>={c}00 AND 製品部品コード<={c}99 ) "
-        return f" OR 製品部品コード={c} "
+        if c.isdigit():
+            if len(c) == 5:
+                return f" OR ( 製品部品コード>={c}00 AND 製品部品コード<={c}99 ) "
+            return f" OR 製品部品コード={c} "
+        else:
+            return f" OR 製品部品カナ LIKE'%{c}%' "
     if cd == "":
         if   flg == "seihin":
             return " 製品部品コード<= 9999999 AND \n"
@@ -61,11 +64,14 @@ def create_sql_tokuisaki_cd(cd: str) -> str:
     """得意先コードのSQLコードを作成"""
     def func(c: str):
         c = c.replace(" ", "")
-        if len(c) <= 4:
-            # 3ｹﾀでも対応する
-            z = '0'*(4 - len(c))
-            return f" OR ( 得意先コード>={z}{c}00 AND 得意先コード<={z}{c}99 ) "
-        return f" OR 得意先コード={c} "
+        if c.isdigit():
+            if len(c) <= 4:
+                # 3ｹﾀでも対応する
+                z = '0'*(4 - len(c))
+                return f" OR ( 得意先コード>={z}{c}00 AND 得意先コード<={z}{c}99 ) "
+            return f" OR 得意先コード={c} "
+        else:
+            return f" OR 得意先カナ LIKE'%{c}%' "
     if cd == "":
         return ""
     elif "," in cd:
@@ -77,15 +83,20 @@ def create_sql_tokuisaki_cd(cd: str) -> str:
 
 def create_sql_soukasaki_cd(cd: str) -> str:
     """送荷先コードのSQLコード作成"""
+    def func(c: str):
+        if c.isdigit():
+            return f" OR 送荷先コード={c} "
+        else:
+            return f" OR 送荷先カナ LIKE'%{c}%' "
     if cd == "":
         return ""
     elif "," in cd:
         # ','区切りにORで結合した、SQLコードを作成する
-        s = "".join([ f" OR 送荷先コード={code}" for code in cd.split(",")])
+        s = "".join([ func(code) for code in cd.split(",")])
         # 最初の'OR'部分削除
         return f" ({s[3:]}) AND\n"
     else:
-        return f" 送荷先コード={cd} AND\n"
+        return f" {func(cd)} AND\n"
 
 def create_sql_zatu_cd(cd: str) -> str:
     """雑コードのSQLコード作成"""

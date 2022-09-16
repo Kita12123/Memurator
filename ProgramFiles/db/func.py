@@ -59,6 +59,7 @@ def craft_sql(
         LEFT OUTER JOIN ETCMPF ET3 ON ET3.レコード区分=22 AND ET3.コード=担当者コード
         WHERE 
 {sql_where_sqlite3}
+        AND   数量<>0
         /* 
         伝票区分抽出なし
         AND   伝票区分<>20
