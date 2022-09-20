@@ -10,13 +10,11 @@ from flask import (
     send_from_directory
 )
 from datetime import datetime, timedelta
+import json
+
+from ProgramData import M_SETTING_PATH
 from ProgramFiles.flaskr import app
 from ProgramFiles import db
-
-#
-# Contract
-#
-MAX_DSP_ROW = 300
 
 #
 # Sub Function
@@ -119,28 +117,31 @@ def create_sql_zatu_cd(cd: str) -> str:
 #
 @app.route("/", methods=["GET","POST"])
 def index():
+    with open(M_SETTING_PATH, mode="r", encoding="cp932") as f:
+        setting_dic = json.load(f)
     if request.method=="GET":
-        # Initialize paramater
-        first_yyyy_mm_dd = ( datetime.today() - timedelta(days=1) ).strftime(r"%Y-%m-%d")
-        last_yyyy_mm_dd = datetime.today().strftime(r"%Y-%m-%d")
-        seihin_buhin_cd = ""
-        seihin_buhin_flg = ""
-        tokuisaki_cd = ""
-        zatu_cd = ""
-        soukasaki_cd = ""
-        sort_column = ""
-        sort_type = "昇順"
-    else:
-        # Read paramater on request
-        first_yyyy_mm_dd = request.form["first_yyyy_mm_dd"]
-        last_yyyy_mm_dd = request.form["last_yyyy_mm_dd"]
-        seihin_buhin_cd = request.form["seihin_buhin_cd"]
-        seihin_buhin_flg = request.form["seihin_buhin_flg"]
-        tokuisaki_cd = request.form["tokuisaki_cd"]
-        zatu_cd = request.form["zatu_cd"]
-        soukasaki_cd = request.form["soukasaki_cd"]
-        sort_column = request.form["sort_column"]
-        sort_type = request.form.get("sort_type","降順")
+        return render_template(
+        # HTML
+            "index.html",
+            method_type="get",
+        # Query data
+            first_yyyy_mm_dd=( datetime.today() - timedelta(days=1) ).strftime(r"%Y-%m-%d"),
+            last_yyyy_mm_dd=datetime.today().strftime(r"%Y-%m-%d"),
+            sort_type="昇順",
+        # Display Table of DataFrame
+            refresh_date=setting_dic["REFRESH_DATE"],
+            headers=["抽出条件を入力してください。"]
+        )
+    # Read paramater on request
+    first_yyyy_mm_dd = request.form["first_yyyy_mm_dd"]
+    last_yyyy_mm_dd = request.form["last_yyyy_mm_dd"]
+    seihin_buhin_cd = request.form["seihin_buhin_cd"]
+    seihin_buhin_flg = request.form["seihin_buhin_flg"]
+    tokuisaki_cd = request.form["tokuisaki_cd"]
+    zatu_cd = request.form["zatu_cd"]
+    soukasaki_cd = request.form["soukasaki_cd"]
+    sort_column = request.form["sort_column"]
+    sort_type = request.form.get("sort_type","降順")
     # Create Code of SQL for Database on sqlite3
     # HOSTとsqlite3で送荷先コードのタイプが違うため、それぞれのSQLコードが必要
     sql_where_sqlite3 = (
@@ -162,9 +163,9 @@ def index():
     # if Count is many, Compression DataFrame for Display
     count=len(df)
     messages = []
-    if count >= MAX_DSP_ROW:
-        df_dsp = df.head(MAX_DSP_ROW)
-        messages.append("件数 : {:,} ({})".format(count, MAX_DSP_ROW))
+    if count >= setting_dic["MAX_DSP_ROW"]:
+        df_dsp = df.head(setting_dic["MAX_DSP_ROW"])
+        messages.append("件数 : {:,} ({})".format(count, setting_dic["MAX_DSP_ROW"]))
     else:
         df_dsp = df
         messages.append("件数 : {:,}".format(count))
@@ -173,6 +174,7 @@ def index():
     return render_template(
     # HTML
         "index.html",
+        method_type="post",
     # Query data
         sql_sqlite3=sql_sqlite3,
         first_yyyy_mm_dd=first_yyyy_mm_dd,
@@ -190,6 +192,7 @@ def index():
         count=count,
         messages=messages,
     # Display Table of DataFrame
+        refresh_date=setting_dic["REFRESH_DATE"],
         headers=df_dsp.columns,
         records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns))),
     )

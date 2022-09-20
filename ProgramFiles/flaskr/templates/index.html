@@ -54,7 +54,7 @@
           </select>
           <br>
           <div class="comments">
-            ※カンマ(,)で区切ることで、複数条件を抽出することができます
+            ※カンマ(,)で区切ることで、複数条件を抽出することができます。
           </div>
           {% if sort_type == "昇順" %}
             <input type="checkbox" name="sort_type", value="昇順" checked>
@@ -78,27 +78,36 @@
           </div>
         </form>
       </div><!--main-form-->
-      <div class="subtitle">
-        データテーブル
-      </div><!--subtitle-->
-      <!--Display Loading-->
-      <div id="loading" style="display:none;"></div>
-      <div id="datatable">
-        <!--Message of Totall Data-->
-        {% for m in messages %}
-          {{ m }} &emsp;&emsp;
-        {% endfor %}
-        <!--Download data to csv-->
-        <form action="{{ url_for('download') }}" method="post">
-          <input type="hidden" name="sql_where_sqlite3" value="{{ sql_where_sqlite3 }}">
-          <input type="hidden" name="sort_column" value="{{ sort_column }}">
-          <div class="bigbutton">
+      {% if method_type == "post" %}
+        <div class="subtitle">
+          データテーブル
+        </div><!--subtitle-->
+        <!--Display Loading-->
+        <div id="loading" style="display:none;"></div>
+        <div id="datatable">
+          <!--Message of Totall Data-->
+          {% for m in messages %}
+            {{ m }} &emsp;&emsp;
+          {% endfor %}
+          <!--Download data to csv-->
+          <form action="{{ url_for('download') }}" method="post">
+            <input type="hidden" name="sql_where_sqlite3" value="{{ sql_where_sqlite3 }}">
+            <input type="hidden" name="sort_column" value="{{ sort_column }}">
+            <input type="hidden" name="sort_type" value="{{ sort_type }}">
+            <div class="bigbutton">
             <input type="submit" value="ダウンロード">
-          </div><!--bigbutton-->
-        </form>
-      </div><!--datatable-->
+            </div><!--bigbutton-->
+          </form>
+        </div><!--datatable-->
+      {% endif %}
     </div><!--content-->
     <!--Table of Data-->
+    <div class="comments">
+      更新日時：{{ refresh_date }} &emsp;&emsp;
+      {% if method_type == "post" %}
+        ※列名に＊がついたものは、現在のマスタから取得しています。
+      {% endif %}
+    </div><!--comments-->
     <table class="dataframe">
       <thead>
         <tr>

@@ -37,7 +37,7 @@ class FD:
 
     def refresh(
         self,
-        first_date: str=""
+        sql: str=""
         ):
         """Syncing from HOST to sqlite3
 
@@ -45,11 +45,14 @@ class FD:
             where (str, optional): WHERE of SQL("WHERE ~~"). Defaults to "".
         """
         # host -> df (pyodbc)
-        sql_where_host    = ""
+        sql_where_host = ""
         sql_where_sqlite3 = ""
-        if first_date:
-            sql_where_host    = f"WHERE DYMD>={int(first_date)-19500000}"
-            sql_where_sqlite3 = f"WHERE 伝票日付>={first_date}"
+        if sql:
+            sql_where_sqlite3 = " WHERE " + sql
+            for k, v in self.columns_dic.items():
+                if k in sql:
+                    sql = sql.replace(k, v[0])
+            sql_where_host    = " WHERE " + sql
         sql_select_host = ",".join([f"{v[0]} AS {k}" for k, v in self.columns_dic.items()])
         sql_host = f"SELECT {sql_select_host} FROM {self.lib_name}.{self.file_name} {sql_where_host}"
         LOGGER.debug("ODBC Conecting...\n" + sql_host)
