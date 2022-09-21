@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>M端末</title>
+    <link rel="stylesheet" href="./static/css/style.css">
+    <script type="text/javascript" src="./static/js/script.js"></script>
+  </head>
+  <body>
+    <!-- タイトル画面 -->
+    <div class="title">
+      <a id="left-title" href="/">初期画面へ</a>
+      <div id="main-title">
+        設定
+      </div><!--center-->
+      <a id="right-title" href="/setting">設定画面へ</a>
+    </div><!--title-->
+    <!-- メイン画面 -->
+    <div class="content">
+      <div class="subtitle">
+        詳細設定
+      </div><!--subtitle-->
+      <div class="main-form">
+        <form method="post">
+          {% for key, value in setting_dic.items() %}
+            <label for="{{ key }}" >{{ key }}:</label>
+            <input name="{{ key }}" value="{{ value }}">
+            <br>
+          {% endfor %}
+          <div class="bigbutton">
+            <input type="submit" name="ok" value="設定変更">
+          </div><!--bigbutton-->
+        </form>
+      </div><!--main-form-->
+      <div class="subtitle">
+        データ更新
+      </div>
+      <div class="comments">
+        現在日時:{{ now }}
+        <br>
+        更新日時:{{ refresh_date }}
+      </div>
+      <form method="post">
+        <div class="bigbutton">
+          <input type="submit" name="ok" value="最新データ取得">
+        </div><!--bigbutton-->
+      </form>
+      <div class="subtitle">
+        ログ参照
+      </div><!--bigbutton-->
+      <div class="comments">
+        {% for t in log_texts %}
+          {{ t }}<br>
+        {% endfor %}
+      </div><!--comments-->
+    </div><!--content-->
+  </body>
+</html>

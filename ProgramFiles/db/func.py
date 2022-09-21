@@ -86,6 +86,7 @@ def craft_sql(
     return sql_sqlite3
 
 def create_df_sqlite3(sql: str) -> pd.DataFrame:
-    with sqlite3.connect(DATABASE) as conn:
-        df = pd.read_sql(sql=sql, con=conn)
-    return df
+    return pd.read_sql(
+        sql=sql,
+        con=sqlite3.connect(DATABASE)
+        )

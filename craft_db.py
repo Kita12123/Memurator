@@ -9,23 +9,14 @@
     が出力されて、エラーになる可能性がある。
 """
 from datetime import datetime
-import json
 from dateutil.relativedelta import relativedelta
 import sys
 
-from ProgramData import M_SETTING_PATH
-from ProgramFiles.db import file_ins
+#
+# User Module
+#
+from ProgramFiles.db import file_ins, Rewrite_Refresh_Time
 from ProgramFiles.log import LOGGER, dsp_except
-
-#
-# Sub Function
-#
-def Rewrite_Refresh_Time(memo=""):
-    with open(M_SETTING_PATH, mode="r", encoding="cp932") as f:
-        tmp_dic = json.load(f)
-        tmp_dic["REFRESH_DATE"] = datetime.today().strftime(r"%Y/%m/%d %H:%M:%S") + memo
-    with open(M_SETTING_PATH, mode="w", encoding="cp932") as f:
-        json.dump(tmp_dic, f, indent=1)
 
 #
 # Main Function

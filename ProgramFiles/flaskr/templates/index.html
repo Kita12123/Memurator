@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!--select句のselected判定をどうにかしたい。ifで全て書いていくのは微妙な気がする-->
 <html lang="ja">
   <head>
     <meta charset="UTF-8">
@@ -10,7 +9,11 @@
   <body>
     <!-- タイトル画面 -->
     <div class="title">
-      売上データ参照
+      <a id="left-title" href="/">初期画面へ</a>
+      <div id="main-title">
+        売上データ参照
+      </div><!--center-->
+      <a id="right-title" href="/setting">設定画面へ</a>
     </div><!--title-->
     <!-- メイン画面 -->
     <div class="content">
@@ -103,7 +106,7 @@
     </div><!--content-->
     <!--Table of Data-->
     <div class="comments">
-      更新日時：{{ refresh_date }} &emsp;&emsp;
+      最終更新日付:{{ refresh_date }} &emsp;&emsp;
       {% if method_type == "post" %}
         ※列名に＊がついたものは、現在のマスタから取得しています。
       {% endif %}

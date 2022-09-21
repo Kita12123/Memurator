@@ -14,6 +14,7 @@ import json
 
 from ProgramData import M_SETTING_PATH
 from ProgramFiles.flaskr import app
+from ProgramFiles.log import LOGGER, CD as LOGCD
 from ProgramFiles import db
 
 #
@@ -32,7 +33,6 @@ def create_sql_dennpyou_date(fd: str, ld: str) -> str:
         ld_ = int(ld.replace("-","")) - 19500000
         last = f" 伝票日付<={ld_} AND\n"
     return first + last
-
 
 def create_sql_seihin_buhin_cd(cd: str) -> str:
     """製品部品コードのSQLコードを作成"""
@@ -117,8 +117,11 @@ def create_sql_zatu_cd(cd: str) -> str:
 #
 @app.route("/", methods=["GET","POST"])
 def index():
+    LOGGER.debug("リクエスト取得")
     with open(M_SETTING_PATH, mode="r", encoding="cp932") as f:
         setting_dic = json.load(f)
+    max_dsp_row = int(setting_dic["最大表示行数"])
+    refresh_date = setting_dic["最終更新日時"]
     if request.method=="GET":
         return render_template(
         # HTML
@@ -129,7 +132,7 @@ def index():
             last_yyyy_mm_dd=datetime.today().strftime(r"%Y-%m-%d"),
             sort_type="昇順",
         # Display Table of DataFrame
-            refresh_date=setting_dic["REFRESH_DATE"],
+            refresh_date=refresh_date,
             headers=["抽出条件を入力してください。"]
         )
     # Read paramater on request
@@ -154,6 +157,7 @@ def index():
     +   create_sql_seihin_buhin_flg(flg=seihin_buhin_flg)
     )[:-5] + "\n/* ユーザー抽出条件 */"
     # Create DataFrame
+    LOGGER.debug("SQL接続")
     df, sql_sqlite3 = db.create_uriage_df(
         sql_where_sqlite3=sql_where_sqlite3,
         sort_column=sort_column,
@@ -163,14 +167,15 @@ def index():
     # if Count is many, Compression DataFrame for Display
     count=len(df)
     messages = []
-    if count >= setting_dic["MAX_DSP_ROW"]:
-        df_dsp = df.head(setting_dic["MAX_DSP_ROW"])
-        messages.append("件数 : {:,} ({})".format(count, setting_dic["MAX_DSP_ROW"]))
+    if count >= max_dsp_row:
+        df_dsp = df.head(max_dsp_row)
+        messages.append("件数 : {:,} ({})".format(count, max_dsp_row))
     else:
         df_dsp = df
         messages.append("件数 : {:,}".format(count))
     messages.append("合計数量 : {:,}".format(df["数量"].sum()))
     messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
+    LOGGER.debug("POST出力")
     return render_template(
     # HTML
         "index.html",
@@ -192,7 +197,7 @@ def index():
         count=count,
         messages=messages,
     # Display Table of DataFrame
-        refresh_date=setting_dic["REFRESH_DATE"],
+        refresh_date=refresh_date,
         headers=df_dsp.columns,
         records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns))),
     )
@@ -218,6 +223,33 @@ def download():
 #
 # Setting
 #
+@app.route("/setting", methods=["GET", "POST"])
+def setting():
+    """設定画面"""
+    if request.method == "POST":
+        click = request.form.get("ok")
+        if click == "設定変更":
+            with open(M_SETTING_PATH, mode="r") as f:
+                setting_dic = json.load(f)
+            for key in setting_dic.keys():
+                setting_dic[key] = request.form[key]
+            with open(M_SETTING_PATH, mode="w") as f:
+                json.dump(setting_dic, f, indent=1)
+        elif click == "最新データ取得":
+            db.refresh_auto()
+    with open(M_SETTING_PATH, mode="r") as f:
+        setting_dic = json.load(f)
+    with open(os.path.join(LOGCD, "debug.txt"), mode="r", encoding="utf-8") as f:
+        log_texts = f.readlines()
+    print(log_texts)
+    return render_template(
+        "setting.html",
+        now=datetime.today().strftime(r"%Y/%m/%d %H:%M:%S"),
+        setting_dic=setting_dic,
+        refresh_date=setting_dic["最終更新日時"],
+        log_texts=log_texts
+    )
+
 @app.route('/favicon.ico')
 def favicon():
     """Select ico"""
