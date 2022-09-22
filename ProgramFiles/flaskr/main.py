@@ -2,20 +2,26 @@
 FLASK Main
 """
 import os
+import pandas as pd
 from flask import (
     render_template,
-    url_for,
     send_file,
     request,
     send_from_directory
 )
 from datetime import datetime, timedelta
-import json
 
-from ProgramData import M_SETTING_PATH
-from ProgramFiles.flaskr import app
+from ProgramData.setting_ins import SETTING
 from ProgramFiles.log import LOGGER, CD as LOGCD
+from ProgramFiles.db.sql_ins import DB_SQL
 from ProgramFiles import db
+from ProgramFiles.db import uriage
+from ProgramFiles.flaskr import app
+
+#
+# Contract
+#
+DOWNLOAD_CSV = os.path.join(app.root_path, "download.csv")
 
 #
 # Sub Function
@@ -118,10 +124,8 @@ def create_sql_zatu_cd(cd: str) -> str:
 @app.route("/", methods=["GET","POST"])
 def index():
     LOGGER.debug("リクエスト取得")
-    with open(M_SETTING_PATH, mode="r", encoding="cp932") as f:
-        setting_dic = json.load(f)
-    max_dsp_row = int(setting_dic["最大表示行数"])
-    refresh_date = setting_dic["最終更新日時"]
+    max_dsp_row = int(SETTING.dic["最大表示行数"])
+    refresh_date = SETTING.dic["最終更新日時"]
     if request.method=="GET":
         return render_template(
         # HTML
@@ -158,10 +162,14 @@ def index():
     )[:-5] + "\n/* ユーザー抽出条件 */"
     # Create DataFrame
     LOGGER.debug("SQL接続")
-    df, sql_sqlite3 = db.create_uriage_df(
-        sql_where_sqlite3=sql_where_sqlite3,
+    sql = uriage.Create_SQL_dsp(
+        where=sql_where_sqlite3,
         sort_column=sort_column,
         sort_type=sort_type
+    )
+    df = pd.read_sql(
+        sql=sql,
+        con=DB_SQL.connection
     )
     # Message of Count
     # if Count is many, Compression DataFrame for Display
@@ -176,12 +184,13 @@ def index():
     messages.append("合計数量 : {:,}".format(df["数量"].sum()))
     messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
     LOGGER.debug("POST出力")
+    df_dsp[["数量","単価","金額"]] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
     return render_template(
     # HTML
         "index.html",
         method_type="post",
     # Query data
-        sql_sqlite3=sql_sqlite3,
+        sql_sqlite3=sql,
         first_yyyy_mm_dd=first_yyyy_mm_dd,
         last_yyyy_mm_dd=last_yyyy_mm_dd,
         seihin_buhin_cd=seihin_buhin_cd,
@@ -205,19 +214,19 @@ def index():
 @app.route("/download", methods=["POST"])
 def download():
     """データをダウンロードする"""
-    sql_where_sqlite3 = request.form["sql_where_sqlite3"]
-    sort_column = request.form["sort_column"]
-    sort_type = request.form["sort_type"]
-    file = os.path.join(app.root_path, "download.csv")
-    df, sql_sqlite3 = db.create_uriage_df(
-        sql_where_sqlite3=sql_where_sqlite3,
-        sort_column=sort_column,
-        sort_type=sort_type
+    sql = uriage.Create_SQL_download(
+        where=request.form["sql_where_sqlite3"],
+        sort_column=request.form["sort_column"],
+        sort_type=request.form["sort_type"]
     )
-    df.to_csv(file, index=False, encoding="cp932", escapechar="|")
+    df = pd.read_sql(
+        sql=sql,
+        con=DB_SQL.connection
+    )
+    df.to_csv(DOWNLOAD_CSV, index=False, encoding="cp932", escapechar="|")
     return send_file(
-        file,
-        attachment_filename="data.csv"
+        DOWNLOAD_CSV,
+        attachment_filename="download.csv"
     )
 
 #
@@ -229,24 +238,18 @@ def setting():
     if request.method == "POST":
         click = request.form.get("ok")
         if click == "設定変更":
-            with open(M_SETTING_PATH, mode="r") as f:
-                setting_dic = json.load(f)
-            for key in setting_dic.keys():
-                setting_dic[key] = request.form[key]
-            with open(M_SETTING_PATH, mode="w") as f:
-                json.dump(setting_dic, f, indent=1)
+            for key in SETTING.dic.keys():
+                SETTING.dic[key] = request.form[key]
+            SETTING.update()
         elif click == "最新データ取得":
-            db.refresh_auto()
-    with open(M_SETTING_PATH, mode="r") as f:
-        setting_dic = json.load(f)
+            db.refresh_all()
     with open(os.path.join(LOGCD, "debug.txt"), mode="r", encoding="utf-8") as f:
         log_texts = f.readlines()
-    print(log_texts)
     return render_template(
         "setting.html",
         now=datetime.today().strftime(r"%Y/%m/%d %H:%M:%S"),
-        setting_dic=setting_dic,
-        refresh_date=setting_dic["最終更新日時"],
+        setting_dic=SETTING.dic,
+        refresh_date=SETTING.dic["最終更新日時"],
         log_texts=log_texts
     )
 
