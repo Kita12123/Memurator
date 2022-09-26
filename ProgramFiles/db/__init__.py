@@ -6,6 +6,12 @@ from dateutil.relativedelta import relativedelta
 
 from ProgramData.setting_ins import SETTING
 from ProgramFiles.db import file_ins
+from ProgramFiles.db.sql_ins import DB_SQL
+
+#
+# Initializing
+#
+DB_SQL.db_open()
 
 
 def refresh_all():

@@ -17,8 +17,14 @@ def Create_SQL_dsp(
             ifnull(ET3.名称＊,'') AS 担当者名＊,
             得意先コード,
             得意先カナ,
-            雑コード,
-            ifnull(NI2.送荷先名＊,'') AS 雑名＊,
+            CASE
+                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN 雑コード
+                ELSE ''
+            END AS 雑コード,
+            CASE
+                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN ifnull(NI2.送荷先カナ＊,'')
+                ELSE ''
+            END AS 雑カナ＊,
             送荷先コード,
             送荷先カナ,
             製品部品コード,
@@ -95,14 +101,26 @@ def Create_SQL_download(
             ifnull(TOK.住所１＊ || TOK.住所２＊,'') AS 得意先住所＊,
             ifnull(TOK.電話番号＊,'') AS 得意先電話番号＊,
             */
-            雑コード,
-            ifnull(NI2.送荷先名＊,'') AS 雑名＊,
+            CASE
+                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN 雑コード
+                ELSE ''
+            END AS 雑コード,
+            CASE
+                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN ifnull(NI2.送荷先カナ＊,'')
+                ELSE ''
+            END AS 雑カナ＊,
             送荷先コード,
             送荷先カナ,
             ifnull(NI.送荷先名＊,'') AS 送荷先名＊,
-            NI.郵便番号１＊ || '-' || NI.郵便番号２＊ AS 送荷先郵便番号＊,
+            SUBSTR('0000' || NI.郵便番号１＊,-4,4)
+             || '-' ||
+            SUBSTR('000' || NI.郵便番号２＊,-3,3) AS 送荷先郵便番号＊,
             ifnull(NI.住所１＊ || NI.住所２＊,'') AS 送荷先住所＊,
-            ifnull(NI.電話番号＊,'') AS 送荷先電話番号＊,
+            CASE
+                WHEN ifnull(NI.電話番号＊,'') = '' THEN ''
+                WHEN ifnull(NI.電話番号＊,'') = ' ' THEN ''
+                ELSE ifnull(NI.電話番号＊,'') || ','
+            END AS 送荷先電話番号＊,
             製品部品コード,
             製品部品カナ,
             級区分,
@@ -120,7 +138,8 @@ def Create_SQL_download(
                 ELSE 数量*単価
             END AS 金額,
             備考,
-            出荷伝票番号
+            出荷伝票番号,
+            オーダー番号
         FROM {file}
         LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=10 AND ET1.コード＊=伝票区分
         LEFT OUTER JOIN ETCMPF ET2 ON ET2.レコード区分＊=20 AND ET2.コード＊=委託区分

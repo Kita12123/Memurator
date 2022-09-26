@@ -35,7 +35,6 @@ class FD:
             """
         )
         DB_SQL.db_commit()
-        DB_SQL.db_close()
 
     def refresh(
         self,

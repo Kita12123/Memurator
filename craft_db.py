@@ -13,6 +13,7 @@ from dateutil.relativedelta import relativedelta
 import sys
 
 from ProgramFiles.db import file_ins
+from ProgramFiles.db.sql_ins import DB_SQL
 from ProgramFiles.log import LOGGER, dsp_except
 
 #
@@ -47,6 +48,7 @@ if __name__=="__main__":
         last_yyyy = sys.argv[2]
     except(IndexError):
         last_yyyy = ""
+    DB_SQL.db_open()
     try:
         LOGGER.info(f"*************** Start Connect HOST and SQL ({first_yyyy} - {last_yyyy}) ***************")
         if first_yyyy == "auto":
@@ -63,3 +65,4 @@ if __name__=="__main__":
             )
     except:
         dsp_except()
+    DB_SQL.db_close()

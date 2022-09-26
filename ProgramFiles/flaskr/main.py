@@ -12,16 +12,12 @@ from flask import (
 from datetime import datetime, timedelta
 
 from ProgramData.setting_ins import SETTING
-from ProgramFiles.log import LOGGER, CD as LOGCD
+from ProgramData import TEMP_CSV
+from ProgramFiles.log import CD as LOGCD
 from ProgramFiles.db.sql_ins import DB_SQL
 from ProgramFiles import db
 from ProgramFiles.db import uriage
 from ProgramFiles.flaskr import app
-
-#
-# Contract
-#
-DOWNLOAD_CSV = os.path.join(app.root_path, "download.csv")
 
 #
 # Sub Function
@@ -123,7 +119,6 @@ def create_sql_zatu_cd(cd: str) -> str:
 #
 @app.route("/", methods=["GET","POST"])
 def index():
-    LOGGER.debug("リクエスト取得")
     max_dsp_row = int(SETTING.dic["最大表示行数"])
     refresh_date = SETTING.dic["最終更新日時"]
     if request.method=="GET":
@@ -161,7 +156,6 @@ def index():
     +   create_sql_seihin_buhin_flg(flg=seihin_buhin_flg)
     )[:-5] + "\n/* ユーザー抽出条件 */"
     # Create DataFrame
-    LOGGER.debug("SQL接続")
     sql = uriage.Create_SQL_dsp(
         where=sql_where_sqlite3,
         sort_column=sort_column,
@@ -176,15 +170,14 @@ def index():
     count=len(df)
     messages = []
     if count >= max_dsp_row:
-        df_dsp = df.head(max_dsp_row)
+        df_dsp = df.head(max_dsp_row).copy()
         messages.append("件数 : {:,} ({})".format(count, max_dsp_row))
     else:
-        df_dsp = df
+        df_dsp = df.copy()
         messages.append("件数 : {:,}".format(count))
     messages.append("合計数量 : {:,}".format(df["数量"].sum()))
     messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
-    LOGGER.debug("POST出力")
-    df_dsp[["数量","単価","金額"]] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
+    df_dsp.loc[:,("数量","単価","金額")] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
     return render_template(
     # HTML
         "index.html",
@@ -223,9 +216,9 @@ def download():
         sql=sql,
         con=DB_SQL.connection
     )
-    df.to_csv(DOWNLOAD_CSV, index=False, encoding="cp932", escapechar="|")
+    df.to_csv(TEMP_CSV, index=False, encoding="cp932", escapechar="|")
     return send_file(
-        DOWNLOAD_CSV,
+        TEMP_CSV,
         attachment_filename="download.csv"
     )
 
