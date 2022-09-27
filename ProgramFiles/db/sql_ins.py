@@ -7,14 +7,13 @@ from ProgramData import DATABASE
 
 class DB_SQL_CLS:
     def __init__(self):
-        self.database = DATABASE
         self.connection = None
         self.cursor = None
     
     def db_open(self):
         if self.connection is None:
             self.connection = sqlite3.connect(
-                self.database,
+                DATABASE,
                 check_same_thread=False)
         if self.cursor is None:
             self.cursor = self.connection.cursor()

@@ -59,23 +59,28 @@
           <div class="comments">
             ※カンマ(,)で区切ることで、複数条件を抽出することができます。
           </div>
-          {% if sort_type == "昇順" %}
-            <input type="checkbox" name="sort_type", value="昇順" checked>
+          {% if method_type == "post" %}
+            {% if sort_type == "昇順" %}
+              <input type="checkbox" name="sort_type", value="昇順" checked>
+            {% else %}
+              <input type="checkbox" name="sort_type", value="昇順">
+            {% endif %}
+            <label for="sort_column">昇順:</label>
+            <select name="sort_column">
+              <option value="" selected></option>
+              {% for column in headers %}
+                {% if column == sort_column %}
+                  <option value="{{ column }}" selected>{{ column }}</option>
+                {% else %}
+                  <option value="{{ column }}">{{ column }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+            <br>
           {% else %}
-            <input type="checkbox" name="sort_type", value="昇順">
+            <input type="hidden" name="sort_type" value="昇順">
+            <input type="hidden" name="sort_column" value="">
           {% endif %}
-          <label for="sort_column">昇順:</label>
-          <select name="sort_column">
-            <option value="" selected></option>
-            {% for column in headers %}
-              {% if column == sort_column %}
-                <option value="{{ column }}" selected>{{ column }}</option>
-              {% else %}
-                <option value="{{ column }}">{{ column }}</option>
-              {% endif %}
-            {% endfor %}
-          </select>
-          <br>
           <div class="bigbutton">
             <input type="submit" value="検索" onclick="showLoading();">
           </div>

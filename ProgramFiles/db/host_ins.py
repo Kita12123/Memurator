@@ -3,17 +3,14 @@ Instance for HOST
 """
 import pyodbc
 
-from ProgramData import HOST_ODBC_STRINGS
-
 class DB_HOST_CLS:
     def __init__(self):
-        self.database = HOST_ODBC_STRINGS
         self.connection = None
         self.cursor = None
     
     def db_open(self):
         if self.connection is None:
-            self.connection = pyodbc.connect(self.database)
+            self.connection = pyodbc.connect("DSN=HOST;UID=MINORU1;PWD=;SCH=;CNV=K")
         if self.cursor is None:
             self.cursor = self.connection.cursor()
 
