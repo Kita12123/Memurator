@@ -161,10 +161,12 @@ def index():
         sort_column=sort_column,
         sort_type=sort_type
     )
+    DB_SQL.db_open()
     df = pd.read_sql(
         sql=sql,
         con=DB_SQL.connection
     )
+    DB_SQL.db_close()
     # Message of Count
     # if Count is many, Compression DataFrame for Display
     count=len(df)
@@ -212,10 +214,12 @@ def download():
         sort_column=request.form["sort_column"],
         sort_type=request.form["sort_type"]
     )
+    DB_SQL.db_open()
     df = pd.read_sql(
         sql=sql,
         con=DB_SQL.connection
     )
+    DB_SQL.db_close()
     df.to_csv(TEMP_CSV, index=False, encoding="cp932", escapechar="|")
     return send_file(
         TEMP_CSV,

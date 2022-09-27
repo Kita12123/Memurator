@@ -35,6 +35,7 @@ class FD:
             """
         )
         DB_SQL.db_commit()
+        DB_SQL.db_close()
 
     def refresh(
         self,
@@ -62,6 +63,7 @@ class FD:
         DB_HOST.db_close()
         # df -> database.db
         LOGGER.debug("Syncing database.db..." + self.file_name)
+        DB_SQL.db_open()
         if sql_where_host:
             DB_SQL.db_execute(sql=f"DELETE FROM {self.file_name} {sql_where_sqlite3}")
         else:
@@ -77,6 +79,7 @@ class FD:
             if_exists="append",
             index=False)
         DB_SQL.db_commit()
+        DB_SQL.db_close()
 
 
 #
