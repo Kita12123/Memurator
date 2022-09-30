@@ -105,7 +105,22 @@ def create_sql_zatu_cd(cd: str) -> str:
         if c.isdigit():
             return f" OR 雑コード={c} "
         else:
-            return ""
+            return f" OR 雑カナ＊ LIKE'%{c}%' "
+    if cd == "":
+        return ""
+    elif "," in cd:
+        sql = "".join([ func(code) for code in cd.split(",")])[3:]
+        return f" ({sql}) AND\n"
+    else:
+        return func(cd)[3:] + " AND \n"
+
+def create_sql_tantou_cd(cd: str) -> str:
+    """担当者コードのSQLコード作成"""
+    def func(c: str):
+        if c.isdigit():
+            return f" OR 担当者コード={c} "
+        else:
+            return f" OR 担当者名＊ LIKE'%{c}%' "
     if cd == "":
         return ""
     elif "," in cd:
@@ -142,6 +157,7 @@ def index():
     tokuisaki_cd = request.form["tokuisaki_cd"]
     zatu_cd = request.form["zatu_cd"]
     soukasaki_cd = request.form["soukasaki_cd"]
+    tantou_cd = request.form["tantou_cd"]
     sort_column = request.form["sort_column"]
     sort_type = request.form.get("sort_type","降順")
     # Create Code of SQL for Database on sqlite3
@@ -154,6 +170,7 @@ def index():
     +   create_sql_soukasaki_cd(soukasaki_cd)
     +   create_sql_seihin_buhin_cd(cd=seihin_buhin_cd)
     +   create_sql_seihin_buhin_flg(flg=seihin_buhin_flg)
+    +   create_sql_tantou_cd(cd=tantou_cd)
     )[:-5] + "\n/* ユーザー抽出条件 */"
     # Create DataFrame
     sql = uriage.Create_SQL_dsp(
@@ -193,6 +210,7 @@ def index():
         tokuisaki_cd=tokuisaki_cd,
         zatu_cd=zatu_cd,
         soukasaki_cd=soukasaki_cd,
+        tantou_cd=tantou_cd,
         sort_column=sort_column,
         sort_type=sort_type,
     # for download
@@ -232,7 +250,10 @@ def download():
 @app.route("/setting", methods=["GET", "POST"])
 def setting():
     """設定画面"""
-    if request.method == "POST":
+    if request.method == "GET":
+        with open(os.path.join(LOGCD, "debug.txt"), mode="r", encoding="utf-8") as f:
+            log_texts = f.readlines()
+    else:
         click = request.form.get("ok")
         if click == "設定変更":
             for key in SETTING.dic.keys():
@@ -240,8 +261,9 @@ def setting():
             SETTING.update()
         elif click == "最新データ取得":
             db.refresh_all()
-    with open(os.path.join(LOGCD, "debug.txt"), mode="r", encoding="utf-8") as f:
-        log_texts = f.readlines()
+        else:
+            with open(os.path.join(LOGCD, f"{click}.txt"), mode="r", encoding="utf-8") as f:
+                log_texts = f.readlines()
     return render_template(
         "setting.html",
         now=datetime.today().strftime(r"%Y/%m/%d %H:%M:%S"),

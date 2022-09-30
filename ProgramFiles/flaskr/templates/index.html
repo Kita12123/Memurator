@@ -23,39 +23,62 @@
       <div class="main-form">
         <form method="post">
         <!--Query DataBase-->
-          <label for="first_yyyy_mm_dd">開始日付:</label>
-          <input type="date" name="first_yyyy_mm_dd" value="{{ first_yyyy_mm_dd }}">
-          <label for="last_yyyy_mm_dd">終了日付:</label>
-          <input type="date" name="last_yyyy_mm_dd" value="{{ last_yyyy_mm_dd }}">
-          <br>
-          <label for="tokuisaki_cd">得意先ｺｰﾄﾞ ｶﾅ：</label>
-          <input id="tokuisaki-cd" type="text" name="tokuisaki_cd" value="{{ tokuisaki_cd }}">
-          <br>
-          <label for="zatu_cd">雑ｺｰﾄﾞ：</label>
-          <input id="zatu-cd" type="text" name="zatu_cd" value="{{ zatu_cd }}">
-          <br>
-          <label for="soukasaki_cd">送荷先ｺｰﾄﾞ ｶﾅ：</label>
-          <input id="soukasaki-cd" type="text" name="soukasaki_cd" value="{{ soukasaki_cd }}">
-          <br>
-          <label for="seihin_buhin_cd">製品部品ｺｰﾄﾞ ｶﾅ：</label>
-          <input id="seihin-buhin-cd" type="text" name="seihin_buhin_cd" value="{{ seihin_buhin_cd }}">
-          <label for="seihin_buhin_flg"> ← </label>
-          <select name="seihin_buhin_flg">
-            {% if seihin_buhin_flg   == "seihin" %}
-              <option value=""></option>
-              <option value="seihin" selected>製品のみ</option>
-              <option value="buhin">部品のみ</option>
-            {% elif seihin_buhin_flg == "buhin" %}
-              <option value=""></option>
-              <option value="seihin">製品のみ</option>
-              <option value="buhin" selected>部品のみ</option>
-            {% else %}
-              <option value="" selected></option>
-              <option value="seihin">製品のみ</option>
-              <option value="buhin">部品のみ</option>
-            {% endif %}
-          </select>
-          <br>
+          <table>
+            <tbody>
+              <tr>
+                <td><label for="first_yyyy_mm_dd">開始日付:</label></td>
+                <td><input type="date" name="first_yyyy_mm_dd" value="{{ first_yyyy_mm_dd }}"></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><label for="last_yyyy_mm_dd">終了日付:</label></td>
+                <td><input type="date" name="last_yyyy_mm_dd" value="{{ last_yyyy_mm_dd }}"></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><label for="tokuisaki_cd">得意先ｺｰﾄﾞ ｶﾅ：</label></td>
+                <td><input type="text" name="tokuisaki_cd" value="{{ tokuisaki_cd }}"></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><label for="zatu_cd">雑ｺｰﾄﾞ ｶﾅ：</label></td>
+                <td><input type="text" name="zatu_cd" value="{{ zatu_cd }}"></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><label for="soukasaki_cd">送荷先ｺｰﾄﾞ ｶﾅ：</label></td>
+                <td><input type="text" name="soukasaki_cd" value="{{ soukasaki_cd }}"></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><label for="seihin_buhin_cd">製品部品ｺｰﾄﾞ ｶﾅ：</label></td>
+                <td>
+                  <input type="text" name="seihin_buhin_cd" value="{{ seihin_buhin_cd }}">
+                  <select name="seihin_buhin_flg">
+                    {% if seihin_buhin_flg   == "seihin" %}
+                      <option value=""></option>
+                      <option value="seihin" selected>製品のみ</option>
+                      <option value="buhin">部品のみ</option>
+                    {% elif seihin_buhin_flg == "buhin" %}
+                      <option value=""></option>
+                      <option value="seihin">製品のみ</option>
+                      <option value="buhin" selected>部品のみ</option>
+                    {% else %}
+                      <option value="" selected></option>
+                      <option value="seihin">製品のみ</option>
+                      <option value="buhin">部品のみ</option>
+                    {% endif %}
+                  </select>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td><label for="tantou_cd">担当者ｺｰﾄﾞ 名：</label></td>
+                <td><input type="text" name="tantou_cd" value="{{ tantou_cd }}"></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
           <div class="comments">
             ※カンマ(,)で区切ることで、複数条件を抽出することができます。
           </div>

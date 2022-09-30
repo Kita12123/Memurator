@@ -50,6 +50,13 @@
       <div class="subtitle">
         ログ参照
       </div><!--bigbutton-->
+      <form method="post">
+        <input type="submit" name="ok" value="debug">
+        &emsp;&emsp;
+        <input type="submit" name="ok" value="info">
+        &emsp;&emsp;
+        <input type="submit" name="ok" value="error">
+      </form>
       <div class="comments">
         {% for t in log_texts %}
           {{ t }}<br>
