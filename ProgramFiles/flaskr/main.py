@@ -16,7 +16,7 @@ from ProgramData import TEMP_CSV
 from ProgramFiles.log import CD as LOGCD
 from ProgramFiles.db.sql_ins import DB_SQL
 from ProgramFiles import db
-from ProgramFiles.db import uriage
+from ProgramFiles.db import uriage, syukka
 from ProgramFiles.flaskr import app
 
 #
@@ -153,6 +153,7 @@ def index():
             headers=["抽出条件を入力してください。"]
         )
     # Read paramater on request
+    db_name = request.form["db_name"]
     first_yyyy_mm_dd = request.form["first_yyyy_mm_dd"]
     last_yyyy_mm_dd = request.form["last_yyyy_mm_dd"]
     seihin_buhin_cd = request.form["seihin_buhin_cd"]
@@ -176,7 +177,12 @@ def index():
     +   create_sql_tantou_cd(cd=tantou_cd)
     )[:-5] + "\n/* ユーザー抽出条件 */"
     # Create DataFrame
-    sql = uriage.Create_SQL_dsp(
+    if db_name == "売上検索":
+        tmp_class = uriage
+    else:
+    #elif db_name == "出荷":
+        tmp_class = syukka
+    sql = tmp_class.Create_SQL_dsp(
         where=sql_where_sqlite3,
         sort_column=sort_column,
         sort_type=sort_type
@@ -197,14 +203,20 @@ def index():
     else:
         df_dsp = df.copy()
         messages.append("件数 : {:,}".format(count))
-    messages.append("合計数量 : {:,}".format(df["数量"].sum()))
-    messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
-    df_dsp.loc[:,("数量","単価","金額")] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
+    if db_name == "売上検索":
+        messages.append("合計数量 : {:,}".format(df["数量"].sum()))
+        messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
+        df_dsp.loc[:,("数量","単価","金額")] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
+    elif db_name == "出荷検索":
+        messages.append("合計出荷数 : {:,}".format(df["出荷数"].sum()))
+        messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
+        df_dsp.loc[:,("出荷数","単価","金額")] = df_dsp[["出荷数","単価","金額"]].applymap("{:,}".format)
     return render_template(
     # HTML
         "index.html",
         method_type="post",
     # Query data
+        db_name=db_name[:-2],
         sql_sqlite3=sql,
         first_yyyy_mm_dd=first_yyyy_mm_dd,
         last_yyyy_mm_dd=last_yyyy_mm_dd,
@@ -230,7 +242,14 @@ def index():
 @app.route("/download", methods=["POST"])
 def download():
     """データをダウンロードする"""
-    sql = uriage.Create_SQL_download(
+    # htmlでdb_nameはdb_name[:-2]とされているため
+    # classを使ってもっとわかりやすく複数のデータを参照できるようにしたい
+    if request.form["db_name"] == "売上":
+        tmp_class = uriage
+    else:
+    #elif db_name == "出荷":
+        tmp_class = syukka
+    sql = tmp_class.Create_SQL_download(
         where=request.form["sql_where_sqlite3"],
         sort_column=request.form["sort_column"],
         sort_type=request.form["sort_type"]
@@ -253,10 +272,9 @@ def download():
 @app.route("/setting", methods=["GET", "POST"])
 def setting():
     """設定画面"""
-    if request.method == "GET":
-        with open(os.path.join(LOGCD, "debug.txt"), mode="r", encoding="utf-8") as f:
-            log_texts = f.readlines()
-    else:
+    with open(os.path.join(LOGCD, "debug.txt"), mode="r", encoding="utf-8") as f:
+        log_texts = f.readlines()
+    if request.method == "POST":
         click = request.form.get("ok")
         if click == "設定変更":
             for key in SETTING.dic.keys():

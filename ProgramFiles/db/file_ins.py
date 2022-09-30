@@ -164,6 +164,41 @@ TEMP_URI2 = FD(
     }
 )
 
+TOTAL_SYUKA = FD(
+    file_name="SYUKAPF",
+    lib_name="FLIB",
+    columns_dic={
+        "伝票日付":("S08", "INTEGER"),
+        "指示日付":("S07", "INTEGER"),
+        "出荷伝票番号":("S03", "TEXT"),
+        "出荷行番号":("S04", "INTEGER"),
+        "伝票区分":("S09", "INTEGER"),
+        "委託区分":("S10", "INTEGER"),
+        "得意先コード":("S12", "INTEGER"),
+        "得意先カナ":("S13", "TEXT"),
+        "雑コード":("ZATUCD", "INTEGER"),
+        "担当者コード":("S199", "INTEGER"),
+        "送荷先コード":("S20", "INTEGER"),
+        "送荷先カナ":("S36", "TEXT"),
+        "扱い運送":("S21", "INTEGER"),
+        "製品部品コード":("S25", "INTEGER"),
+        "製品部品カナ":("S27", "TEXT"),
+        "級区分":("S24", "INTEGER"),
+        "部番":("S26", "TEXT"),
+        "受注数":("S29", "INTEGER"),
+        "出荷数":("S30", "INTEGER"),
+        "売上数":("S31", "INTEGER"),
+        "ＢＯ区分":("S31", "INTEGER"),
+        "単価":("S33", "INTEGER"),
+        "金額":("S34", "INTEGER"),
+        "オーダー番号":("S28", "TEXT"),
+        "備考":("S35", "TEXT"),
+        "入力日":("HONJIT", "INTEGER"),
+        "入力時":("HH", "INTEGER"),
+        "入力分":("MM", "INTEGER")
+    }
+)
+
 ETC_MASTER = FD(
     file_name="ETCMPF",
     lib_name="FLIB",
@@ -175,7 +210,6 @@ ETC_MASTER = FD(
         "数値＊":("SUU","INTEGER")
     }
 )
-
 
 SOKCD_MASTER = FD(
     file_name="NIHONPF",

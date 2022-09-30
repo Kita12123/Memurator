@@ -11,7 +11,7 @@
     <div class="title">
       <a id="left-title" href="/">初期画面へ</a>
       <div id="main-title">
-        売上データ参照
+        {{ db_name }}データ参照
       </div><!--center-->
       <a id="right-title" href="/setting">設定画面へ</a>
     </div><!--title-->
@@ -105,7 +105,14 @@
             <input type="hidden" name="sort_column" value="">
           {% endif %}
           <div class="bigbutton">
-            <input type="submit" value="検索" onclick="showLoading();">
+            {% if db_name == "売上" %}
+              <input name="db_name" type="submit" value="売上検索" onclick="showLoading();">
+            {% elif db_name == "出荷" %}
+              <input name="db_name" type="submit" value="出荷検索" onclick="showLoading();">
+            {% else %}
+              <input name="db_name" type="submit" value="売上検索" onclick="showLoading();">
+              <input name="db_name" type="submit" value="出荷検索" onclick="showLoading();">
+            {% endif %}
           </div>
         </form>
         <!--Display Loading-->
@@ -122,11 +129,12 @@
           {% endfor %}
           <!--Download data to csv-->
           <form action="{{ url_for('download') }}" method="post">
+            <input type="hidden" name="db_name" value="{{ db_name }}">
             <input type="hidden" name="sql_where_sqlite3" value="{{ sql_where_sqlite3 }}">
             <input type="hidden" name="sort_column" value="{{ sort_column }}">
             <input type="hidden" name="sort_type" value="{{ sort_type }}">
             <div class="bigbutton">
-            <input type="submit" value="ダウンロード" onclick="showLoading();">
+            <input type="submit" value="ダウンロード">
             </div><!--bigbutton-->
           </form>
         </div><!--datatable-->
@@ -139,25 +147,27 @@
         ※列名に＊がついたものは、現在のマスタから取得しています。
       {% endif %}
     </div><!--comments-->
-    <table class="dataframe">
-      <thead>
-        <tr>
-          {% for header in headers %}
-          <th>
-            {{ header }}
-          </th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for record in records %}
+    <div class="dataframe">
+      <table>
+        <thead>
           <tr>
-            {% for rec in record %}
-            <td>{{ rec }}</td>
+            {% for header in headers %}
+            <th>
+              {{ header }}
+            </th>
             {% endfor %}
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for record in records %}
+            <tr>
+              {% for rec in record %}
+              <td>{{ rec }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>

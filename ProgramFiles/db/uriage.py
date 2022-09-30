@@ -67,8 +67,8 @@ def Create_SQL_dsp(
                 WHEN 伝票区分=90 THEN 数量*-1*単価
                 ELSE 数量*単価
             END AS 金額,
-            備考,
-            出荷伝票番号
+            出荷伝票番号,
+            備考
         FROM {file}
         LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=10 AND ET1.コード＊=伝票区分
         LEFT OUTER JOIN ETCMPF ET2 ON ET2.レコード区分＊=20 AND ET2.コード＊=委託区分
@@ -150,8 +150,8 @@ def Create_SQL_download(
                 WHEN 伝票区分=90 THEN 数量*-1*単価
                 ELSE 数量*単価
             END AS 金額,
-            備考,
             出荷伝票番号,
+            備考,
             オーダー番号
         FROM {file}
         LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=10 AND ET1.コード＊=伝票区分
