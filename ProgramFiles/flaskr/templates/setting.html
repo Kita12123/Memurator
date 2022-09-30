@@ -42,9 +42,11 @@
       </div>
       <form method="post">
         <div class="bigbutton">
-          <input type="submit" name="ok" value="最新データ取得">
+          <input type="submit" name="ok" value="最新データ取得" onclick="showLoading();">
         </div><!--bigbutton-->
       </form>
+      <!--Display Loading-->
+      <div id="loading" style="display:none;"></div>
       <div class="subtitle">
         ログ参照
       </div><!--bigbutton-->

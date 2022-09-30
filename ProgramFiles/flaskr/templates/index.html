@@ -85,13 +85,13 @@
             <input type="submit" value="検索" onclick="showLoading();">
           </div>
         </form>
+        <!--Display Loading-->
+        <div id="loading" style="display:none;"></div>
       </div><!--main-form-->
       {% if method_type == "post" %}
         <div class="subtitle">
           データテーブル
         </div><!--subtitle-->
-        <!--Display Loading-->
-        <div id="loading" style="display:none;"></div>
         <div id="datatable">
           <!--Message of Totall Data-->
           {% for m in messages %}
@@ -103,7 +103,7 @@
             <input type="hidden" name="sort_column" value="{{ sort_column }}">
             <input type="hidden" name="sort_type" value="{{ sort_type }}">
             <div class="bigbutton">
-            <input type="submit" value="ダウンロード">
+            <input type="submit" value="ダウンロード" onclick="showLoading();">
             </div><!--bigbutton-->
           </form>
         </div><!--datatable-->

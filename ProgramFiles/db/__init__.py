@@ -9,15 +9,21 @@ from ProgramFiles.db import file_ins
 from ProgramFiles.db.sql_ins import DB_SQL
 from ProgramFiles.log import LOGGER, dsp_except
 
-#
-# Initializing
-#
-DB_SQL.db_open()
+
+def refresh_schedule():
+    """定期実行
+        SQLとの接続を途切れさせないため"""
+    try:
+        DB_SQL.db_open()
+        DB_SQL.db_execute(sql="SELECT * FROM ETCMPF")
+        DB_SQL.db_close()
+    except:
+        dsp_except()
 
 
 def refresh_all():
     """すべてのデータを更新"""
-    LOGGER.info(f"*************** Start Connect DataBase ***************")
+    LOGGER.info("*************** Start Connect DataBase ***************")
     try:
         last_month = datetime.today() - relativedelta(months=1)
         yymmdd_host = int(last_month.strftime(r"%Y%m"+"00")) - 19500000
@@ -34,4 +40,4 @@ def refresh_all():
         SETTING.update()
     except:
         dsp_except()
-    LOGGER.info(f"*************** Ended Connect DataBase ***************")
+    LOGGER.info("*************** Ended Connect DataBase ***************")

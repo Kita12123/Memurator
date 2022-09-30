@@ -14,7 +14,9 @@ class DB_SQL_CLS:
         if self.connection is None:
             self.connection = sqlite3.connect(
                 DATABASE,
-                check_same_thread=False)
+                timeout=8,
+                check_same_thread=False
+                )
         if self.cursor is None:
             self.cursor = self.connection.cursor()
 
@@ -28,6 +30,7 @@ class DB_SQL_CLS:
 
     def db_close(self):
         if self.cursor is not None:
+            self.cursor.close()
             self.connection.close()
         self.connection = None
         self.cursor = None

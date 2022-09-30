@@ -77,17 +77,6 @@ def Create_SQL_dsp(
         WHERE 
 {where}
         AND   数量<>0
-        /* 
-        伝票区分抽出なし
-        AND   伝票区分<>20
-        AND   伝票区分<>22
-        AND   伝票区分<>50
-        AND   伝票区分<>70
-        AND   伝票区分<>80
-        AND   伝票区分<>95
-        AND   伝票区分<>96
-        AND   伝票区分<>99
-        */
         """
     sql = (
         func(file="MUJNRPF")
@@ -176,17 +165,6 @@ def Create_SQL_download(
         WHERE 
 {where}
         AND   数量<>0
-        /* 
-        伝票区分抽出なし
-        AND   伝票区分<>20
-        AND   伝票区分<>22
-        AND   伝票区分<>50
-        AND   伝票区分<>70
-        AND   伝票区分<>80
-        AND   伝票区分<>95
-        AND   伝票区分<>96
-        AND   伝票区分<>99
-        */
         """
     sql = (
         func(file="MUJNRPF")
