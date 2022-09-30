@@ -87,6 +87,7 @@ def create_sql_tokuisaki_cd(cd: str) -> str:
 def create_sql_soukasaki_cd(cd: str) -> str:
     """送荷先コードのSQLコード作成"""
     def func(c: str):
+        c = c.replace(" ", "")
         if c.isdigit():
             return f" OR 送荷先コード={c} "
         else:
@@ -102,6 +103,7 @@ def create_sql_soukasaki_cd(cd: str) -> str:
 def create_sql_zatu_cd(cd: str) -> str:
     """雑コードのSQLコード作成"""
     def func(c: str):
+        c = c.replace(" ", "")
         if c.isdigit():
             return f" OR 雑コード={c} "
         else:
@@ -117,6 +119,7 @@ def create_sql_zatu_cd(cd: str) -> str:
 def create_sql_tantou_cd(cd: str) -> str:
     """担当者コードのSQLコード作成"""
     def func(c: str):
+        c = c.replace(" ", "")
         if c.isdigit():
             return f" OR 担当者コード={c} "
         else:
