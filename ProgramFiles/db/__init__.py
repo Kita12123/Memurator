@@ -6,24 +6,17 @@ from dateutil.relativedelta import relativedelta
 
 from ProgramData.setting_ins import SETTING
 from ProgramFiles.db import file_ins
-from ProgramFiles.db.sql_ins import DB_SQL
 from ProgramFiles.log import LOGGER, dsp_except
-
-def refresh_schedule():
-    """定期実行
-        SQLとの接続を途切れさせないため"""
-    try:
-        DB_SQL.db_open()
-        DB_SQL.db_execute(sql="SELECT * FROM ETCMPF")
-        DB_SQL.db_close()
-    except:
-        dsp_except()
 
 
 def refresh_all():
     """すべてのデータを更新"""
     LOGGER.info("*************** Start Connect DataBase ***************")
     try:
+        if SETTING.dic["最終更新日時"] == "更新中":
+            return
+        SETTING.dic["最終更新日時"] = "更新中"
+        SETTING.update()
         last_month = datetime.today() - relativedelta(months=1)
         yymmdd_host = int(last_month.strftime(r"%Y%m"+"00")) - 19500000
         file_ins.TOTAL_URI.refresh(where=f"伝票日付>={yymmdd_host}")
@@ -40,4 +33,5 @@ def refresh_all():
         SETTING.update()
     except:
         dsp_except()
+        SETTING.dic["最終更新日時"] = "更新エラー"
     LOGGER.info("*************** Ended Connect DataBase ***************")

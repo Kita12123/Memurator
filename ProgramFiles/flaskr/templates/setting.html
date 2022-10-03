@@ -41,9 +41,13 @@
         更新日時:{{ refresh_date }}
       </div>
       <form method="post">
-        <div class="bigbutton">
-          <input type="submit" name="ok" value="最新データ取得" onclick="showLoading();">
-        </div><!--bigbutton-->
+        {% if refresh_date == "更新中" %}
+          更新中...
+        {% else %}
+          <div class="bigbutton">
+            <input type="submit" name="ok" value="最新データ取得" onclick="showLoading();">
+          </div><!--bigbutton-->
+        {% endif %}
       </form>
       <!--Display Loading-->
       <div id="loading" style="display:none;"></div>
