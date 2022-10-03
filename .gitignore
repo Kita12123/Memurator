@@ -1,5 +1,5 @@
 .win/
-ProgramData/__pycache__
+ProgramData/__pycache__/
 ProgramData/database.db
 ProgramData/download.csv
 ProgramData/setting.json

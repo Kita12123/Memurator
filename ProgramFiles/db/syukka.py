@@ -33,10 +33,13 @@ def Create_SQL_dsp(
     sql =  f"""
     SELECT
         伝票日付+19500000 AS 伝票日付,
-        伝票区分,
         ifnull(ET1.名称＊,'') AS 伝票区分名＊,
-        委託区分,
         ifnull(ET2.名称＊,'') AS 委託区分名＊,
+        ifnull(ET4.名称＊,'') AS 扱い区分名＊,
+        CASE
+            WHEN ifnull(ET6.名称＊,'') <> '' THEN ifnull(ET6.名称＊,'')
+            ELSE ifnull(ET5.名称＊,'')
+        END AS 運送会社名＊,
         ifnull(ET3.名称＊,'') AS 担当者名＊,
         得意先コード,
         得意先カナ,
@@ -72,6 +75,9 @@ def Create_SQL_dsp(
     LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=10 AND ET1.コード＊=伝票区分
     LEFT OUTER JOIN ETCMPF ET2 ON ET2.レコード区分＊=20 AND ET2.コード＊=委託区分
     LEFT OUTER JOIN ETCMPF ET3 ON ET3.レコード区分＊=22 AND ET3.コード＊=担当者コード
+    LEFT OUTER JOIN ETCMPF ET4 ON ET4.レコード区分＊=30 AND ET4.コード＊=substr(扱い運送,1,1)
+    LEFT OUTER JOIN ETCMPF ET5 ON ET5.レコード区分＊=40 AND ET5.コード＊=substr(扱い運送,2,2)
+    LEFT OUTER JOIN ETCMPF ET6 ON ET6.レコード区分＊=40 AND ET6.コード＊=扱い運送
     LEFT OUTER JOIN NIHONPF NI2 ON NI2.送荷先コード＊=雑コード
     WHERE 
 {where}
@@ -96,6 +102,12 @@ def Create_SQL_download(
         ifnull(ET1.名称＊,'') AS 伝票区分名＊,
         委託区分,
         ifnull(ET2.名称＊,'') AS 委託区分名＊,
+        扱い運送 AS 扱い運送区分,
+        ifnull(ET4.名称＊,'') AS 扱い区分名＊,
+        CASE
+            WHEN ifnull(ET6.名称＊,'') <> '' THEN ifnull(ET6.名称＊,'')
+            ELSE ifnull(ET5.名称＊,'')
+        END AS 運送会社名＊,
         ifnull(ET3.名称＊,'') AS 担当者名＊,
         得意先コード,
         得意先カナ,
@@ -156,6 +168,9 @@ def Create_SQL_download(
     LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=10 AND ET1.コード＊=伝票区分
     LEFT OUTER JOIN ETCMPF ET2 ON ET2.レコード区分＊=20 AND ET2.コード＊=委託区分
     LEFT OUTER JOIN ETCMPF ET3 ON ET3.レコード区分＊=22 AND ET3.コード＊=担当者コード
+    LEFT OUTER JOIN ETCMPF ET4 ON ET4.レコード区分＊=30 AND ET4.コード＊=substr(扱い運送,1,1)
+    LEFT OUTER JOIN ETCMPF ET5 ON ET5.レコード区分＊=40 AND ET5.コード＊=substr(扱い運送,2,2)
+    LEFT OUTER JOIN ETCMPF ET6 ON ET6.レコード区分＊=40 AND ET6.コード＊=扱い運送
     LEFT OUTER JOIN NIHONPF NI ON NI.送荷先コード＊=送荷先コード
     LEFT OUTER JOIN NIHONPF NI2 ON NI2.送荷先コード＊=雑コード
     /* 得意先はコードが二つに分かれているからめんどくさい
