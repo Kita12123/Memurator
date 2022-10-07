@@ -3,6 +3,8 @@ ProgramData/__pycache__/
 ProgramData/database.db
 ProgramData/download.csv
 ProgramData/setting.json
+ProgramData/user.json
+ProgramData/setting.json
 ProgramFiles/__pycache__/
 ProgramFiles/db/__pycache__/
 ProgramFiles/flaskr/__pycache__/
@@ -10,3 +12,4 @@ ProgramFiles/log/__pycache__
 ProgramFiles/log/debug.txt
 ProgramFiles/log/error.txt
 ProgramFiles/log/info.txt
+ProgramFiles/query/__pycache__

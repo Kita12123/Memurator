@@ -5,12 +5,11 @@ from ProgramFiles.flaskr.user_ins import USER
 from ProgramFiles.query import ( 
     syukka,
     uriage,
-    tokuisaki
 )
 
 class QUERY_CLS:
     
-    def create_sql_dsp(self, ip, db_name, where=""):
+    def create_sql_dsp(self, ip, db_name):
         user_query = USER.load(ip=ip)
         if db_name == "売上データ":
             return uriage.Create_SQL_dsp(
@@ -24,12 +23,8 @@ class QUERY_CLS:
                 sort_column=user_query["順列"],
                 sort_type=user_query["順列タイプ"]
             )
-        elif db_name == "得意先":
-            return tokuisaki.Create_SQL_dsp(
-                where=where
-            )
 
-    def create_sql_download(self, ip, db_name, where=""):
+    def create_sql_download(self, ip, db_name):
         user_query = USER.load(ip=ip)
         if db_name == "売上データ":
             return uriage.Create_SQL_download(
@@ -42,10 +37,6 @@ class QUERY_CLS:
                 where=self.create_where(ip=ip),
                 sort_column=user_query["順列"],
                 sort_type=user_query["順列タイプ"]
-            )
-        elif db_name == "得意先":
-            return tokuisaki.Create_SQL_dsp(
-                where=where
             )
     
     def create_where(self, ip):
@@ -89,7 +80,7 @@ class QUERY_CLS:
         # 製品部品フラグ
         if "製品部品フラグ" not in user_query:
             seihinbuhin2 = ""
-        elif user_query["製品部品"] == "":
+        elif user_query["製品部品フラグ"] == "":
             seihinbuhin2 = ""
         elif user_query["製品部品フラグ"] == "seihin":
             seihinbuhin2 = " 製品部品コード<= 9999999 AND \n"
