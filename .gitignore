@@ -12,4 +12,4 @@ ProgramFiles/log/__pycache__
 ProgramFiles/log/debug.txt
 ProgramFiles/log/error.txt
 ProgramFiles/log/info.txt
-ProgramFiles/query/__pycache__
+ProgramFiles/query/__pycache__/

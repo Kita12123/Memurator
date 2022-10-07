@@ -9,7 +9,6 @@ from ProgramData import USER_JSON
 class USER_CLS:
     def __init__(self):
         self.file = USER_JSON
-        # importでいけるかどうか試してみる
         with open(self.file, mode="r", encoding="utf-8") as f:
             self.dic = json.load(f)
     
@@ -23,8 +22,6 @@ class USER_CLS:
     def update(self, ip:str, query:dict):
         """更新"""
         self.dic[ip] = query
-        with open(self.file, mode="w", encoding="utf-8") as f:
-            json.dump(self.dic, f, indent=2)
     
     def clear(self, ip:str):
         if ip in self.dic:
@@ -34,6 +31,9 @@ class USER_CLS:
         yesterday =  today - timedelta(days=1)
         self.dic[ip]["開始日付"] = yesterday.strftime(r"%Y-%m-%d")
         self.dic[ip]["終了日付"] = today.strftime(r"%Y-%m-%d")
+
+    def refresh(self):
+        """データ保存"""
         with open(self.file, mode="w", encoding="utf-8") as f:
             json.dump(self.dic, f, indent=2)
 

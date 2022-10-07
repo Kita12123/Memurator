@@ -5,11 +5,13 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from flask import Flask
 from ProgramFiles.db import refresh_all
+from ProgramFiles.flaskr.user_ins import USER
 from ProgramFiles.log import dsp_except
 
 def create_app() -> Flask:
     def schedule_func():
         now_hour = datetime.now().strftime(r"%H")
+        USER.refresh()
         if now_hour in ["8", "10", "12", "14", "16"]:
             refresh_all()
     app = Flask(__name__)
