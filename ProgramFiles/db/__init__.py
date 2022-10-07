@@ -27,8 +27,8 @@ def refresh_all():
         file_ins.SOKCD_MASTER.refresh()
         file_ins.TOKCD_MASTER.refresh()
         #file_ins.KEN_MASTER.refresh()
-        #file_ins.BUHIN_MASTER.refresh()
-        #file_ins.SEIHIN_MASTER.refresh()
+        file_ins.BUHIN_MASTER.refresh()
+        file_ins.SEIHIN_MASTER.refresh()
         SETTING.dic["最終更新日時"] = datetime.today().strftime(r"%Y/%m/%d %H:%M:%S")
         SETTING.update()
     except:

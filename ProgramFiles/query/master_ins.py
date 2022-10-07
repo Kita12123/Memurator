@@ -2,6 +2,7 @@
 Query作成（マスタ検索用）
 """
 from ProgramFiles.query import ( 
+    seihinbuhin,
     soukasaki,
     tokuisaki,
     zatu
@@ -14,24 +15,32 @@ class MASTER_CLS:
             "カナ名",
             "名称",
             "担当者名",
-            "住所"
+            "住所",
+            "部番"
             ]
 
     def create_selects(self, column: str, value: str):
-        selects = value.split(",")
-        selects_ = selects
-        for s in selects_:
-            selects.remove(s)
-            s_ = str(s).replace(" ","")
-            if s_.isdigit() == False:
-                continue
-            elif column == "得意先":
-                s_ = int(s_)
-                if len(str(s_)) < 5:
-                    selects += [f"{s_}10", f"{s_}20", f"{s_}40"]
-                else:
-                    selects += [str(s_)]
-        return selects
+        def func(c :str) -> list[str]:
+            """調整する"""
+            c = c.replace(" ","")
+            if c.isdigit() == False:
+                return []
+            c = str(int(c))
+            if column == "得意先":
+                if len(c) < 5:
+                    return [f"{c}10", f"{c}20", f"{c}40"]
+            #elif column == "製品部品":
+            #    if len(c) == 5:
+            #        [c + str(i).zfill(2) for i in range(100)]
+            return [c]
+        if value == "":
+            return []
+        elif "," not in value:
+            return func(value)
+        result = []
+        for s in value.split(","):
+            result += func(s)     
+        return result
     
     def create_sql_dsp(self, column, form_dic: dict[str,str]):
         """SQL（表示用）作成"""
@@ -48,6 +57,10 @@ class MASTER_CLS:
             return zatu.Create_SQL_dsp(
                 where=where
             )
+        elif column == "製品部品":
+            return seihinbuhin.Create_SQL_dsp(
+                where=where
+            )
 
     def create_sql_download(self, column, form_dic: dict[str,str]):
         """SQL（ダウンロード用）作成"""
@@ -62,6 +75,10 @@ class MASTER_CLS:
             )
         elif column == "雑":
             return zatu.Create_SQL_download(
+                where=where
+            )
+        elif column == "製品部品":
+            return seihinbuhin.Create_SQL_download(
                 where=where
             )
 

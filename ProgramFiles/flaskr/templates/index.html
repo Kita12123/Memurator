@@ -26,6 +26,13 @@
       </div><!--subtitle-->
       <div class="main-form">
         <form method="post">
+          <div class="dummy">
+            {% if method_type == "get" %}
+              <button formaction="{{ url_for('index',db_name='売上データ') }}" onclick="showLoading();">売上データ</button>
+            {% elif method_type == "post" %}
+              <button formaction="{{ url_for('index',db_name=db_name) }}" onclick="showLoading();">{{ db_name }}</button>
+            {% endif %}
+          </div><!--dummy-->
         <!--Query DataBase-->
           <table>
             <tbody>
@@ -74,7 +81,7 @@
                     {% endif %}
                   </select>
                 </td>
-                <td></td>
+                <td><button formaction="{{ url_for('search', column='製品部品') }}">製品部品マスタ</button></td>
               </tr>
               <tr>
                 <td><label for="担当者">担当者ｺｰﾄﾞ 名：</label></td>

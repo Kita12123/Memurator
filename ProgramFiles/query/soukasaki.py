@@ -11,7 +11,8 @@ def Create_SQL_dsp(
         where = "WHERE\n" + where
     sql =  f"""
     SELECT
-        送荷先コード＊ AS 送荷先コード,
+        /*selects用にstr型にしている*/
+        送荷先コード＊ || '' AS 送荷先コード,
         送荷先カナ＊ AS カナ名,
         送荷先名＊ AS 名称,
         SUBSTR('0000' || 郵便番号１＊,-4,4)

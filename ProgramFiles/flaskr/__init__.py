@@ -23,6 +23,7 @@ def create_app() -> Flask:
     except:
         dsp_except()
         scheduler.shutdown()
+#refresh_all()
 app = create_app()
 #app = Flask(__name__)
 

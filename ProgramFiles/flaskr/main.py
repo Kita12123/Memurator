@@ -119,7 +119,6 @@ def search(column):
         user_query = USER.load(ip=user_ip)
         master_query = request.form.to_dict()
         user_query[column] = ",".join(request.form.getlist("key_code"))
-    print(user_query)
     USER.update(ip=user_ip, query=user_query)
     selects = MASTER.create_selects(
         column=column,
@@ -136,6 +135,8 @@ def search(column):
     df_dsp = df.head(int(SETTING.dic["最大表示行数"]))
     return render_template(
         "master.html",
+        # 抽出input_textをこれで作成しようとしたら難しかった。
+        #query_column=MASTER.query_columns,
         master_query=master_query,
         selects=selects,
         refresh_date=SETTING.dic["最終更新日時"],
