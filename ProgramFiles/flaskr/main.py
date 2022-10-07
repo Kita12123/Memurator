@@ -7,189 +7,52 @@ from flask import (
     render_template,
     send_file,
     request,
-    send_from_directory
+    send_from_directory,
 )
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from ProgramData.setting_ins import SETTING
+from ProgramFiles.flaskr.setting_ins import SETTING
+from ProgramFiles.flaskr.user_ins import USER
+from ProgramFiles.query.query_ins import QUERY
+from ProgramFiles.query.master_ins import MASTER
 from ProgramData import TEMP_CSV
 from ProgramFiles.log import CD as LOGCD
 from ProgramFiles.db.sql_ins import DB_SQL
 from ProgramFiles import db
-from ProgramFiles.db import uriage, syukka
 from ProgramFiles.flaskr import app
-
-#
-# Sub Function
-#
-def create_sql_dennpyou_date(fd: str, ld: str) -> str:
-    """Adjust Date from YYYY-MM-DD to YYYYMMDD"""
-    if fd == "":
-        first = ""
-    else:
-        fd_ = int(fd.replace("-","")) - 19500000
-        first = f" 伝票日付>={fd_} AND\n"
-    if ld == "":
-        last = ""
-    else:
-        ld_ = int(ld.replace("-","")) - 19500000
-        last = f" 伝票日付<={ld_} AND\n"
-    return first + last
-
-def create_sql_seihin_buhin_cd(cd: str) -> str:
-    """製品部品コードのSQLコードを作成"""
-    def func(c: str):
-        c = c.replace(" ", "")
-        if c.isdigit():
-            if len(c) == 5:
-                return f" OR ( 製品部品コード>={c}00 AND 製品部品コード<={c}99 ) "
-            return f" OR 製品部品コード={c} "
-        else:
-            return f" OR 製品部品カナ LIKE'%{c}%' "
-    if cd == "":
-        return ""
-    elif "," in cd:
-        # ','区切りにORで結合した、SQLコードを作成する
-        sql = "".join([func(code) for code in cd.split(",")])[3:]
-        return f" ({sql}) AND\n"
-    else:
-        return func(cd)[3:] + " AND\n"
-
-def create_sql_seihin_buhin_flg(flg: str) -> str:
-    """製品のみ部品のみのSQLコードを作成"""
-    if   flg == "seihin":
-        return " 製品部品コード<= 9999999 AND \n"
-    elif flg == "buhin":
-        return " 製品部品コード>=10000000 AND \n"
-    else:
-        return ""
-
-def create_sql_tokuisaki_cd(cd: str) -> str:
-    """得意先コードのSQLコードを作成"""
-    def func(c: str):
-        c = c.replace(" ", "")
-        if c.isdigit():
-            if len(c) <= 4:
-                # 3ｹﾀでも対応する
-                z = '0'*(4 - len(c))
-                return f" OR ( 得意先コード>={z}{c}00 AND 得意先コード<={z}{c}99 ) "
-            return f" OR 得意先コード={c} "
-        else:
-            return f" OR 得意先カナ LIKE'%{c}%' "
-    if cd == "":
-        return ""
-    elif "," in cd:
-        sql = "".join([ func(code) for code in cd.split(",")])[3:]
-        return f" ({sql}) AND\n"
-    else:
-        return func(cd)[3:] + " AND \n"
-
-def create_sql_soukasaki_cd(cd: str) -> str:
-    """送荷先コードのSQLコード作成"""
-    def func(c: str):
-        c = c.replace(" ", "")
-        if c.isdigit():
-            return f" OR 送荷先コード={c} "
-        else:
-            return f" OR 送荷先カナ LIKE'%{c}%' "
-    if cd == "":
-        return ""
-    elif "," in cd:
-        sql = "".join([ func(code) for code in cd.split(",")])[3:]
-        return f" ({sql}) AND\n"
-    else:
-        return func(cd)[3:] + " AND \n"
-
-def create_sql_zatu_cd(cd: str) -> str:
-    """雑コードのSQLコード作成"""
-    def func(c: str):
-        c = c.replace(" ", "")
-        if c.isdigit():
-            return f" OR 雑コード={c} "
-        else:
-            return f" OR 雑カナ＊ LIKE'%{c}%' "
-    if cd == "":
-        return ""
-    elif "," in cd:
-        sql = "".join([ func(code) for code in cd.split(",")])[3:]
-        return f" ({sql}) AND\n"
-    else:
-        return func(cd)[3:] + " AND \n"
-
-def create_sql_tantou_cd(cd: str) -> str:
-    """担当者コードのSQLコード作成"""
-    def func(c: str):
-        c = c.replace(" ", "")
-        if c.isdigit():
-            return f" OR 担当者コード={c} "
-        else:
-            return f" OR 担当者名＊ LIKE'%{c}%' "
-    if cd == "":
-        return ""
-    elif "," in cd:
-        sql = "".join([ func(code) for code in cd.split(",")])[3:]
-        return f" ({sql}) AND\n"
-    else:
-        return func(cd)[3:] + " AND \n"
 
 #
 # Main
 #
-@app.route("/", methods=["GET","POST"])
-def index():
-    max_dsp_row = int(SETTING.dic["最大表示行数"])
-    refresh_date = SETTING.dic["最終更新日時"]
-    if request.method=="GET":
-        return render_template(
-        # HTML
-            "index.html",
-            method_type="get",
-        # Query data
-            first_yyyy_mm_dd=( datetime.today() - timedelta(days=1) ).strftime(r"%Y-%m-%d"),
-            last_yyyy_mm_dd=datetime.today().strftime(r"%Y-%m-%d"),
-            sort_type="昇順",
-        # Display Table of DataFrame
-            refresh_date=refresh_date,
-            headers=["抽出条件を入力してください。"]
-        )
-    # Read paramater on request
-    db_name = request.form["db_name"]
-    first_yyyy_mm_dd = request.form["first_yyyy_mm_dd"]
-    last_yyyy_mm_dd = request.form["last_yyyy_mm_dd"]
-    seihin_buhin_cd = request.form["seihin_buhin_cd"]
-    seihin_buhin_flg = request.form["seihin_buhin_flg"]
-    tokuisaki_cd = request.form["tokuisaki_cd"]
-    zatu_cd = request.form["zatu_cd"]
-    soukasaki_cd = request.form["soukasaki_cd"]
-    tantou_cd = request.form["tantou_cd"]
-    sort_column = request.form["sort_column"]
-    sort_type = request.form.get("sort_type","降順")
-    # Create Code of SQL for Database on sqlite3
-    # HOSTとsqlite3で送荷先コードのタイプが違うため、それぞれのSQLコードが必要
-    sql_where_sqlite3 = (
-        "/* ユーザー抽出条件 */\n"
-    +   create_sql_dennpyou_date(fd=first_yyyy_mm_dd, ld=last_yyyy_mm_dd)
-    +   create_sql_tokuisaki_cd(cd=tokuisaki_cd)
-    +   create_sql_zatu_cd(cd=zatu_cd)
-    +   create_sql_soukasaki_cd(soukasaki_cd)
-    +   create_sql_seihin_buhin_cd(cd=seihin_buhin_cd)
-    +   create_sql_seihin_buhin_flg(flg=seihin_buhin_flg)
-    +   create_sql_tantou_cd(cd=tantou_cd)
-    )[:-5] + "\n/* ユーザー抽出条件 */"
-    # Create DataFrame
-    if db_name == "売上検索":
-        tmp_class = uriage
-    else:
-    #elif db_name == "出荷":
-        tmp_class = syukka
-    sql = tmp_class.Create_SQL_dsp(
-        where=sql_where_sqlite3,
-        sort_column=sort_column,
-        sort_type=sort_type
+@app.route("/", methods=["GET"])
+def login():
+    user_ip = request.remote_addr
+    #USER.clear(ip=user_ip)
+    user_query = USER.load(ip=user_ip)
+    # 順列はそのままだとデータ種類を変更するときに列名がないものを指定してしまう可能性がある
+    user_query["順列"] = ""
+    user_query["順列タイプ"] = "昇順"
+    USER.update(ip=user_ip, query=user_query)
+    return render_template(
+    # HTML
+        "index.html",
+        method_type="get",
+    # Query data
+        user_query=user_query,
+    # Display Table of DataFrame
+        refresh_date=SETTING.dic["最終更新日時"],
+        headers=["抽出条件を入力してください。"]
     )
+@app.route("/<db_name>", methods=["POST"])
+def index(db_name):
+    user_ip = request.remote_addr
+    # POST
+    # Read paramater on request
+    USER.update(ip=user_ip, query=request.form.to_dict())
+    # Create Code of SQL for Database on sqlite3
     DB_SQL.db_open()
     df = pd.read_sql(
-        sql=sql,
+        sql=QUERY.create_sql_dsp(ip=user_ip,db_name=db_name),
         con=DB_SQL.connection
     )
     DB_SQL.db_close()
@@ -197,17 +60,17 @@ def index():
     # if Count is many, Compression DataFrame for Display
     count=len(df)
     messages = []
-    if count >= max_dsp_row:
-        df_dsp = df.head(max_dsp_row).copy()
-        messages.append("件数 : {:,} ({})".format(count, max_dsp_row))
+    if count >= int(SETTING.dic["最大表示行数"]):
+        df_dsp = df.head(int(SETTING.dic["最大表示行数"])).copy()
+        messages.append("件数 : {:,} ({})".format(count, int(SETTING.dic["最大表示行数"])))
     else:
         df_dsp = df.copy()
         messages.append("件数 : {:,}".format(count))
-    if db_name == "売上検索":
+    if db_name == "売上データ":
         messages.append("合計数量 : {:,}".format(df["数量"].sum()))
         messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
         df_dsp.loc[:,("数量","単価","金額")] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
-    elif db_name == "出荷検索":
+    elif db_name == "出荷データ":
         messages.append("合計出荷数 : {:,}".format(df["出荷数"].sum()))
         messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
         df_dsp.loc[:,("出荷数","単価","金額")] = df_dsp[["出荷数","単価","金額"]].applymap("{:,}".format)
@@ -216,47 +79,77 @@ def index():
         "index.html",
         method_type="post",
     # Query data
-        db_name=db_name[:-2],
-        sql_sqlite3=sql,
-        first_yyyy_mm_dd=first_yyyy_mm_dd,
-        last_yyyy_mm_dd=last_yyyy_mm_dd,
-        seihin_buhin_cd=seihin_buhin_cd,
-        seihin_buhin_flg=seihin_buhin_flg,
-        tokuisaki_cd=tokuisaki_cd,
-        zatu_cd=zatu_cd,
-        soukasaki_cd=soukasaki_cd,
-        tantou_cd=tantou_cd,
-        sort_column=sort_column,
-        sort_type=sort_type,
-    # for download
-        sql_where_sqlite3=sql_where_sqlite3,
+        db_name=db_name,
+        user_query=USER.load(ip=user_ip),
     # Totalling User DataFrame
         count=count,
         messages=messages,
     # Display Table of DataFrame
-        refresh_date=refresh_date,
+        refresh_date=SETTING.dic["最終更新日時"],
         headers=df_dsp.columns,
-        records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns))),
+        records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns)))
     )
 
-@app.route("/download", methods=["POST"])
-def download():
-    """データをダウンロードする"""
-    # htmlでdb_nameはdb_name[:-2]とされているため
-    # classを使ってもっとわかりやすく複数のデータを参照できるようにしたい
-    if request.form["db_name"] == "売上":
-        tmp_class = uriage
-    else:
-    #elif db_name == "出荷":
-        tmp_class = syukka
-    sql = tmp_class.Create_SQL_download(
-        where=request.form["sql_where_sqlite3"],
-        sort_column=request.form["sort_column"],
-        sort_type=request.form["sort_type"]
+@app.route("/search/<column>", methods=["GET", "POST"])
+def search(column):
+    """抽出条件をマスタより取得"""
+    user_ip = request.remote_addr
+    # 抽出条件QUERYに反映させる -> "/"へ
+    if request.form.get("ok") == "決定":
+        user_query = USER.load(ip=user_ip)
+        user_query[column] = ",".join(request.form.getlist("key_code"))
+        USER.update(ip=user_ip, query=user_query)
+        return render_template(
+        # HTML
+            "index.html",
+            method_type="get",
+        # Query data
+            user_query=USER.load(ip=user_ip),
+        # Display Table of DataFrame
+            refresh_date=SETTING.dic["最終更新日時"],
+            headers=["抽出条件を入力してください。"]
+        )
+    # user_query, master_query作成
+    if "順列" in request.form.to_dict():
+        # ここのQUERYを保存するかしないかの判定がむずかしい
+        # indexからきた場合はする
+        user_query = request.form.to_dict()
+        master_query = {}
+    elif request.method == "POST" and request.form.get("ok") == "抽出":
+        user_query = USER.load(ip=user_ip)
+        master_query = request.form.to_dict()
+        user_query[column] = ",".join(request.form.getlist("key_code"))
+    print(user_query)
+    USER.update(ip=user_ip, query=user_query)
+    selects = MASTER.create_selects(
+        column=column,
+        value=user_query[column]
     )
     DB_SQL.db_open()
     df = pd.read_sql(
-        sql=sql,
+        sql=MASTER.create_sql_dsp(
+            column=column,
+            form_dic=master_query),
+        con=DB_SQL.connection
+    )
+    DB_SQL.db_close()
+    df_dsp = df.head(int(SETTING.dic["最大表示行数"]))
+    return render_template(
+        "master.html",
+        master_query=master_query,
+        selects=selects,
+        refresh_date=SETTING.dic["最終更新日時"],
+        headers=["選択"] + list(df_dsp.columns),
+        records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns)))
+    )
+
+@app.route("/<db_name>/download", methods=["GET"])
+def download(db_name):
+    """データをダウンロードする"""
+    user_ip = request.remote_addr
+    DB_SQL.db_open()
+    df = pd.read_sql(
+        sql=QUERY.create_sql_download(ip=user_ip,db_name=db_name),
         con=DB_SQL.connection
     )
     DB_SQL.db_close()
@@ -272,8 +165,7 @@ def download():
 @app.route("/setting", methods=["GET", "POST"])
 def setting():
     """設定画面"""
-    with open(os.path.join(LOGCD, "debug.txt"), mode="r", encoding="utf-8") as f:
-        log_texts = f.readlines()
+    log_texts=["ログ内容を表示します"]
     if request.method == "POST":
         click = request.form.get("ok")
         if click == "設定変更":

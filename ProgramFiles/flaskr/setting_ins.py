@@ -4,11 +4,11 @@
 import os
 import json
 
+from ProgramData import SETTING_JSON
+
 class SETTING_CLS:
     def __init__(self):
-        self.file = os.path.join(
-            os.path.dirname(__file__),
-            "setting.json")
+        self.file = SETTING_JSON
         with open(self.file, mode="r", encoding="cp932") as f:
             self.dic = json.load(f)
 
@@ -18,3 +18,4 @@ class SETTING_CLS:
             json.dump(self.dic, f)
 
 SETTING = SETTING_CLS()
+

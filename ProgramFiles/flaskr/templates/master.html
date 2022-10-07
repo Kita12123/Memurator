@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>M端末</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
+  </head>
+  <body>
+    <!-- タイトル画面 -->
+    <div class="title">
+      <a id="left-title" href="/">初期画面へ</a>
+      <div id="main-title">
+        {{ db_name }}参照
+      </div><!--center-->
+      <a id="right-title" href="/setting">設定画面へ</a>
+    </div><!--title-->
+    <!-- メイン画面 -->
+    <div class="content">
+      <div class="subtitle">
+        マスタ検索
+      </div><!--subtitle-->
+    </div><!--content-->
+    <!--Table of Data-->
+    <div class="comments">
+      最終更新日付:{{ refresh_date }}
+    </div><!--comments-->
+    <form method="POST">
+      <input type="hidden" name="headers" value="{{ headers }}">
+      <div class="bigbutton">
+        <input type="submit" name="ok" value="抽出">
+        <input type="submit" name="ok" value="決定">
+      </div>
+      <div class="dataframe">
+        <table>
+          <thead>
+            <tr>
+              {% for header in headers %}
+                {% if   header == "カナ名" %}
+                  <td><input name="カナ名" value="{{ master_query['カナ名'] }}"></td>
+                {% elif header == "名称" %}
+                  <td><input name="名称" value="{{ master_query['名称'] }}"></td>
+                {% elif header == "担当者名" %}
+                  <td><input name="担当者名"  value="{{ master_query['担当者名'] }}"></td>
+                  {% elif header == "住所" %}
+                  <td><input name="住所"   value="{{ master_query['住所'] }}"></td>
+                {% else %}
+                  <td></td>
+                {% endif %}
+              {% endfor %}
+            </tr>
+            <tr>
+              {% for header in headers %}
+                <th>
+                  {{ header }}
+                </th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in records %}
+                <tr>
+                  <label for="{{ record[0] }}">
+                    {% if record[0] in selects %}
+                      <td><input type="checkbox" name="key_code" id="{{ record[0] }}" value="{{ record[0] }}" checked></td>
+                    {% else %}
+                      <td><input type="checkbox" name="key_code" id="{{ record[0] }}" value="{{ record[0] }}"></td>
+                    {% endif %}
+                  </label>
+                  {% for rec in record %}
+                    <td>{{ rec }}</td>
+                  {% endfor %}
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div><!--dataframe-->
+    </form>
+  </body>
+</html>

@@ -2,29 +2,6 @@
 売上データ用 Module
 """
 
-DSP_COLUMNS = [
-    "伝票日付",
-    "伝票区分",
-    "伝票区分名＊",
-    "委託区分",
-    "委託区分名＊",
-    "担当者名＊",
-    "得意先コード",
-    "得意先カナ",
-    "雑コード",
-    "雑カナ＊",
-    "送荷先コード",
-    "送荷先カナ",
-    "製品部品コード",
-    "製品部品カナ",
-    "級区分",
-    "数量",
-    "単価",
-    "金額",
-    "備考",
-    "出荷伝票番号"
-    ]
-
 def Create_SQL_dsp(
     where: str,
     sort_column: str,
@@ -141,6 +118,7 @@ def Create_SQL_download(
                 WHEN ifnull(ET6.名称＊,'') <> '' THEN ifnull(ET6.名称＊,'')
                 ELSE ifnull(ET5.名称＊,'')
             END AS 運送会社名＊,
+            担当者コード,
             ifnull(ET3.名称＊,'') AS 担当者名＊,
             得意先コード,
             得意先カナ,
@@ -158,6 +136,10 @@ def Create_SQL_download(
                 WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN ifnull(NI2.送荷先カナ＊,'')
                 ELSE ''
             END AS 雑カナ＊,
+            CASE
+                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN ifnull(NI2.送荷先名＊,'')
+                ELSE ''
+            END AS 雑名＊,
             送荷先コード,
             送荷先カナ,
             ifnull(NI.送荷先名＊,'') AS 送荷先名＊,

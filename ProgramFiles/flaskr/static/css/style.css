@@ -96,6 +96,11 @@ form > input {
     margin-bottom: 0.3%;
     width: 30%;
 }
+.bigbutton > button {
+    margin-top: 0.3%;
+    margin-bottom: 0.3%;
+    width: 30%;
+}
 
 /* データ表示 */
 .dataframe table {
@@ -106,6 +111,9 @@ form > input {
 .dataframe thead {
 	border-bottom: 1px solid black;
 	vertical-align: bottom;
+}
+.dataframe thead input {
+    width: 100%;
 }
 .dataframe tbody tr:nth-child(odd) {
 	background: #f5f5f5;

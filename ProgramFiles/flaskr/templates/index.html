@@ -3,15 +3,19 @@
   <head>
     <meta charset="UTF-8">
     <title>M端末</title>
-    <link rel="stylesheet" href="./static/css/style.css">
-    <script type="text/javascript" src="./static/js/script.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
   </head>
   <body>
     <!-- タイトル画面 -->
     <div class="title">
       <a id="left-title" href="/">初期画面へ</a>
       <div id="main-title">
-        {{ db_name }}データ参照
+        {% if method_type=="get" %}
+          ようこそ
+        {% else %}
+          {{ db_name }}参照
+        {% endif %}
       </div><!--center-->
       <a id="right-title" href="/setting">設定画面へ</a>
     </div><!--title-->
@@ -26,40 +30,40 @@
           <table>
             <tbody>
               <tr>
-                <td><label for="first_yyyy_mm_dd">開始日付:</label></td>
-                <td><input type="date" name="first_yyyy_mm_dd" value="{{ first_yyyy_mm_dd }}"></td>
+                <td><label for="開始日付">開始日付:</label></td>
+                <td><input type="date" name="開始日付" value="{{ user_query['開始日付'] }}"></td>
                 <td></td>
               </tr>
               <tr>
-                <td><label for="last_yyyy_mm_dd">終了日付:</label></td>
-                <td><input type="date" name="last_yyyy_mm_dd" value="{{ last_yyyy_mm_dd }}"></td>
+                <td><label for="終了日付">終了日付:</label></td>
+                <td><input type="date" name="終了日付" value="{{ user_query['終了日付'] }}"></td>
                 <td></td>
               </tr>
               <tr>
-                <td><label for="tokuisaki_cd">得意先ｺｰﾄﾞ ｶﾅ：</label></td>
-                <td><input type="text" name="tokuisaki_cd" value="{{ tokuisaki_cd }}"></td>
-                <td></td>
+                <td><label for="得意先">得意先ｺｰﾄﾞ ｶﾅ：</label></td>
+                <td><input type="text" name="得意先" value="{{ user_query['得意先'] }}"></td>
+                <td><button formaction="{{ url_for('search', column='得意先') }}">得意先マスタ</button></td>
               </tr>
               <tr>
-                <td><label for="zatu_cd">雑ｺｰﾄﾞ ｶﾅ：</label></td>
-                <td><input type="text" name="zatu_cd" value="{{ zatu_cd }}"></td>
-                <td></td>
+                <td><label for="雑">雑ｺｰﾄﾞ ｶﾅ：</label></td>
+                <td><input type="text" name="雑" value="{{ user_query['雑'] }}"></td>
+                <td><button formaction="{{ url_for('search', column='雑') }}">雑マスタ</button></td>
               </tr>
               <tr>
-                <td><label for="soukasaki_cd">送荷先ｺｰﾄﾞ ｶﾅ：</label></td>
-                <td><input type="text" name="soukasaki_cd" value="{{ soukasaki_cd }}"></td>
-                <td></td>
+                <td><label for="送荷先">送荷先ｺｰﾄﾞ ｶﾅ：</label></td>
+                <td><input type="text" name="送荷先" value="{{ user_query['送荷先'] }}"></td>
+                <td><button formaction="{{ url_for('search', column='送荷先') }}">送荷先マスタ</button></td>
               </tr>
               <tr>
-                <td><label for="seihin_buhin_cd">製品部品ｺｰﾄﾞ ｶﾅ：</label></td>
+                <td><label for="製品部品">製品部品ｺｰﾄﾞ ｶﾅ：</label></td>
                 <td>
-                  <input type="text" name="seihin_buhin_cd" value="{{ seihin_buhin_cd }}">
-                  <select name="seihin_buhin_flg">
-                    {% if seihin_buhin_flg   == "seihin" %}
+                  <input type="text" name="製品部品" value="{{ user_query['製品部品'] }}">
+                  <select name="製品部品フラグ">
+                    {% if user_query['製品部品フラグ']   == "seihin" %}
                       <option value=""></option>
                       <option value="seihin" selected>製品のみ</option>
                       <option value="buhin">部品のみ</option>
-                    {% elif seihin_buhin_flg == "buhin" %}
+                    {% elif user_query['製品部品フラグ'] == "buhin" %}
                       <option value=""></option>
                       <option value="seihin">製品のみ</option>
                       <option value="buhin" selected>部品のみ</option>
@@ -73,8 +77,8 @@
                 <td></td>
               </tr>
               <tr>
-                <td><label for="tantou_cd">担当者ｺｰﾄﾞ 名：</label></td>
-                <td><input type="text" name="tantou_cd" value="{{ tantou_cd }}"></td>
+                <td><label for="担当者">担当者ｺｰﾄﾞ 名：</label></td>
+                <td><input type="text" name="担当者" value="{{ user_query['担当者'] }}"></td>
                 <td></td>
               </tr>
             </tbody>
@@ -83,16 +87,16 @@
             ※カンマ(,)で区切ることで、複数条件を抽出することができます。
           </div>
           {% if method_type == "post" %}
-            {% if sort_type == "昇順" %}
-              <input type="checkbox" name="sort_type", value="昇順" checked>
+            {% if user_query["順列タイプ"] == "降順" %}
+              <input type="checkbox" name="順列タイプ", value="昇順">
             {% else %}
-              <input type="checkbox" name="sort_type", value="昇順">
+              <input type="checkbox" name="順列タイプ", value="昇順" checked>
             {% endif %}
-            <label for="sort_column">昇順:</label>
-            <select name="sort_column">
+            <label for="順列">昇順:</label>
+            <select name="順列">
               <option value="" selected></option>
               {% for column in headers %}
-                {% if column == sort_column %}
+                {% if column == user_query['順列'] %}
                   <option value="{{ column }}" selected>{{ column }}</option>
                 {% else %}
                   <option value="{{ column }}">{{ column }}</option>
@@ -101,17 +105,15 @@
             </select>
             <br>
           {% else %}
-            <input type="hidden" name="sort_type" value="昇順">
-            <input type="hidden" name="sort_column" value="">
+            <input type="hidden" name="順列タイプ" value="昇順">
+            <input type="hidden" name="順列" value="">
           {% endif %}
           <div class="bigbutton">
-            {% if db_name == "売上" %}
-              <input name="db_name" type="submit" value="売上検索" onclick="showLoading();">
-            {% elif db_name == "出荷" %}
-              <input name="db_name" type="submit" value="出荷検索" onclick="showLoading();">
-            {% else %}
-              <input name="db_name" type="submit" value="売上検索" onclick="showLoading();">
-              <input name="db_name" type="submit" value="出荷検索" onclick="showLoading();">
+            {% if method_type == "get" %}
+              <button formaction="{{ url_for('index',db_name='売上データ') }}" onclick="showLoading();">売上データ</button>
+              <button formaction="{{ url_for('index',db_name='出荷データ') }}" onclick="showLoading();">出荷データ</button>
+            {% elif method_type == "post" %}
+              <button formaction="{{ url_for('index',db_name=db_name) }}" onclick="showLoading();">{{ db_name }}</button>
             {% endif %}
           </div>
         </form>
@@ -128,15 +130,7 @@
             {{ m }} &emsp;&emsp;
           {% endfor %}
           <!--Download data to csv-->
-          <form action="{{ url_for('download') }}" method="post">
-            <input type="hidden" name="db_name" value="{{ db_name }}">
-            <input type="hidden" name="sql_where_sqlite3" value="{{ sql_where_sqlite3 }}">
-            <input type="hidden" name="sort_column" value="{{ sort_column }}">
-            <input type="hidden" name="sort_type" value="{{ sort_type }}">
-            <div class="bigbutton">
-            <input type="submit" value="ダウンロード">
-            </div><!--bigbutton-->
-          </form>
+          <a href="{{ url_for('download',db_name=db_name) }}">ダウンロード</a>
         </div><!--datatable-->
       {% endif %}
     </div><!--content-->
