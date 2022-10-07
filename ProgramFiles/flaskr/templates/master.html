@@ -63,13 +63,11 @@
           <tbody>
             {% for record in records %}
                 <tr>
-                  <label for="{{ record[0] }}">
-                    {% if record[0] in selects %}
-                      <td><input type="checkbox" name="key_code" id="{{ record[0] }}" value="{{ record[0] }}" checked></td>
-                    {% else %}
-                      <td><input type="checkbox" name="key_code" id="{{ record[0] }}" value="{{ record[0] }}"></td>
-                    {% endif %}
-                  </label>
+                  {% if record[0] in selects %}
+                    <td><input type="checkbox" name="key_code" value="{{ record[0] }}" checked></td>
+                  {% else %}
+                    <td><input type="checkbox" name="key_code" value="{{ record[0] }}"></td>
+                  {% endif %}
                   {% for rec in record %}
                     <td>{{ rec }}</td>
                   {% endfor %}
