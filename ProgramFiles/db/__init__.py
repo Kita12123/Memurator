@@ -34,4 +34,5 @@ def refresh_all():
     except:
         dsp_except()
         SETTING.dic["最終更新日時"] = "更新エラー"
+        SETTING.update()
     LOGGER.info("*************** Ended Connect DataBase ***************")

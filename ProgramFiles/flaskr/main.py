@@ -48,7 +48,10 @@ def index(db_name):
     user_ip = request.remote_addr
     # POST
     # Read paramater on request
-    USER.update(ip=user_ip, query=request.form.to_dict())
+    user_query = request.form.to_dict()
+    if "順列タイプ" not in user_query:
+        user_query["順列タイプ"] = "降順"
+    USER.update(ip=user_ip, query=user_query)
     # Create Code of SQL for Database on sqlite3
     DB_SQL.db_open()
     df = pd.read_sql(
