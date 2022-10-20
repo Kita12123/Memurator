@@ -4,7 +4,7 @@ FLASK Initialize
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from flask import Flask
-from ProgramFiles.db import refresh_all
+from ProgramFiles import db
 from ProgramFiles.flaskr.user_ins import USER
 from ProgramFiles.log import dsp_except
 
@@ -13,7 +13,7 @@ def create_app() -> Flask:
         now_hour = datetime.now().strftime(r"%H")
         USER.refresh()
         if now_hour in ["08", "10", "12", "14", "16"]:
-            refresh_all()
+            db.refresh_all()
     app = Flask(__name__)
     scheduler = BackgroundScheduler()
     scheduler.add_job(schedule_func, trigger="interval", minutes=60)
