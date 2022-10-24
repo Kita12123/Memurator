@@ -15,6 +15,7 @@ from ProgramFiles.flaskr.setting_ins import SETTING
 from ProgramFiles.flaskr.user_ins import USER
 from ProgramFiles.query.query_ins import QUERY
 from ProgramFiles.query.master_ins import MASTER
+from ProgramFiles.totall import TOTALL
 from ProgramData import TEMP_CSV
 from ProgramFiles.log import CD as LOGCD
 from ProgramFiles.db.sql_ins import DB_SQL
@@ -40,8 +41,7 @@ def login():
     # Query data
         user_query=user_query,
     # Display Table of DataFrame
-        refresh_date=SETTING.dic["最終更新日時"],
-        headers=["抽出条件を入力してください。"]
+        refresh_date=SETTING.dic["最終更新日時"]
     )
 @app.route("/<db_name>", methods=["POST"])
 def index(db_name):
@@ -65,32 +65,36 @@ def index(db_name):
     messages = []
     if count >= int(SETTING.dic["最大表示行数"]):
         df_dsp = df.head(int(SETTING.dic["最大表示行数"])).copy()
-        messages.append("件数 : {:,} ({})".format(count, int(SETTING.dic["最大表示行数"])))
+        count = "{:,} ({})".format(count, int(SETTING.dic["最大表示行数"]))
     else:
         df_dsp = df.copy()
-        messages.append("件数 : {:,}".format(count))
-    if db_name == "売上データ":
-        messages.append("合計数量 : {:,}".format(df["数量"].sum()))
-        messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
-        df_dsp.loc[:,("数量","単価","金額")] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
-    elif db_name == "出荷データ":
-        messages.append("合計出荷数 : {:,}".format(df["出荷数"].sum()))
-        messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
-        df_dsp.loc[:,("出荷数","単価","金額")] = df_dsp[["出荷数","単価","金額"]].applymap("{:,}".format)
+        count = "{:,}".format(count)
+    messages.append("合計数量 : {:,}".format(df["数量"].sum()))
+    messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
+    df_dsp.loc[:,("数量","単価","金額")] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
+    # Totall DataFrame
+    df1, df2, df3 = TOTALL.create(df=df)
     return render_template(
     # HTML
         "index.html",
         method_type="post",
     # Query data
         db_name=db_name,
+        refresh_date=SETTING.dic["最終更新日時"],
         user_query=USER.load(ip=user_ip),
     # Totalling User DataFrame
         count=count,
         messages=messages,
     # Display Table of DataFrame
-        refresh_date=SETTING.dic["最終更新日時"],
         headers=df_dsp.columns,
-        records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns)))
+        records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns))),
+    # Totall Table of DataFrame
+        headers_totall1=df1.columns,
+        records_totall1=list(list(x) for x in zip(*(df1[x].values.tolist() for x in df1.columns))),
+        headers_totall2=df2.columns,
+        records_totall2=list(list(x) for x in zip(*(df2[x].values.tolist() for x in df2.columns))),
+        headers_totall3=df3.columns,
+        records_totall3=list(list(x) for x in zip(*(df3[x].values.tolist() for x in df3.columns))),
     )
 
 @app.route("/search/<column>", methods=["GET", "POST"])
@@ -109,8 +113,7 @@ def search(column):
         # Query data
             user_query=USER.load(ip=user_ip),
         # Display Table of DataFrame
-            refresh_date=SETTING.dic["最終更新日時"],
-            headers=["抽出条件を入力してください。"]
+            refresh_date=SETTING.dic["最終更新日時"]
         )
     # user_query, master_query作成
     if "順列" in request.form.to_dict():

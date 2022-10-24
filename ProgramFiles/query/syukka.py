@@ -38,7 +38,7 @@ def Create_SQL_dsp(
             WHEN 伝票区分=30 THEN 出荷数*-1
             WHEN 伝票区分=90 THEN 出荷数*-1
             ELSE 出荷数
-        END AS 出荷数,
+        END AS 数量,
         単価,
         CASE
             /* 返品,値引き*/

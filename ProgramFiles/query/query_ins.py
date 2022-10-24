@@ -146,15 +146,29 @@ class QUERY_CLS:
                 return f" OR 担当者コード={c} "
             else:
                 return f" OR 担当者名＊ LIKE'%{c}%' "
-        if "担当者" not in user_query:
-            tantou = ""
-        elif user_query["担当者"] == "":
+        if ("担当者" not in user_query
+        or user_query["担当者"] == ""):
             tantou = ""
         elif "," in user_query["担当者"]:
             sql = "".join([ func(code) for code in user_query["担当者"].split(",")])[3:]
             tantou = f" ({sql}) AND\n"
         else:
             tantou = func(user_query["担当者"])[3:] + " AND \n"
+        # 伝票区分
+        def func(c: str):
+            c = c.replace(" ", "")
+            if c.isdigit():
+                return f" OR 伝票区分={c} "
+            else:
+                return f" OR 伝票区分名＊ LIKE'%{c}%' "
+        if ("伝票区分" not in user_query
+        or user_query["伝票区分"] == ""):
+            denk = ""
+        elif "," in user_query["伝票区分"]:
+            sql = "".join([ func(code) for code in user_query["伝票区分"].split(",")])[3:]
+            denk = f" ({sql}) AND\n"
+        else:
+            denk = func(user_query["伝票区分"])[3:] + " AND \n"
         return (
             first_date
         +   last_date
@@ -164,6 +178,7 @@ class QUERY_CLS:
         +   zatu
         +   soukasaki
         +   tantou
+        +   denk
         )[:-5]
 
 QUERY = QUERY_CLS()

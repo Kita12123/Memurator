@@ -5,7 +5,9 @@ from ProgramFiles.query import (
     seihinbuhin,
     soukasaki,
     tokuisaki,
-    zatu
+    zatu,
+    denk,
+    tantou
 )
 
 class MASTER_CLS:
@@ -61,6 +63,14 @@ class MASTER_CLS:
             return seihinbuhin.Create_SQL_dsp(
                 where=where
             )
+        elif column == "担当者":
+            return tantou.Create_SQL_dsp(
+                where=where
+            )
+        elif column == "伝票区分":
+            return denk.Create_SQL_dsp(
+                where=where
+            )
 
     def create_sql_download(self, column, form_dic: dict[str,str]):
         """SQL（ダウンロード用）作成"""
@@ -79,6 +89,14 @@ class MASTER_CLS:
             )
         elif column == "製品部品":
             return seihinbuhin.Create_SQL_download(
+                where=where
+            )
+        elif column == "担当者":
+            return tantou.Create_SQL_download(
+                where=where
+            )
+        elif column == "伝票区分":
+            return denk.Create_SQL_download(
                 where=where
             )
 

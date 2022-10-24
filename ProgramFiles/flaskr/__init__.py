@@ -4,6 +4,9 @@ FLASK Initialize
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from flask import Flask
+import warnings
+warnings.simplefilter("ignore")
+
 from ProgramFiles import db
 from ProgramFiles.flaskr.user_ins import USER
 from ProgramFiles.log import dsp_except

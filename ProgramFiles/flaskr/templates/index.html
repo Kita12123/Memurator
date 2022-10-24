@@ -22,10 +22,12 @@
     <!-- メイン画面 -->
     <div class="content">
       <div class="subtitle">
-        データ抽出
+        抽出条件入力
+        <input id="extract-" class="smallbutton" type="image" src="/static/image/マイナス.png" alt="非表示" onclick="hideForm();">
+        <input id="extract--" class="smallbutton" type="image" src="/static/image/プラス.png" alt="表示" style="display:none;" onclick="showForm();">
       </div><!--subtitle-->
-      <div class="main-form">
-        <form method="post">
+      <form method="post">
+        <div id="extract" class="main-form">
           <div class="dummy">
             {% if method_type == "get" %}
               <button formaction="{{ url_for('index',db_name='売上データ') }}" onclick="showLoading();">売上データ</button>
@@ -33,7 +35,7 @@
               <button formaction="{{ url_for('index',db_name=db_name) }}" onclick="showLoading();">{{ db_name }}</button>
             {% endif %}
           </div><!--dummy-->
-        <!--Query DataBase-->
+          <!--Query DataBase-->
           <table>
             <tbody>
               <tr>
@@ -86,12 +88,20 @@
               <tr>
                 <td><label for="担当者">担当者ｺｰﾄﾞ 名：</label></td>
                 <td><input type="text" name="担当者" value="{{ user_query['担当者'] }}"></td>
+                <td><button formaction="{{ url_for('search', column='担当者') }}">担当者マスタ</button></td>
+              </tr>
+              <tr>
+                <td><label for="伝票区分">伝票区分ｺｰﾄﾞ 名：</label></td>
+                <td><input type="text" name="伝票区分" value="{{ user_query['伝票区分'] }}"></td>
+                <td><button formaction="{{ url_for('search', column='伝票区分') }}">伝票区分マスタ</button></td>
                 <td></td>
               </tr>
             </tbody>
           </table>
           <div class="comments">
-            ※カンマ(,)で区切ることで、複数条件を抽出することができます。
+            ※カンマ(,)で区切ることで、複数条件を指定することができます。
+            <br>
+            最終更新日付:{{ refresh_date }}
           </div>
           {% if method_type == "post" %}
             {% if user_query["順列タイプ"] == "降順" %}
@@ -123,52 +133,150 @@
               <button formaction="{{ url_for('index',db_name=db_name) }}" onclick="showLoading();">{{ db_name }}</button>
             {% endif %}
           </div>
-        </form>
-        <!--Display Loading-->
-        <div id="loading" style="display:none;"></div>
-      </div><!--main-form-->
-      {% if method_type == "post" %}
+          <!--Display Loading-->
+          <div id="loading" style="display:none;"></div>
+        </div><!--main-form-->
+      </form><!--post-->
+    </div><!--content-->
+    {% if method_type == "post" %}
+      <div class="content">
         <div class="subtitle">
-          データテーブル
+          データ選択
         </div><!--subtitle-->
-        <div id="datatable">
-          <!--Message of Totall Data-->
+      </div><!--content-->
+      <div class="TableTag">
+        <table>
+          <td><button type="button" onclick="showTable();">明細データ</button></td>
+          <td><button type="button" onclick="showTotall1();">年別集計</button></td>
+          <td><button type="button" onclick="showTotall2();">月別集計</button></td>
+          <td><button type="button" onclick="showTotall3();">日別集計</button></td>
+        </table>
+      </div><!--TableTag-->
+      <div id="table">
+        <div class="content">
+          <div class="subtitle">
+            明細データ
+          </div><!--subtitle-->
+          件数：{{ count }} &emsp;&emsp;
           {% for m in messages %}
             {{ m }} &emsp;&emsp;
           {% endfor %}
-          <!--Download data to csv-->
           <a href="{{ url_for('download',db_name=db_name) }}">ダウンロード</a>
-        </div><!--datatable-->
-      {% endif %}
-    </div><!--content-->
-    <!--Table of Data-->
-    <div class="comments">
-      最終更新日付:{{ refresh_date }} &emsp;&emsp;
-      {% if method_type == "post" %}
-        ※列名に＊がついたものは、現在のマスタから取得しています。
-      {% endif %}
-    </div><!--comments-->
-    <div class="dataframe">
-      <table>
-        <thead>
-          <tr>
-            {% for header in headers %}
-            <th>
-              {{ header }}
-            </th>
-            {% endfor %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for record in records %}
-            <tr>
-              {% for rec in record %}
-              <td>{{ rec }}</td>
+        </div><!--content-->
+        <!--Table of Data-->
+        <div class="comments">
+          ※列名に＊がついたものは、現在のマスタから取得しています。
+        </div><!--comments-->
+        <div class="dataframe">
+          <table>
+            <thead>
+              <tr>
+                {% for header in headers %}
+                <th>
+                  {{ header }}
+                </th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in records %}
+                <tr>
+                  {% for rec in record %}
+                  <td>{{ rec }}</td>
+                  {% endfor %}
+                </tr>
               {% endfor %}
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+            </tbody>
+          </table>
+        </div><!--dataframe-->
+      </div><!--#table-->
+      <div id="totall1">
+        <div class="content">
+          <div class="subtitle">
+            年別集計
+          </div><!--subtitle-->
+        </div><!--content-->
+        <div class="dataframe">
+          <table>
+            <thead>
+              <tr>
+                {% for header in headers_totall1 %}
+                <th>
+                  {{ header }}
+                </th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in records_totall1 %}
+                <tr>
+                  {% for rec in record %}
+                  <td>{{ rec }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div><!--dataframe-->
+      </div><!--#totall1-->
+      <div id="totall2">
+        <div class="content">
+          <div class="subtitle">
+            月別集計
+          </div><!--subtitle-->
+        </div><!--content-->
+        <div class="dataframe">
+          <table>
+            <thead>
+              <tr>
+                {% for header in headers_totall2 %}
+                <th>
+                  {{ header }}
+                </th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in records_totall2 %}
+                <tr>
+                  {% for rec in record %}
+                  <td>{{ rec }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div><!--dataframe-->
+      </div><!--#totall2-->
+      <div id="totall3">
+        <div class="content">
+          <div class="subtitle">
+            日別集計
+          </div><!--subtitle-->
+        </div><!--content-->
+        <div class="dataframe">
+          <table>
+            <thead>
+              <tr>
+                {% for header in headers_totall3 %}
+                <th>
+                  {{ header }}
+                </th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in records_totall3 %}
+                <tr>
+                  {% for rec in record %}
+                  <td>{{ rec }}</td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div><!--dataframe-->
+      </div><!--#totall3-->
+    {% endif %}
   </body>
 </html>
