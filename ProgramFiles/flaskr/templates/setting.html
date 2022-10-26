@@ -35,15 +35,13 @@
       <div class="subtitle">
         データ更新
       </div>
-      <div class="comments">
-        現在日時:{{ now }}
-        <br>
-        更新日時:{{ refresh_date }}
-      </div>
       <form method="post">
         {% if refresh_date == "更新中" %}
           更新中...
         {% else %}
+          <label for="first_date">更新開始日付:</label>
+          <input type="date" name="first_date" value="{{ first_date }}">
+          <br>
           <div class="bigbutton">
             <input type="submit" name="ok" value="最新データ取得" onclick="showLoading();">
           </div><!--bigbutton-->

@@ -9,7 +9,9 @@ from ProgramFiles.db import file_ins
 from ProgramFiles.log import LOGGER, dsp_except
 
 
-def refresh_all():
+def refresh_all(
+    first_date = (datetime.today() - relativedelta(months=1)).strftime(r"%Y%m"+"00")
+    ):
     """すべてのデータを更新"""
     LOGGER.info("*************** Start Connect DataBase ***************")
     try:
@@ -17,8 +19,7 @@ def refresh_all():
             return
         SETTING.dic["最終更新日時"] = "更新中"
         SETTING.update()
-        last_month = datetime.today() - relativedelta(months=1)
-        yymmdd_host = int(last_month.strftime(r"%Y%m"+"00")) - 19500000
+        yymmdd_host = int(first_date) - 19500000
         file_ins.TOTAL_URI.refresh(where=f"伝票日付>={yymmdd_host}")
         file_ins.TEMP_URI1.refresh()
         file_ins.TEMP_URI2.refresh()

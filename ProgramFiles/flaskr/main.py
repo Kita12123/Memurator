@@ -10,6 +10,7 @@ from flask import (
     send_from_directory,
 )
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 from ProgramFiles.flaskr.setting_ins import SETTING
 from ProgramFiles.flaskr.user_ins import USER
@@ -188,6 +189,7 @@ def download(db_name, flg):
 def setting():
     """設定画面"""
     log_texts=["ログ内容を表示します"]
+    last_month = datetime.today() - relativedelta(months=1)
     if request.method == "POST":
         click = request.form.get("ok")
         if click == "設定変更":
@@ -195,15 +197,15 @@ def setting():
                 SETTING.dic[key] = request.form[key]
             SETTING.update()
         elif click == "最新データ取得":
-            db.refresh_all()
+            first_date = request.form.get("first_date")
+            db.refresh_all(first_date=first_date.replace("-",""))
         else:
             with open(os.path.join(LOGCD, f"{click}.txt"), mode="r", encoding="utf-8") as f:
                 log_texts = f.readlines()
     return render_template(
         "setting.html",
-        now=datetime.today().strftime(r"%Y/%m/%d %H:%M:%S"),
+        first_date=last_month.strftime(r"%Y-%m-01"),
         setting_dic=SETTING.dic,
-        refresh_date=SETTING.dic["最終更新日時"],
         log_texts=log_texts
     )
 
