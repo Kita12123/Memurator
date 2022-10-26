@@ -57,7 +57,7 @@ class FD:
             sql_where_host    = " WHERE " + where
         sql_host = f"SELECT {self.sql_select_host} FROM {self.lib_name}.{self.file_name} {sql_where_host}"
         # host -> df
-        LOGGER.debug("ODBC Conecting..." + self.file_name)
+        LOGGER.debug(f"ODBC Conecting...{self.file_name}({where})")
         DB_HOST.db_open()
         df = pd.read_sql(sql=sql_host, con=DB_HOST.connection)
         DB_HOST.db_close()
