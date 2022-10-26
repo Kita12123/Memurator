@@ -139,29 +139,26 @@
       </form><!--post-->
     </div><!--content-->
     {% if method_type == "post" %}
-      <div class="content">
-        <div class="subtitle">
-          データ選択
-        </div><!--subtitle-->
-      </div><!--content-->
       <div class="TableTag">
         <table>
-          <td><button type="button" onclick="showTable();">明細データ</button></td>
-          <td><button type="button" onclick="showTotall1();">年別集計</button></td>
-          <td><button type="button" onclick="showTotall2();">月別集計</button></td>
-          <td><button type="button" onclick="showTotall3();">日別集計</button></td>
+          <tr>
+            <td colspan="4">データ表示</td>
+          </tr>
+          <tr>
+            <td id="tab1b"><a id="tab1" class="a-button" href="javascript:showTable();">明細データ</a></td>
+            <td id="tab2b"><a id="tab2" class="a-button" href="javascript:showTotall1();">年別集計</a></td>
+            <td id="tab3b"><a id="tab3" class="a-button" href="javascript:showTotall2();">月別集計</a></td>
+            <td id="tab4b"><a id="tab4" class="a-button" href="javascript:showTotall3();">日別集計</a></td>
+          </tr>
         </table>
       </div><!--TableTag-->
       <div id="table">
         <div class="content">
-          <div class="subtitle">
-            明細データ
-          </div><!--subtitle-->
+          <a href="{{ url_for('download',db_name=db_name, flg='table') }}">ダウンロード</a>&emsp;&emsp;
           件数：{{ count }} &emsp;&emsp;
           {% for m in messages %}
             {{ m }} &emsp;&emsp;
           {% endfor %}
-          <a href="{{ url_for('download',db_name=db_name) }}">ダウンロード</a>
         </div><!--content-->
         <!--Table of Data-->
         <div class="comments">
@@ -190,11 +187,9 @@
           </table>
         </div><!--dataframe-->
       </div><!--#table-->
-      <div id="totall1">
+      <div id="totall1" style="display:none;">
         <div class="content">
-          <div class="subtitle">
-            年別集計
-          </div><!--subtitle-->
+          <a href="{{ url_for('download',db_name=db_name, flg='totall1') }}">ダウンロード</a>
         </div><!--content-->
         <div class="dataframe">
           <table>
@@ -219,11 +214,9 @@
           </table>
         </div><!--dataframe-->
       </div><!--#totall1-->
-      <div id="totall2">
+      <div id="totall2" style="display:none;">
         <div class="content">
-          <div class="subtitle">
-            月別集計
-          </div><!--subtitle-->
+          <a href="{{ url_for('download',db_name=db_name, flg='totall2') }}">ダウンロード</a>
         </div><!--content-->
         <div class="dataframe">
           <table>
@@ -248,11 +241,9 @@
           </table>
         </div><!--dataframe-->
       </div><!--#totall2-->
-      <div id="totall3">
+      <div id="totall3" style="display:none;">
         <div class="content">
-          <div class="subtitle">
-            日別集計
-          </div><!--subtitle-->
+          <a href="{{ url_for('download',db_name=db_name, flg='totall3') }}">ダウンロード</a>
         </div><!--content-->
         <div class="dataframe">
           <table>

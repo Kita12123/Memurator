@@ -82,10 +82,9 @@ def index(db_name):
         db_name=db_name,
         refresh_date=SETTING.dic["最終更新日時"],
         user_query=USER.load(ip=user_ip),
-    # Totalling User DataFrame
+    # Display Table of DataFrame
         count=count,
         messages=messages,
-    # Display Table of DataFrame
         headers=df_dsp.columns,
         records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns))),
     # Totall Table of DataFrame
@@ -150,16 +149,32 @@ def search(column):
         records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns)))
     )
 
-@app.route("/<db_name>/download", methods=["GET"])
-def download(db_name):
+@app.route("/<db_name>/download/<flg>", methods=["GET"])
+def download(db_name, flg):
     """データをダウンロードする"""
     user_ip = request.remote_addr
-    DB_SQL.db_open()
-    df = pd.read_sql(
-        sql=QUERY.create_sql_download(ip=user_ip,db_name=db_name),
-        con=DB_SQL.connection
-    )
-    DB_SQL.db_close()
+    if flg == "table":
+        DB_SQL.db_open()
+        df = pd.read_sql(
+            sql=QUERY.create_sql_download(ip=user_ip,db_name=db_name),
+            con=DB_SQL.connection
+        )
+        DB_SQL.db_close()
+    else:
+        DB_SQL.db_open()
+        df = pd.read_sql(
+            sql=QUERY.create_sql_dsp(ip=user_ip,db_name=db_name),
+            con=DB_SQL.connection
+        )
+        DB_SQL.db_close()
+        df1, df2, df3 = TOTALL.create(df=df)
+    # To File .csv
+    if flg=="totall1":
+        df = df1
+    elif flg=="totall2":
+        df = df2
+    elif flg=="totall3":
+        df = df3
     df.to_csv(TEMP_CSV, index=False, encoding="cp932", escapechar="|")
     return send_file(
         TEMP_CSV,
