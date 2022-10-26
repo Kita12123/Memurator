@@ -19,13 +19,21 @@ class Totall_CLS:
                 pd.DataFrame(index=[], columns=["ﾃﾞｰﾀﾅｼ"]),
                 pd.DataFrame(index=[], columns=["ﾃﾞｰﾀﾅｼ"]))
         df = df[self.columns].copy()
+        # Period
+        def func(x):
+            x = str(x)
+            if len(x) != 8:
+                return "0"
+            else:
+                return int(x[2:4]) + int(x[4:5]) + 55
+        df1 = df.copy()
+        df1.loc[:,"期"] = df1["伝票日付"].map(func)
+        df1 = df1[["期","数量","金額"]].groupby("期").sum()
+        df1.insert(0, "期", value=df1.index)
+        df1.loc[:,("数量","金額")] = df1[["数量","金額"]].applymap("{:,}".format)
+        # Date
         df.loc[:,"伝票日付"] = pd.to_datetime(df["伝票日付"], format=r"%Y%m%d")
         df.set_index("伝票日付", inplace=True)
-        # Year
-        df1 = df.copy().groupby(pd.Grouper(freq="1Y")).sum()
-        df1.insert(0, "伝票日付", value=df1.index)
-        df1.loc[:,"伝票日付"] = df1["伝票日付"].dt.strftime(r"%Y")
-        df1.loc[:,("数量","金額")] = df1[["数量","金額"]].applymap("{:,}".format)
         # Month
         df2 = df.copy().groupby(pd.Grouper(freq="1M")).sum()
         df2.insert(0, "伝票日付", value=df2.index)
