@@ -25,7 +25,7 @@ class Totall_CLS:
             if len(x) != 8:
                 return "0"
             else:
-                return int(x[2:4]) + int(x[4:5]) + 55
+                return int(x[0:4]) + int(x[4:5]) - 1945
         df1 = df.copy()
         df1.loc[:,"期"] = df1["伝票日付"].map(func)
         df1 = df1[["期","数量","金額"]].groupby("期").sum()
