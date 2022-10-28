@@ -197,8 +197,9 @@ def setting():
                 SETTING.dic[key] = request.form[key]
             SETTING.update()
         elif click == "最新データ取得":
-            first_date = request.form.get("first_date")
-            db.refresh_all(first_date=first_date.replace("-",""))
+            db.refresh_all(
+                first_date=request.form.get("first_date").replace("-",""),
+                contain_master=request.form.get("contain_master"))
         else:
             with open(os.path.join(LOGCD, f"{click}.txt"), mode="r", encoding="utf-8") as f:
                 log_texts = f.readlines()
