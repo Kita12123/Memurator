@@ -11,6 +11,7 @@ a:link, a:visited {
 }
 a:hover {
     color: rosybrown;
+    text-decoration: underline;
 }
 a:active {
     color: black;
@@ -32,6 +33,56 @@ button{
 form > input {
     margin: 0.1%;
 }
+/*TableSorter*/
+.tablesorter th{
+    /*position: relative;*/
+    cursor: pointer;
+}
+.tablesorter th:hover{
+    text-decoration: underline;
+}
+/*
+.tablesorter th::before, .tablesorter th::after{
+    content: '';
+    position: absolute;
+    z-index: 2;
+    right: 7px;
+    width: 0;
+    height: 0;
+    border: 4px dashed;
+    border-color: #333 transparent;
+    pointer-events: none;
+}
+.tablesorter th::before{
+    border-bottom-style: solid;
+    border-top: none;
+    top: 30%;
+}
+.tablesorter th::after{
+    border-top-style: solid;
+    border-bottom: none;
+    bottom: 30%;
+}
+.tablesorter th.tablesorter-headerAsc:after{
+    border: none;
+}
+.tablesorter th.tablesorter-headerAsc:before{
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+}
+.tablesorter th.tablesorter-headerDesc:before{
+    border: none;
+}
+.tablesorter th.tablesorter-headerDesc:after{
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+}
+.tablesorter th.sorter-false:before, .tablesorter th.sorter-false:after{
+    border: none;
+}
+*/
 /*
 ###############################################################################
     クラス

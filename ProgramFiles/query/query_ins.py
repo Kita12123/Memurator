@@ -10,33 +10,23 @@ from ProgramFiles.query import (
 class QUERY_CLS:
     
     def create_sql_dsp(self, ip, db_name):
-        user_query = USER.load(ip=ip)
         if db_name == "売上データ":
             return uriage.Create_SQL_dsp(
-                where=self.create_where(ip=ip),
-                sort_column=user_query["順列"],
-                sort_type=user_query["順列タイプ"]
+                where=self.create_where(ip=ip)
             )
         elif db_name == "出荷データ":
             return syukka.Create_SQL_dsp(
-                where=self.create_where(ip=ip),
-                sort_column=user_query["順列"],
-                sort_type=user_query["順列タイプ"]
+                where=self.create_where(ip=ip)
             )
 
     def create_sql_download(self, ip, db_name):
-        user_query = USER.load(ip=ip)
         if db_name == "売上データ":
             return uriage.Create_SQL_download(
-                where=self.create_where(ip=ip),
-                sort_column=user_query["順列"],
-                sort_type=user_query["順列タイプ"]
+                where=self.create_where(ip=ip)
             )
         elif db_name == "出荷データ":
             return syukka.Create_SQL_download(
-                where=self.create_where(ip=ip),
-                sort_column=user_query["順列"],
-                sort_type=user_query["順列タイプ"]
+                where=self.create_where(ip=ip)
             )
     
     def create_where(self, ip):

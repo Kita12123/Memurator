@@ -3,9 +3,7 @@
 """
 
 def Create_SQL_dsp(
-    where: str,
-    sort_column: str,
-    sort_type: str
+    where: str
     ) -> str:
     def func(file: str) -> str:
         if file == "MUJNRPF":
@@ -76,17 +74,11 @@ def Create_SQL_dsp(
     +   "\nUNION ALL\n"
     +   func(file="UJNRPF")
     )
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
+    sql += f"\nORDER BY 伝票日付 ASC"
     return sql
 
 def Create_SQL_download(
-    where: str,
-    sort_column: str,
-    sort_type: str
+    where: str
     ) -> str:
     def func(file: str) -> str:
         if file == "MUJNRPF":
@@ -194,9 +186,5 @@ def Create_SQL_download(
     +   "\nUNION ALL\n"
     +   func(file="UJNRPF")
     )
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
+    sql += f"\nORDER BY 伝票日付 ASC"
     return sql

@@ -3,14 +3,10 @@
 """
 
 def Create_SQL_dsp(
-    where: str="",
-    sort_column: str="得意先コード１＊, 得意先コード２＊",
-    sort_type: str="昇順"
+    where: str=""
     ) -> str:
-    if where == "":
-        where = "得意先コード２＊<>0"
-    else:
-        where += " AND 得意先コード２＊<>0"
+    if where:
+        where = " AND " + where
     sql =  f"""
     SELECT
         得意先コード１＊
@@ -31,25 +27,18 @@ def Create_SQL_dsp(
         作成日＊ + 19500000 AS 作成日
     FROM TOKMPF
     LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=22 AND ET1.コード＊=担当者コード＊
-    WHERE 
+    WHERE
+        得意先コード２＊<>0
 {where}
+    ORDER BY 得意先コード１＊, 得意先コード２＊ ASC
     """
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
     return sql
 
 def Create_SQL_download(
-    where: str="",
-    sort_column: str="得意先コード１＊, 得意先コード２＊",
-    sort_type: str="昇順"
+    where: str=""
     ) -> str:
-    if where == "":
-        where = "得意先コード２＊<>0"
-    else:
-        where += " AND 得意先コード２＊<>0"
+    if where:
+        where = " AND " + where
     sql =  f"""
     SELECT
         得意先コード１＊
@@ -70,12 +59,9 @@ def Create_SQL_download(
         作成日＊ + 19500000 AS 作成日
     FROM TOKMPF
     LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=22 AND ET1.コード＊=担当者コード＊
-    WHERE 
+    WHERE
+        得意先コード２＊<>0
 {where}
+    ORDER BY 得意先コード１＊, 得意先コード２＊ ASC
     """
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
     return sql

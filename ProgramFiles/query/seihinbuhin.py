@@ -3,9 +3,7 @@
 """
 
 def Create_SQL_dsp(
-    where: str="",
-    sort_column: str="製品部品コード",
-    sort_type: str="昇順"
+    where: str=""
     ) -> str:
     if where:
         where = "WHERE\n" + where
@@ -35,18 +33,12 @@ def Create_SQL_dsp(
         作成日＊ + 19500000 AS 作成日
     FROM BUHMPF
 {where}
+    ORDER BY 製品部品コード ASC
     """
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
     return sql
 
 def Create_SQL_download(
-    where: str="",
-    sort_column: str="製品部品コード",
-    sort_type: str="昇順"
+    where: str=""
     ) -> str:
     if where:
         where = "WHERE\n" + where
@@ -76,10 +68,6 @@ def Create_SQL_download(
         作成日＊ + 19500000 AS 作成日
     FROM BUHMPF
 {where}
+    ORDER BY 製品部品コード ASC
     """
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
     return sql

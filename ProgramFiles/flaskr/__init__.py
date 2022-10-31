@@ -15,7 +15,7 @@ def create_app() -> Flask:
     def schedule_func():
         now_hour = datetime.now().strftime(r"%H")
         USER.refresh()
-        if now_hour in ["08", "10", "12", "14", "16"]:
+        if now_hour in ["08", "10", "12", "14", "16", "18"]:
             db.refresh_all()
     app = Flask(__name__)
     scheduler = BackgroundScheduler()

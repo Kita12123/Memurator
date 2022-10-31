@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <title>M端末</title>
+    <!--My Static-->
     <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-    <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
   </head>
   <body>
     <!-- タイトル画面 -->
@@ -27,6 +27,7 @@
         <input id="extract--" class="smallbutton" type="image" src="/static/image/プラス.png" alt="表示" style="display:none;" onclick="showForm();">
       </div><!--subtitle-->
       <form method="post">
+        <input type="hidden" name="index">
         <div id="extract" class="main-form">
           <div class="dummy">
             {% if method_type == "get" %}
@@ -101,38 +102,12 @@
           <div class="comments">
             ※カンマ(,)で区切ることで、複数条件を指定することができます。
             <br>
-            最終更新日付:{{ refresh_date }}
-          </div>
-          {% if method_type == "post" %}
-            {% if user_query["順列タイプ"] == "降順" %}
-              <input type="checkbox" name="順列タイプ", value="昇順">
-            {% else %}
-              <input type="checkbox" name="順列タイプ", value="昇順" checked>
-            {% endif %}
-            <label for="順列">昇順:</label>
-            <select name="順列">
-              <option value="" selected></option>
-              {% for column in headers %}
-                {% if column == user_query['順列'] %}
-                  <option value="{{ column }}" selected>{{ column }}</option>
-                {% else %}
-                  <option value="{{ column }}">{{ column }}</option>
-                {% endif %}
-              {% endfor %}
-            </select>
-            <br>
-          {% else %}
-            <input type="hidden" name="順列タイプ" value="昇順">
-            <input type="hidden" name="順列" value="">
-          {% endif %}
+            最終更新日付:{{ setting_dic["最終更新日時"] }}
+          </div><!--comments-->
           <div class="bigbutton">
-            {% if method_type == "get" %}
-              <button formaction="{{ url_for('index',db_name='売上データ') }}" onclick="showLoading();">売上データ</button>
-              <button formaction="{{ url_for('index',db_name='出荷データ') }}" onclick="showLoading();">出荷データ</button>
-            {% elif method_type == "post" %}
-              <button formaction="{{ url_for('index',db_name=db_name) }}" onclick="showLoading();">{{ db_name }}</button>
-            {% endif %}
-          </div>
+            <button formaction="{{ url_for('index',db_name='売上データ') }}" onclick="showLoading();">売上データ</button>
+            <button formaction="{{ url_for('index',db_name='出荷データ') }}" onclick="showLoading();">出荷データ</button>
+          </div><!--bigbutton-->
           <!--Display Loading-->
           <div id="loading" style="display:none;"></div>
         </div><!--main-form-->
@@ -165,7 +140,7 @@
           ※列名に＊がついたものは、現在のマスタから取得しています。
         </div><!--comments-->
         <div class="dataframe">
-          <table>
+          <table class="sort-table">
             <thead>
               <tr>
                 {% for header in headers %}
@@ -195,7 +170,7 @@
           <table>
             <thead>
               <tr>
-                {% for header in headers_totall1 %}
+                {% for header in headers1 %}
                 <th>
                   {{ header }}
                 </th>
@@ -203,7 +178,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for record in records_totall1 %}
+              {% for record in records1 %}
                 <tr>
                   {% for rec in record %}
                   <td>{{ rec }}</td>
@@ -222,7 +197,7 @@
           <table>
             <thead>
               <tr>
-                {% for header in headers_totall2 %}
+                {% for header in headers2 %}
                 <th>
                   {{ header }}
                 </th>
@@ -230,7 +205,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for record in records_totall2 %}
+              {% for record in records2 %}
                 <tr>
                   {% for rec in record %}
                   <td>{{ rec }}</td>
@@ -249,7 +224,7 @@
           <table>
             <thead>
               <tr>
-                {% for header in headers_totall3 %}
+                {% for header in headers3 %}
                 <th>
                   {{ header }}
                 </th>
@@ -257,7 +232,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for record in records_totall3 %}
+              {% for record in records3 %}
                 <tr>
                   {% for rec in record %}
                   <td>{{ rec }}</td>
@@ -269,5 +244,13 @@
         </div><!--dataframe-->
       </div><!--#totall3-->
     {% endif %}
+    <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>  
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(".sort-table").tablesorter();
+      });
+    </script>
   </body>
 </html>

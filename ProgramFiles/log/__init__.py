@@ -7,13 +7,14 @@ from functools import wraps
 import os
 import traceback
 
-CD = os.path.dirname(__file__)
+from ProgramData import DEBUG_LOG, INFO_LOG, ERROR_LOG
+
 LOGGER = getLogger(__name__)
 
 handler = StreamHandler()
-handler_file_error = FileHandler(os.path.join(CD, "error.txt"),mode="a",encoding="utf-8")
-handler_file_info  = FileHandler(os.path.join(CD, "info.txt" ),mode="a",encoding="utf-8")
-handler_file_debug = FileHandler(os.path.join(CD, "debug.txt"),mode="w",encoding="utf-8")
+handler_file_error = FileHandler(ERROR_LOG,mode="a",encoding="utf-8")
+handler_file_info  = FileHandler(INFO_LOG,mode="a",encoding="utf-8")
+handler_file_debug = FileHandler(DEBUG_LOG,mode="w",encoding="utf-8")
 
 handler.setLevel(DEBUG)
 handler_file_error.setLevel(ERROR)

@@ -3,9 +3,7 @@
 """
 
 def Create_SQL_dsp(
-    where: str="",
-    sort_column: str="送荷先コード＊",
-    sort_type: str="昇順"
+    where: str=""
     ) -> str:
     if where:
         where = "WHERE\n" + where
@@ -23,18 +21,12 @@ def Create_SQL_dsp(
         電話番号＊ AS 電話番号
     FROM NIHONPF
 {where}
+    ORDER BY 送荷先コード＊ ASC
     """
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
     return sql
 
 def Create_SQL_download(
-    where: str="",
-    sort_column: str="送荷先コード＊",
-    sort_type: str="昇順"
+    where: str=""
     ) -> str:
     if where:
         where = "WHERE\n" + where
@@ -51,10 +43,6 @@ def Create_SQL_download(
         電話番号＊ AS 電話番号
     FROM NIHONPF
 {where}
+    ORDER BY 送荷先コード＊ ASC
     """
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
     return sql

@@ -23,7 +23,7 @@
     </div><!--content-->
     <!--Table of Data-->
     <div class="comments">
-      最終更新日付:{{ refresh_date }}
+      最終更新日付:{{ setting_dic["最終更新日時"] }}
     </div><!--comments-->
     <form method="POST">
       <div class="dummy">
@@ -31,9 +31,10 @@
       </div>
       <div class="bigbutton">
         <input type="submit" name="ok" value="決定">
+        <a href="{{ url_for('download',db_name=column, flg='master') }}">ダウンロード</a>
       </div>
       <div class="dataframe">
-        <table>
+        <table class="sort-table">
           <thead>
             <tr>
               {% for header in headers %}
@@ -77,5 +78,13 @@
         </table>
       </div><!--dataframe-->
     </form>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>  
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $(".sort-table").tablesorter();
+      });
+    </script>
   </body>
 </html>

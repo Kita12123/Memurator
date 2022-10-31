@@ -72,7 +72,7 @@ class MASTER_CLS:
                 where=where
             )
 
-    def create_sql_download(self, column, form_dic: dict[str,str]):
+    def create_sql_download(self, column, form_dic: dict[str,str]={}):
         """SQL（ダウンロード用）作成"""
         where = self.create_where(form_dic=form_dic)
         if column == "得意先":

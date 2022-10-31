@@ -18,7 +18,7 @@ from ProgramFiles.query.query_ins import QUERY
 from ProgramFiles.query.master_ins import MASTER
 from ProgramFiles.totall import TOTALL
 from ProgramData import TEMP_CSV
-from ProgramFiles.log import CD as LOGCD
+from ProgramData import cd as LOGCD
 from ProgramFiles.db.sql_ins import DB_SQL
 from ProgramFiles import db
 from ProgramFiles.flaskr import app
@@ -28,30 +28,26 @@ from ProgramFiles.flaskr import app
 #
 @app.route("/", methods=["GET"])
 def login():
+    """初期画面"""
     user_ip = request.remote_addr
-    #USER.clear(ip=user_ip)
     user_query = USER.load(ip=user_ip)
-    # 順列はそのままだとデータ種類を変更するときに列名がないものを指定してしまう可能性がある
-    user_query["順列"] = ""
-    user_query["順列タイプ"] = "昇順"
-    USER.update(ip=user_ip, query=user_query)
     return render_template(
     # HTML
         "index.html",
         method_type="get",
     # Query data
         user_query=user_query,
-    # Display Table of DataFrame
-        refresh_date=SETTING.dic["最終更新日時"]
+    # Setting data
+        setting_dic=SETTING.dic
     )
+
 @app.route("/<db_name>", methods=["POST"])
 def index(db_name):
+    """データ表示"""
     user_ip = request.remote_addr
     # POST
     # Read paramater on request
     user_query = request.form.to_dict()
-    if "順列タイプ" not in user_query:
-        user_query["順列タイプ"] = "降順"
     USER.update(ip=user_ip, query=user_query)
     # Create Code of SQL for Database on sqlite3
     DB_SQL.db_open()
@@ -81,23 +77,23 @@ def index(db_name):
         method_type="post",
     # Query data
         db_name=db_name,
-        refresh_date=SETTING.dic["最終更新日時"],
+        setting_dic=SETTING.dic,
         user_query=USER.load(ip=user_ip),
-    # Display Table of DataFrame
+    # Message
         count=count,
         messages=messages,
+    # Table
         headers=df_dsp.columns,
-        records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns))),
-    # Totall Table of DataFrame
-        headers_totall1=df1.columns,
-        records_totall1=list(list(x) for x in zip(*(df1[x].values.tolist() for x in df1.columns))),
-        headers_totall2=df2.columns,
-        records_totall2=list(list(x) for x in zip(*(df2[x].values.tolist() for x in df2.columns))),
-        headers_totall3=df3.columns,
-        records_totall3=list(list(x) for x in zip(*(df3[x].values.tolist() for x in df3.columns))),
+        records=df.values.tolist(),
+        headers1=df1.columns,
+        records1=df1.values.tolist(),
+        headers2=df2.columns,
+        records2=df2.values.tolist(),
+        headers3=df3.columns,
+        records3=df3.values.tolist(),
     )
 
-@app.route("/search/<column>", methods=["GET", "POST"])
+@app.route("/search/<column>", methods=["POST"])
 def search(column):
     """抽出条件をマスタより取得"""
     user_ip = request.remote_addr
@@ -113,15 +109,15 @@ def search(column):
         # Query data
             user_query=USER.load(ip=user_ip),
         # Display Table of DataFrame
-            refresh_date=SETTING.dic["最終更新日時"]
+            setting_dic=SETTING.dic
         )
     # user_query, master_query作成
-    if "順列" in request.form.to_dict():
+    elif "index" in request.form.to_dict():
         # ここのQUERYを保存するかしないかの判定がむずかしい
         # indexからきた場合はする
         user_query = request.form.to_dict()
         master_query = {}
-    elif request.method == "POST" and request.form.get("ok") == "抽出":
+    elif request.form.get("ok") == "抽出":
         user_query = USER.load(ip=user_ip)
         master_query = request.form.to_dict()
         user_query[column] = ",".join(request.form.getlist("key_code"))
@@ -131,23 +127,25 @@ def search(column):
         value=user_query[column]
     )
     DB_SQL.db_open()
-    df = pd.read_sql(
-        sql=MASTER.create_sql_dsp(
+    sql = MASTER.create_sql_dsp(
             column=column,
-            form_dic=master_query),
+            form_dic=master_query)
+    sql += f" LIMIT {SETTING.dic['最大表示行数']}"
+    df = pd.read_sql(
+        sql=sql,
         con=DB_SQL.connection
     )
     DB_SQL.db_close()
-    df_dsp = df.head(int(SETTING.dic["最大表示行数"]))
     return render_template(
         "master.html",
         # 抽出input_textをこれで作成しようとしたら難しかった。
         #query_column=MASTER.query_columns,
         master_query=master_query,
+        column=column,
         selects=selects,
-        refresh_date=SETTING.dic["最終更新日時"],
-        headers=["選択"] + list(df_dsp.columns),
-        records=list(list(x) for x in zip(*(df_dsp[x].values.tolist() for x in df_dsp.columns)))
+        setting_dic=SETTING.dic,
+        headers=["選択"] + list(df.columns),
+        records=df.values.tolist()
     )
 
 @app.route("/<db_name>/download/<flg>", methods=["GET"])
@@ -158,6 +156,13 @@ def download(db_name, flg):
         DB_SQL.db_open()
         df = pd.read_sql(
             sql=QUERY.create_sql_download(ip=user_ip,db_name=db_name),
+            con=DB_SQL.connection
+        )
+        DB_SQL.db_close()
+    elif flg == "master":
+        DB_SQL.db_open()
+        df = pd.read_sql(
+            sql=MASTER.create_sql_download(column=db_name),
             con=DB_SQL.connection
         )
         DB_SQL.db_close()

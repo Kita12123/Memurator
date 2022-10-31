@@ -3,11 +3,9 @@
 """
 
 def Create_SQL_dsp(
-    where: str,
-    sort_column: str,
-    sort_type: str
+    where: str
     ) -> str:
-    sql =  f"""
+    return  f"""
     SELECT
         伝票日付+19500000 AS 伝票日付,
         ifnull(ET1.名称＊,'') AS 伝票区分名＊,
@@ -59,20 +57,13 @@ def Create_SQL_dsp(
     WHERE 
 {where}
     AND   出荷数<>0
+    ORDER BY 伝票日付 ASC
     """
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
-    return sql
 
 def Create_SQL_download(
-    where: str,
-    sort_column: str,
-    sort_type: str
+    where: str
     ) -> str:
-    sql =  f"""
+    return  f"""
     SELECT
         伝票日付+19500000 AS 伝票日付,
         伝票区分,
@@ -157,10 +148,5 @@ def Create_SQL_download(
     WHERE 
 {where}
     AND   出荷数<>0
+    ORDER BY 伝票日付 ASC
     """
-    if sort_column:
-        if sort_type == "昇順":
-            sql += f"\nORDER BY {sort_column} ASC"
-        else:
-            sql += f"\nORDER BY {sort_column} DESC"
-    return sql
