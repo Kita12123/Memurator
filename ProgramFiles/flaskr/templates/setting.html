@@ -40,7 +40,7 @@
           更新中...
         {% else %}
           <label for="first_date">更新開始日付:</label>
-          <input type="date" name="first_date" value="{{ first_date }}">
+          <input type="date" name="first_date" value="{{ first_date }}" max="9999-12-31">
           <br>
           <input type="checkbox" name="contain_master" checked>
           <label for="contain_master">マスターも更新する</label>

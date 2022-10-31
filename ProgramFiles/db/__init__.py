@@ -4,6 +4,7 @@ Database Package
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+from ProgramFiles.flaskr.user_ins import USER
 from ProgramFiles.flaskr.setting_ins import SETTING
 from ProgramFiles.db import file_ins
 from ProgramFiles.log import LOGGER, dsp_except
@@ -20,6 +21,7 @@ def refresh_all(
             return
         SETTING.dic["最終更新日時"] = "更新中"
         SETTING.update()
+        USER.refresh()
         yymmdd_host = int(first_date) - 19500000
         file_ins.TOTAL_URI.refresh(where=f"伝票日付>={yymmdd_host}")
         file_ins.TEMP_URI1.refresh(where=f"伝票日付>={yymmdd_host}")
