@@ -120,10 +120,10 @@
             <td colspan="4">データ表示</td>
           </tr>
           <tr>
-            <td id="tab1b"><a id="tab1" class="a-button" href="javascript:showTable();">明細データ</a></td>
-            <td id="tab2b"><a id="tab2" class="a-button" href="javascript:showTotall1();">期別集計</a></td>
-            <td id="tab3b"><a id="tab3" class="a-button" href="javascript:showTotall2();">月別集計</a></td>
-            <td id="tab4b"><a id="tab4" class="a-button" href="javascript:showTotall3();">日別集計</a></td>
+            <td id="tab1b"><a id="tab1" href="javascript:showTable();">明細データ</a></td>
+            <td id="tab2b"><a id="tab2" href="javascript:showTotall1();">期別集計</a></td>
+            <td id="tab3b"><a id="tab3" href="javascript:showTotall2();">月別集計</a></td>
+            <td id="tab4b"><a id="tab4" href="javascript:showTotall3();">日別集計</a></td>
           </tr>
         </table>
       </div><!--TableTag-->
@@ -245,8 +245,8 @@
       </div><!--#totall3-->
     {% endif %}
     <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>  
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
         $(".sort-table").tablesorter();

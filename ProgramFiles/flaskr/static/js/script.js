@@ -1,8 +1,15 @@
-// ロードアイコン表示
+
+
+//#######################################################################################
+//    ロードアイコン表示
+//#######################################################################################
 function showLoading(){
     document.querySelector('#loading').style.display = '';
 }
-//main-form
+
+//#######################################################################################
+//    データ抽出　表示、非表示
+//#######################################################################################
 function showForm(){
     document.querySelector('#extract').style.display   = '';
     document.querySelector('#extract-').style.display  = '';
@@ -13,6 +20,13 @@ function hideForm(){
     document.querySelector('#extract-').style.display  = 'none';
     document.querySelector('#extract--').style.display = '';
 }
+
+//#######################################################################################
+//    データ種類　選択
+//#######################################################################################
+/*
+### Function ###
+*/
 mycolor = "#719FD3"
 //選択済み
 function Selected(id, id2){
@@ -29,6 +43,9 @@ function CanSelect(id, id2){
     obj.style.color = '#FFF';
     obj.style.backgroundColor = mycolor;
 }
+/*
+### Main ###
+*/
 //明細データ
 function showTable(){
     document.querySelector('#table').style.display    = '';

@@ -1,39 +1,41 @@
+
+
 /*
 ###############################################################################
-    初期設定
+    タグ
 ###############################################################################
 */
 html {
- overflow-y: scroll;
+    overflow-y: scroll;
 }
+a {
+    cursor: pointer;  /* カーソルを指マークに */
+    display: block;
+    text-decoration: none;
+}
+
 a:link, a:visited {
     color: rgb(0, 84, 239);
 }
 a:hover {
-    color: rosybrown;
     text-decoration: underline;
 }
-a:active {
-    color: black;
-}
 body {
-    font-size: 100%;
     margin: 0%;
 }
 table{
 	border-collapse: collapse;
-	border-spacing: 0;
-	color: black;
 	table-layout: fixed;
     width: 100%;
 }
-button{
-    cursor: pointer; /* カーソルを指マークに */
+button {
+    cursor: pointer;
 }
-form > input {
-    margin: 0.1%;
-}
-/*TableSorter*/
+/*
+###############################################################################
+    jQuery
+###############################################################################
+*/
 .tablesorter th{
     /*position: relative;*/
     cursor: pointer;
@@ -42,60 +44,19 @@ form > input {
     text-decoration: underline;
 }
 /*
-.tablesorter th::before, .tablesorter th::after{
-    content: '';
-    position: absolute;
-    z-index: 2;
-    right: 7px;
-    width: 0;
-    height: 0;
-    border: 4px dashed;
-    border-color: #333 transparent;
-    pointer-events: none;
-}
-.tablesorter th::before{
-    border-bottom-style: solid;
-    border-top: none;
-    top: 30%;
-}
-.tablesorter th::after{
-    border-top-style: solid;
-    border-bottom: none;
-    bottom: 30%;
-}
-.tablesorter th.tablesorter-headerAsc:after{
-    border: none;
-}
-.tablesorter th.tablesorter-headerAsc:before{
-    top: 50%;
-    transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-}
-.tablesorter th.tablesorter-headerDesc:before{
-    border: none;
-}
-.tablesorter th.tablesorter-headerDesc:after{
-    top: 50%;
-    transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-}
-.tablesorter th.sorter-false:before, .tablesorter th.sorter-false:after{
-    border: none;
-}
-*/
-/*
 ###############################################################################
     クラス
 ###############################################################################
 */
+/*
+### タイトル ###
+*/
 .title {
     background-color: rgb(173, 229, 255);
     width: 100%;
-    margin-bottom: 0.3%;
     display: table;
 }
 .title > #left-title {
-    font-size: 100%;
     text-align: left;
     display: table-cell;
 }
@@ -106,15 +67,12 @@ form > input {
     display: table-cell;
 }
 .title > #right-title {
-    font-size: 100%;
     text-align: right;
     display: table-cell;
 }
-/*フォームのデフォルト設定*/
-.dummy button{
-    display: none;
-}
-/*データ抽出テーブル*/
+/*
+### データ抽出 ###
+*/
 .main-form table {
     font-size: 85%;
 }
@@ -138,48 +96,9 @@ form > input {
 .main-form tr td:nth-of-type(3){
     width: 35%;
 }
-.content {
-    margin-left: 5%;
-}
-.subtitle {
-    font-size: 120%;
-    font-weight: bold;
-    color: rgb(56, 168, 242);
-    margin-top: 0.4%;
-    margin-bottom: 0.1%;
-    margin-left: 1%;
-}
-.comments {
-    font-size: small;
-}
-/*データテーブルタグ*/
-.TableTag > table {
-    margin-top: 1%;
-    margin-bottom: 1.5%;
-    width: 100%;
-    text-align: center;
-    font-weight: 700;
-    background-color: rgb(173, 229, 255); /* 背景色 */
-}
-.a-button {
-    display: block;
-    text-decoration: none;
-}
-.bigbutton > input {
-    margin-top: 0.3%;
-    margin-bottom: 0.3%;
-    width: 30%;
-}
-.bigbutton > button {
-    margin-top: 0.3%;
-    margin-bottom: 0.3%;
-    width: 30%;
-}
-.smallbutton {
-    margin-left: 0.5%;
-    width: 1.5%;
-}
-/* データ表示 */
+/* 
+### データ表示 ###
+*/
 .dataframe table {
     text-align: center;
     font-size: 75%;
@@ -213,11 +132,51 @@ form > input {
     top: 0;
     left: 0;
 }
+/*
+### その他 ###
+*/
+.content {
+    margin-left: 5%;
+}
+.subtitle {
+    font-size: 120%;
+    font-weight: bold;
+    color: rgb(56, 168, 242);
+    margin-top: 0.4%;
+    margin-bottom: 0.1%;
+    margin-left: 1%;
+}
+.dummy {
+    display: none;
+}
+.comments {
+    font-size: small;
+}
+.TableTag > table {
+    margin-top: 1%;
+    margin-bottom: 1.5%;
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+    background-color: rgb(173, 229, 255); /* 背景色 */
+}
+.bigbutton > button {
+    margin-top: 0.3%;
+    margin-bottom: 0.3%;
+    width: 30%;
+}
+.smallbutton {
+    margin-left: 0.5%;
+    width: 1.5%;
+}
 
 /*
 ###############################################################################
     ID
 ###############################################################################
+*/
+/*
+### データ種類選択 ###
 */
 #tab1, #tab2, #tab3, #tab4 {
     /* ブラウザ特有のスタイルを無効に */
@@ -228,7 +187,6 @@ form > input {
     font-size: 90%;
     background-color: rgb(113, 159, 211); /* 背景色 */
     color: #FFF; /* テキストカラー */
-    border-radius: 3px; /* 角の丸み */
     border: 0; /* 枠線を消す */
 }
 #tab1b, #tab2b, #tab3b, #tab4b {
@@ -239,11 +197,13 @@ form > input {
     color: black;
     background-color: #FFF;
 }
-/*ロード画面*/
+/*
+### ロード画面 ###
+*/
 #loading {
-    width: 50px; /* ローディングアイコンのサイズになる */
+    width: 50px; /* ローディングアイコンのサイズ */
     height: 50px;
-    border: 8px solid rgb(116, 253, 116);  /* 先の太さや色になる */
+    border: 8px solid rgb(116, 253, 116);  /* 先の太さや色 */
     border-right-color: transparent;
     border-radius: 50%;
     animation: spin 1s linear infinite;  /* 1秒ごとのアニメーションの指定 */
