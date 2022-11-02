@@ -4,6 +4,7 @@ FLASK Main
 import os
 import pandas as pd
 from flask import (
+    redirect,
     render_template,
     send_file,
     request,
@@ -44,6 +45,8 @@ def login():
 @app.route("/<db_name>", methods=["POST"])
 def index(db_name):
     """データ表示"""
+    if SETTING.dic["最終更新日時"] == "更新中":
+        return redirect("/")
     user_ip = request.remote_addr
     # POST
     # Read paramater on request
@@ -96,6 +99,8 @@ def index(db_name):
 @app.route("/search/<column>", methods=["POST"])
 def search(column):
     """抽出条件をマスタより取得"""
+    if SETTING.dic["最終更新日時"] == "更新中":
+        return redirect("/")
     user_ip = request.remote_addr
     # 抽出条件QUERYに反映させる -> "/"へ
     if request.form.get("ok") == "決定":
@@ -151,6 +156,8 @@ def search(column):
 @app.route("/<db_name>/download/<flg>", methods=["GET"])
 def download(db_name, flg):
     """データをダウンロードする"""
+    if SETTING.dic["最終更新日時"] == "更新中":
+        return
     user_ip = request.remote_addr
     if flg == "table":
         DB_SQL.db_open()
