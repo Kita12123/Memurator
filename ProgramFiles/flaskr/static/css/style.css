@@ -10,10 +10,11 @@ html {
 }
 a {
     cursor: pointer;  /* カーソルを指マークに */
-    display: block;
     text-decoration: none;
 }
-
+td > a {
+    display: block;
+}
 a:link, a:visited {
     color: rgb(0, 84, 239);
 }
@@ -54,21 +55,17 @@ button {
 .title {
     background-color: rgb(173, 229, 255);
     width: 100%;
-    display: table;
 }
-.title > #left-title {
+.title tr td:nth-of-type(1){
     text-align: left;
-    display: table-cell;
 }
-.title > #main-title {
+.title tr td:nth-of-type(2){
     font-size: 150%;
     font-weight: bold;
     text-align: center;
-    display: table-cell;
 }
-.title > #right-title {
+.title tr td:nth-of-type(3){
     text-align: right;
-    display: table-cell;
 }
 /*
 ### データ抽出 ###
@@ -160,12 +157,12 @@ button {
     font-weight: 700;
     background-color: rgb(173, 229, 255); /* 背景色 */
 }
-.bigbutton > button, .bigbutton > input {
+.bigbutton {
     margin-top: 0.3%;
     margin-bottom: 0.3%;
     width: 30%;
 }
-.smallbutton {
+.smallinput {
     margin-left: 0.5%;
     width: 1.5%;
 }

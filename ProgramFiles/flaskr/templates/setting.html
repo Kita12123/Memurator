@@ -7,13 +7,13 @@
   </head>
   <body>
     <!-- タイトル画面 -->
-    <div class="title">
-      <a id="left-title" href="/">初期画面へ</a>
-      <div id="main-title">
-        設定
-      </div><!--center-->
-      <a id="right-title" href="/setting">設定画面へ</a>
-    </div><!--title-->
+    <table class="title">
+      <tr>
+        <td><a href="/">初期画面へ</a></td>
+        <td>設定</td>
+        <td><a href="/setting">設定画面へ</a></td>
+      </tr>
+    </table>
     <!-- メイン画面 -->
     <div class="content">
       <div class="subtitle">
@@ -26,9 +26,7 @@
             <input name="{{ key }}" value="{{ value }}">
             <br>
           {% endfor %}
-          <div class="bigbutton">
-            <input type="submit" name="ok" value="設定変更">
-          </div><!--bigbutton-->
+          <button class="bigbutton" name="ok" value="設定変更">設定変更</button>
         </form>
       </div><!--main-form-->
       <div class="subtitle">
@@ -43,9 +41,8 @@
           <br>
           <input type="checkbox" name="contain_master" checked>
           <label for="contain_master">マスターも更新する</label>
-          <div class="bigbutton">
-            <input type="submit" name="ok" value="最新データ取得" onclick="showLoading();">
-          </div><!--bigbutton-->
+          <br>
+          <button class="bigbutton" name="ok" value="最新データ取得" onclick="showLoading();">最新データ取得</button>
         {% endif %}
       </form>
       <!--Display Loading-->
@@ -54,11 +51,11 @@
         ログ参照
       </div><!--bigbutton-->
       <form method="post">
-        <input type="submit" name="ok" value="debug">
+        <button name="ok" value="debug">debug</button>
         &emsp;&emsp;
-        <input type="submit" name="ok" value="info">
+        <button name="ok" value="info">info</button>
         &emsp;&emsp;
-        <input type="submit" name="ok" value="error">
+        <button name="ok" value="error">error</button>
       </form>
       <div class="comments">
         {% for t in log_texts %}

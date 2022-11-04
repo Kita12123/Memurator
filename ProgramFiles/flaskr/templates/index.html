@@ -8,23 +8,25 @@
   </head>
   <body>
     <!-- タイトル画面 -->
-    <div class="title">
-      <a id="left-title" href="/">初期画面へ</a>
-      <div id="main-title">
-        {% if method_type=="get" %}
-          ようこそ
-        {% else %}
-          {{ db_name }}参照
-        {% endif %}
-      </div><!--center-->
-      <a id="right-title" href="/setting">設定画面へ</a>
-    </div><!--title-->
+    <table class="title">
+      <tr>
+        <td><a href="/">初期画面へ</a></td>
+        <td>
+          {% if method_type=="get" %}
+            ようこそ
+          {% else %}
+            {{ db_name }}参照
+          {% endif %}
+        </td>
+        <td><a href="/setting">設定画面へ</a></td>
+      </tr>
+    </table>
     <!-- メイン画面 -->
     <div class="content">
       <div class="subtitle">
         抽出条件入力
-        <input id="extract-" class="smallbutton" type="image" src="/static/image/マイナス.png" alt="非表示" onclick="hideForm();">
-        <input id="extract--" class="smallbutton" type="image" src="/static/image/プラス.png" alt="表示" style="display:none;" onclick="showForm();">
+        <input id="extract-" class="smallinput" type="image" src="/static/image/マイナス.png" alt="非表示" onclick="hideForm();">
+        <input id="extract--" class="smallinput" type="image" src="/static/image/プラス.png" alt="表示" style="display:none;" onclick="showForm();">
       </div><!--subtitle-->
       <form method="post">
         <input type="hidden" name="index">
@@ -104,10 +106,8 @@
             <br>
             最終更新日付:{{ setting_dic["最終更新日時"] }}
           </div><!--comments-->
-          <div class="bigbutton">
-            <button formaction="{{ url_for('index',db_name='売上データ') }}" onclick="showLoading();">売上データ</button>
-            <button formaction="{{ url_for('index',db_name='出荷データ') }}" onclick="showLoading();">出荷データ</button>
-          </div><!--bigbutton-->
+            <button class="bigbutton" formaction="{{ url_for('index',db_name='売上データ') }}" onclick="showLoading();">売上データ</button>
+            <button class="bigbutton" formaction="{{ url_for('index',db_name='出荷データ') }}" onclick="showLoading();">出荷データ</button>
           <!--Display Loading-->
           <div id="loading" style="display:none;"></div>
         </div><!--main-form-->
@@ -117,7 +117,7 @@
       <div class="TableTag">
         <table>
           <tr>
-            <td colspan="4">データ表示</td>
+            <td colspan="4">{{ db_name }}表示</td>
           </tr>
           <tr>
             <td id="tab1b"><a id="tab1" href="javascript:showTable();">明細データ</a></td>

@@ -7,13 +7,13 @@
   </head>
   <body>
     <!-- タイトル画面 -->
-    <div class="title">
-      <a id="left-title" href="/">初期画面へ</a>
-      <div id="main-title">
-        {{ db_name }}参照
-      </div><!--center-->
-      <a id="right-title" href="/setting">設定画面へ</a>
-    </div><!--title-->
+    <table class="title">
+      <tr>
+        <td><a href="/">初期画面へ</a></td>
+        <td>マスタ検索</td>
+        <td><a href="/setting">設定画面へ</a></td>
+      </tr>
+    </table>
     <!-- メイン画面 -->
     <div class="content">
       <div class="subtitle">
@@ -28,10 +28,8 @@
       <div class="dummy">
         <button name="ok" value="抽出"></button>
       </div>
-      <div class="bigbutton">
-        <input type="submit" name="ok" value="決定">
-        <a href="{{ url_for('download',db_name=column, flg='master') }}">ダウンロード</a>
-      </div>
+      <button class="bigbutton" name="ok" value="決定">決定</button>
+      <a href="{{ url_for('download',db_name=column, flg='master') }}">ダウンロード</a>
       <div class="dataframe">
         <table class="sort-table">
           <thead>
