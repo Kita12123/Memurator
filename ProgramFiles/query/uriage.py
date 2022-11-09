@@ -28,13 +28,13 @@ def Create_SQL_dsp(
             得意先コード,
             得意先カナ,
             CASE
-                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN 雑コード
-                WHEN 得意先コード=333840                         THEN 雑コード
+                WHEN 得意先コード>=500000 AND 得意先コード< 600000 THEN 雑コード
+                WHEN 得意先コード>=333800 AND 得意先コード<=333899 THEN 雑コード
                 ELSE ''
             END AS 雑コード,
             CASE
-                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN ifnull(NI2.送荷先カナ＊,'')
-                WHEN 得意先コード=333840                         THEN ifnull(NI2.送荷先カナ＊,'')
+                WHEN 得意先コード>=500000 AND 得意先コード< 600000 THEN ifnull(NI2.送荷先カナ＊,'')
+                WHEN 得意先コード>=333800 AND 得意先コード<=333899 THEN ifnull(NI2.送荷先カナ＊,'')
                 ELSE ''
             END AS 雑カナ＊,
             送荷先コード,
@@ -123,18 +123,18 @@ def Create_SQL_download(
             ifnull(TOK.電話番号＊,'') AS 得意先電話番号＊,
             */
             CASE
-                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN 雑コード
-                WHEN 得意先コード=333840                         THEN 雑コード
+                WHEN 得意先コード>=500000 AND 得意先コード< 600000 THEN 雑コード
+                WHEN 得意先コード>=333800 AND 得意先コード<=333899 THEN 雑コード
                 ELSE ''
             END AS 雑コード,
             CASE
-                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN ifnull(NI2.送荷先カナ＊,'')
-                WHEN 得意先コード=333840                         THEN ifnull(NI2.送荷先カナ＊,'')
+                WHEN 得意先コード>=500000 AND 得意先コード< 600000 THEN ifnull(NI2.送荷先カナ＊,'')
+                WHEN 得意先コード>=333800 AND 得意先コード<=333899 THEN ifnull(NI2.送荷先カナ＊,'')
                 ELSE ''
             END AS 雑カナ＊,
             CASE
-                WHEN 得意先コード>=500000 AND 得意先コード<600000 THEN ifnull(NI2.送荷先名＊,'')
-                WHEN 得意先コード=333840                         THEN ifnull(NI2.送荷先名＊,'')
+                WHEN 得意先コード>=500000 AND 得意先コード< 600000 THEN ifnull(NI2.送荷先名＊,'')
+                WHEN 得意先コード>=333800 AND 得意先コード<=333899 THEN ifnull(NI2.送荷先名＊,'')
                 ELSE ''
             END AS 雑名＊,
             送荷先コード,
