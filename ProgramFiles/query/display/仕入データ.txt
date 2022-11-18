@@ -1,0 +1,27 @@
+SELECT
+    伝票日付+19500000 AS 伝票日付,
+    納期+19500000 AS 納期,
+    手配先コード AS 仕入先コード,
+    手配先カナ AS 仕入先カナ,
+    CASE
+        WHEN 補用区分='H' THEN '補用'
+        WHEN 補用区分='T' THEN '単発'
+        ELSE ''
+    END AS 発注区分,
+    品目コード,
+    品目カナ,
+    PM.仕様＊ AS 品目仕様＊,
+    PM.図番＊ AS 品目図番＊,
+    数量,
+    単価,
+    金額,
+    機種コード,
+    機種カナ,
+    勘定科目カナ１,
+    勘定科目カナ２,
+    注文番号
+FROM NSFILEP
+LEFT OUTER JOIN PMDBPF PM ON PM.品目コード＊=品目コード
+WHERE
+    {0}
+ORDER BY 伝票日付 ASC

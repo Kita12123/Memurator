@@ -13,7 +13,7 @@ from ProgramFiles.db.host_ins import DB_HOST
 #
 # Main Class
 #
-class FD:
+class FD_CLS:
     def __init__(
         self,
         file_name: str,
@@ -85,7 +85,12 @@ class FD:
 #
 # Instance
 #
-TOTAL_URI = FD(
+
+#
+# 営業
+#
+
+TOTAL_URI = FD_CLS(
     file_name="MUJNRPF",
     lib_name="MOLIB",
     columns_dic= {
@@ -112,7 +117,7 @@ TOTAL_URI = FD(
         }
 )
 
-TEMP_URI1 = FD(
+TEMP_URI1 = FD_CLS(
     file_name="UJNRPFW",
     lib_name="FLIB1",
     columns_dic= {
@@ -138,7 +143,7 @@ TEMP_URI1 = FD(
     }
 )
 
-TEMP_URI2 = FD(
+TEMP_URI2 = FD_CLS(
     file_name="UJNRPF",
     lib_name="FLIB1",
     columns_dic= {
@@ -164,7 +169,7 @@ TEMP_URI2 = FD(
     }
 )
 
-TOTAL_SYUKA = FD(
+TOTAL_SYUKA = FD_CLS(
     file_name="SYUKAPF",
     lib_name="FLIB",
     columns_dic={
@@ -199,7 +204,7 @@ TOTAL_SYUKA = FD(
     }
 )
 
-ETC_MASTER = FD(
+EIGYO_MASTER = FD_CLS(
     file_name="ETCMPF",
     lib_name="FLIB",
     columns_dic={
@@ -211,7 +216,7 @@ ETC_MASTER = FD(
     }
 )
 
-SOKCD_MASTER = FD(
+SOKCD_MASTER = FD_CLS(
     file_name="NIHONPF",
     lib_name="FLIB",
     columns_dic={
@@ -227,7 +232,7 @@ SOKCD_MASTER = FD(
     }
 )
 
-TOKCD_MASTER = FD(
+TOKCD_MASTER = FD_CLS(
     file_name="TOKMPF",
     lib_name="FLIB",
     columns_dic={
@@ -248,7 +253,7 @@ TOKCD_MASTER = FD(
     }
 )
 
-KEN_MASTER = FD(
+KEN_MASTER = FD_CLS(
     file_name="KENPF",
     lib_name="FLIB1",
     columns_dic={
@@ -257,7 +262,7 @@ KEN_MASTER = FD(
     }
 )
 
-SEIHIN_MASTER = FD(
+SEIHIN_MASTER = FD_CLS(
     file_name="SEIMPF",
     lib_name="FLIB",
     columns_dic={
@@ -275,7 +280,7 @@ SEIHIN_MASTER = FD(
     }
 )
 
-BUHIN_MASTER = FD(
+BUHIN_MASTER = FD_CLS(
     file_name="BUHMPF",
     lib_name="FLIB",
     columns_dic={
@@ -290,5 +295,75 @@ BUHIN_MASTER = FD(
         "重量＊":("JURYO", "REAL"),
         "廃止区分＊":("HAISIF", "INTEGER"),
         "作成日＊":("CRTYMD", "INTEGER")
+    }
+)
+
+#
+# 工場
+#
+
+TOTAL_SIIRE = FD_CLS(
+    file_name="NSFILEP",
+    lib_name="MOLIB",
+    columns_dic={
+        "伝票日付":("DYMD", "INTEGER"),
+        "納期":("NOUKI", "INTEGER"),
+        "手配先コード":("SIR", "TEXT"),
+        "手配先カナ":("SIRNM", "TEXT"),
+        "補用区分":("HOYOKB", "TEXT"),
+        "品目コード":("BUCD", "TEXT"),
+        "品目カナ":("BUHNM", "TEXT"),
+        "数量":("SUR", "INTEGER"),
+        "単価":("TANKA", "REAL"),
+        "金額":("KIN", "INTEGER"),
+        "機種コード":("KIS", "TEXT"),
+        "機種カナ":("KISNM", "TEXT"),
+        "勘定科目カナ１":("KAMOK1", "TEXT"),
+        "勘定科目カナ２":("KAMOK2", "TEXT"),
+        "注文番号":("CHU", "TEXT")
+    }
+)
+
+KOUJO_MASTER = FD_CLS(
+    file_name="RIPPET",
+    lib_name="FLIB",
+    columns_dic={
+        "レコード区分＊":("データ区分", "INTEGER"),
+        "コード＊":("コード", "INTEGER"),
+        "カナ＊":("カナ名称", "TEXT"),
+        "名称＊":("名称", "TEXT"),
+        "数値１＊":("数値", "REAL"),
+        "数値２＊":("数値（２）", "REAL")
+    }
+)
+
+TEHAI_MASTER = FD_CLS(
+    file_name="RIPPTR",
+    lib_name="FLIB",
+    columns_dic={
+        "手配先コード＊":("コード", "INTEGER"),
+        "手配先名＊":("仕入先名", "TEXT"),
+        "手配先略称＊":("仕入先名（略称）", "TEXT")
+    }
+)
+
+HINMOKU_MASTER = FD_CLS(
+    file_name="PMDBPF",
+    lib_name="FLIB",
+    columns_dic={
+        "品目コード＊":("DBCTRL", "TEXT"),
+        "品目分類＊":("HSMALL", "INTEGER"),
+        "品目カナ＊":("HINMEI", "TEXT"),
+        "品目名＊":("HINMEN", "TEXT"),
+        "仕様＊":("SIYOU", "TEXT"),
+        "図番＊":("ZUBAN", "TEXT"),
+        "部番＊":("BUBAN", "TEXT"),
+        "手配先コード＊":("TEHAI", "INTEGER"),
+        "納入先コード＊":("NOUNYU", "INTEGER"),
+        "資材単価＊":("ASHI", "REAL"),
+        "加工単価＊":("AKAK", "REAL"),
+        "検査区分＊":("KENKBN", "INTEGER"),
+        "作成日＊":("CRTYMD", "INTEGER"),
+        "変更日＊":("UPDYMD", "INTEGER")
     }
 )

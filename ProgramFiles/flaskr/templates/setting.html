@@ -1,68 +1,47 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <title>M端末</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-  </head>
-  <body>
-    <!-- タイトル画面 -->
-    <table class="title">
-      <tr>
-        <td><a href="/">初期画面へ</a></td>
-        <td>設定</td>
-        <td><a href="/setting">設定画面へ</a></td>
-      </tr>
-    </table>
-    <!-- メイン画面 -->
-    <div class="content">
-      <div class="subtitle">
-        詳細設定
-      </div><!--subtitle-->
-      <div class="main-form">
-        <form method="post">
-          {% for key, value in setting_dic.items() %}
-            <label for="{{ key }}" >{{ key }}:</label>
-            <input name="{{ key }}" value="{{ value }}">
-            <br>
-          {% endfor %}
-          <button class="bigbutton" name="ok" value="設定変更">設定変更</button>
-        </form>
-      </div><!--main-form-->
-      <div class="subtitle">
-        データ更新
-      </div>
-      <form method="post">
-        {% if setting_dic["最終更新日時"] == "更新中" %}
-          更新中...
-        {% else %}
-          <label for="first_date">更新開始日付:</label>
-          <input type="date" name="first_date" value="{{ first_date }}" max="9999-12-31">
-          <br>
-          <input type="checkbox" name="contain_master" checked>
-          <label for="contain_master">マスターも更新する</label>
-          <br>
-          <button class="bigbutton" name="ok" value="最新データ取得" onclick="showLoading();">最新データ取得</button>
-        {% endif %}
-      </form>
-      <!--Display Loading-->
-      <div id="loading" style="display:none;"></div>
-      <div class="subtitle">
-        ログ参照
-      </div><!--bigbutton-->
-      <form method="post">
-        <button name="ok" value="debug">debug</button>
-        &emsp;&emsp;
-        <button name="ok" value="info">info</button>
-        &emsp;&emsp;
-        <button name="ok" value="error">error</button>
-      </form>
-      <div class="comments">
-        {% for t in log_texts %}
-          {{ t }}<br>
-        {% endfor %}
-      </div><!--comments-->
-    </div><!--content-->
-    <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block Title %}
+設定画面
+{% endblock %}
+
+
+{% block Content %}
+<div class="subtitle">
+  詳細設定
+</div><!--subtitle-->
+<div class="main-form">
+  {% for key, value in setting_dic.items() %}
+    <label for="{{ key }}" >{{ key }}:</label>
+    <input name="{{ key }}" value="{{ value }}">
+    <br>
+  {% endfor %}
+  <button class="bigbutton" name="ok" value="設定変更">設定変更</button>
+</div><!--main-form-->
+<div class="subtitle">
+  データ更新
+</div>
+  {% if setting_dic["最終更新日時"] == "更新中" %}
+    更新中...
+  {% else %}
+    <label for="first_date">更新開始日付:</label>
+    <input type="date" name="first_date" value="{{ first_date }}" max="9999-12-31">
+    <br>
+    <input type="checkbox" name="contain_master" checked>
+    <label for="contain_master">マスターも更新する</label>
+    <br>
+    <button class="bigbutton" name="ok" value="最新データ取得" onclick="showLoading();">最新データ取得</button>
+  {% endif %}
+<div class="subtitle">
+  ログ参照
+</div><!--bigbutton-->
+  <button name="ok" value="debug">debug</button>
+  &emsp;&emsp;
+  <button name="ok" value="info">info</button>
+  &emsp;&emsp;
+  <button name="ok" value="error">error</button>
+<div class="comments">
+  {% for t in log_texts %}
+    {{ t }}<br>
+  {% endfor %}
+</div><!--comments-->
+{% endblock %}

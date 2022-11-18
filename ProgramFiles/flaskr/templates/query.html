@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block Head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/table.css') }}">
+{% endblock %}
+
+
+{% block Title %}
+ようこそ
+{% endblock %}
+
+{% block Content %}
+{% if user_query["Department"] == "Sales" %}
+  <div class="dummy">
+    <button type="hidden" formaction="{{ url_for('show_table') }}" 
+      name="データ名" value="売上データ" onclick="showLoading();"></button>
+  </div><!--dummy-->
+  {% include "_FormSales.html" %}
+{% else %}
+  <div class="dummy">
+    <button type="hidden" formaction="{{ url_for('show_table') }}" 
+      name="データ名" value="仕入データ" onclick="showLoading();"></button>
+  </div><!--dummy-->
+  {% include "_FormPlant.html" %}
+{% endif %}
+{% endblock %}

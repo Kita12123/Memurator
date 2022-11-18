@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block Head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/table.css') }}">
+{% endblock %}
+
+{% block Scripts %}
+<script type="text/javascript" src="{{ url_for('static',filename='js/table.js') }}"></script> 
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".sort-table").tablesorter();
+  });
+</script>
+{% endblock %}
+
+
+{% block Title %}
+{{ user_query["データ名"]}}参照
+{% endblock %}
+
+
+{% block Content %}
+<div class="dummy">
+  <button name="データ名" value="{{ user_query['データ名'] }}" onclick="showLoading();"></button>
+</div><!--dummy-->
+{% if user_query["Department"] == "Sales" %}
+  {% include "_FormSales.html" %}
+{% else %}
+  {% include "_FormPlant.html" %}
+{% endif %}
+{% endblock %}
+
+
+{% block Table %}
+<div class="TableTag">
+  <table>
+    <tr>
+      <td colspan="4">データ選択</td>
+    </tr>
+    <tr>
+      <td id="tab1b"><a id="tab1" href="javascript:showTable();">明細データ</a></td>
+      <td id="tab2b"><a id="tab2" href="javascript:showTotall1();">期別集計</a></td>
+      <td id="tab3b"><a id="tab3" href="javascript:showTotall2();">月別集計</a></td>
+      <td id="tab4b"><a id="tab4" href="javascript:showTotall3();">日別集計</a></td>
+    </tr>
+  </table>
+</div><!--TableTag-->
+<div id="table">
+  <div class="content">
+    <a href="{{ url_for('download',flg='table') }}">ダウンロード</a>&emsp;&emsp;
+    {% for m in messages %}
+      {{ m }} &emsp;&emsp;
+    {% endfor %}
+  </div><!--content-->
+  <!--Table of Data-->
+  <div class="comments">
+    ※列名に＊がついたものは、現在のマスタから取得しています。
+  </div><!--comments-->
+  <div class="dataframe">
+    <table class="sort-table">
+      <thead>
+        <tr>
+          {% for header in headers %}
+          <th>
+            {{ header }}
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+          <tr>
+            {% for rec in record %}
+            <td>{{ rec }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div><!--dataframe-->
+</div><!--#table-->
+<div id="totall1" style="display:none;">
+  <div class="content">
+    <a href="{{ url_for('download',flg='totall1') }}">ダウンロード</a>
+  </div><!--content-->
+  <div class="dataframe">
+    <table>
+      <thead>
+        <tr>
+          {% for header in headers1 %}
+          <th>
+            {{ header }}
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records1 %}
+          <tr>
+            {% for rec in record %}
+            <td>{{ rec }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div><!--dataframe-->
+</div><!--#totall1-->
+<div id="totall2" style="display:none;">
+  <div class="content">
+    <a href="{{ url_for('download',flg='totall2') }}">ダウンロード</a>
+  </div><!--content-->
+  <div class="dataframe">
+    <table>
+      <thead>
+        <tr>
+          {% for header in headers2 %}
+          <th>
+            {{ header }}
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records2 %}
+          <tr>
+            {% for rec in record %}
+            <td>{{ rec }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div><!--dataframe-->
+</div><!--#totall2-->
+<div id="totall3" style="display:none;">
+  <div class="content">
+    <a href="{{ url_for('download',flg='totall3') }}">ダウンロード</a>
+  </div><!--content-->
+  <div class="dataframe">
+    <table>
+      <thead>
+        <tr>
+          {% for header in headers3 %}
+          <th>
+            {{ header }}
+          </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records3 %}
+          <tr>
+            {% for rec in record %}
+            <td>{{ rec }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div><!--dataframe-->
+</div><!--#totall3-->
+{% endblock %}

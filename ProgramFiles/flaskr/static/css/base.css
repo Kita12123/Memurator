@@ -1,0 +1,128 @@
+/*
+###############################################################################
+    タグ
+###############################################################################
+*/
+html {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+a {
+    cursor: pointer;  /* カーソルを指マークに */
+    text-decoration: none;
+}
+td {
+    padding: 0px;
+}
+td > a, span > a {
+    display: block;
+}
+a:link, a:visited {
+    color: rgb(0, 84, 239);
+}
+a:hover {
+    text-decoration: underline;
+}
+body {
+    margin: 0%;
+}
+table{
+	border-collapse: collapse;
+	table-layout: fixed;
+    width: 100%;
+}
+button {
+    cursor: pointer;
+}
+/*
+###############################################################################
+    クラス
+###############################################################################
+*/
+/*
+### タイトル ###
+*/
+.title {
+    background-color: rgb(173, 229, 255);
+    width: 100%;
+    display: table;
+}
+.title-left {
+    text-align: left;
+    display: table-cell;
+}
+.title-center {
+    text-align: center;
+    font-size: 130%;
+    font-weight: bold;
+    display: table-cell;
+}
+.title-right{
+    text-align: right;
+    display: table-cell;
+}
+/*
+### 内容 ###
+*/
+.content {
+    margin-left: 5%;
+}
+.subtitle {
+    font-size: 120%;
+    font-weight: bold;
+    color: rgb(56, 168, 242);
+    margin-top: 0.4%;
+    margin-bottom: 0.1%;
+    margin-left: 1%;
+}
+.dummy {
+    display: none;
+}
+.comments {
+    font-size: small;
+}
+.TableTag > table {
+    margin-top: 1%;
+    margin-bottom: 1.5%;
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+    background-color: rgb(173, 229, 255); /* 背景色 */
+}
+.bigbutton {
+    margin-top: 0.3%;
+    margin-bottom: 0.3%;
+    width: 30%;
+}
+.smallinput {
+    margin-left: 0.5%;
+    width: 1.5%;
+}
+/*
+###############################################################################
+    ID
+###############################################################################
+*/
+/*
+### ロード画面 ###
+*/
+#loading {
+    width: 50px; /* ローディングアイコンのサイズ */
+    height: 50px;
+    border: 8px solid rgb(116, 253, 116);  /* 先の太さや色 */
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;  /* 1秒ごとのアニメーションの指定 */
+}
+/* アニメーションの設定 */
+@keyframes spin {
+0% {
+    transform: rotate(0deg); /* 0度回す */
+}
+50% {
+    transform: rotate(180deg);  /* 180度回す */
+}
+100% {
+    transform: rotate(360deg);  /* 360度回す */
+}
+}

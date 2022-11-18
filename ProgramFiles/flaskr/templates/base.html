@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>M端末</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/base.css') }}">
+    {% block Head %}
+    {% endblock %}
+  </head>
+  <body>
+    <!-- タイトル画面 -->
+    <div class="title">
+      <span class="title-left"  ><a href="/">初期画面へ</a></span>
+      <span class="title-center">
+        {% block Title %}
+        {% endblock %}
+      </span>
+      <span class="title-right" ><a href="/setting">設定画面へ</a></span>
+    </div><!--title-->
+    <form method="POST">
+      <div class="content">
+        {% block Content %}
+        {% endblock %}
+        <div id="loading" style="display:none;"></div>
+      </div><!--content-->
+      {% block Table %}
+      {% endblock %}
+    </form><!--post-->
+    <script type="text/javascript" src="{{ url_for('static',filename='js/base.js') }}"></script>
+    {% block Scripts %}
+    {% endblock %}
+  </body>
+</html>

@@ -1,26 +1,3 @@
-
-
-//#######################################################################################
-//    ロードアイコン表示
-//#######################################################################################
-function showLoading(){
-    document.querySelector('#loading').style.display = '';
-}
-
-//#######################################################################################
-//    データ抽出　表示、非表示
-//#######################################################################################
-function showForm(){
-    document.querySelector('#extract').style.display   = '';
-    document.querySelector('#extract-').style.display  = '';
-    document.querySelector('#extract--').style.display = 'none';
-}
-function hideForm(){
-    document.querySelector('#extract').style.display   = 'none';
-    document.querySelector('#extract-').style.display  = 'none';
-    document.querySelector('#extract--').style.display = '';
-}
-
 //#######################################################################################
 //    データ種類　選択
 //#######################################################################################

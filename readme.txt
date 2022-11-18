@@ -66,3 +66,6 @@ gitの運用
     追加
     git remote add origin https://github.com/Kita12123/M_Emurator.git
     git push -u origin master
+
+命名規則（自流）
+・

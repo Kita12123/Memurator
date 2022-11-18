@@ -1,86 +1,85 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <title>M端末</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
-  </head>
-  <body>
-    <!-- タイトル画面 -->
-    <table class="title">
+{% extends "base.html" %}
+
+{% block Head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/table.css') }}">
+{% endblock %}
+
+{% block Scripts %}
+<script type="text/javascript" src="{{ url_for('static',filename='js/table.js') }}"></script> 
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".sort-table").tablesorter();
+  });
+</script>
+{% endblock %}
+
+
+{% block Title %}
+{{ user_query["データ名"]}}参照
+{% endblock %}
+
+{% block Content %}
+<div class="subtitle">
+  マスタ検索
+</div><!--subtitle-->
+<div class="comments">
+  最終更新日付:{{ setting_dic["最終更新日時"] }}
+</div><!--comments-->
+<div class="dummy">
+  <button name="ok" value="抽出"></button>
+</div>
+<button class="bigbutton" name="ok" value="決定">決定</button>
+<a href="{{ url_for('download',flg='master') }}">ダウンロード</a>
+{% endblock %}
+
+
+{% block Table %}
+<div class="dataframe">
+  <table class="sort-table">
+    <thead>
       <tr>
-        <td><a href="/">初期画面へ</a></td>
-        <td>マスタ検索</td>
-        <td><a href="/setting">設定画面へ</a></td>
+        {% for header in headers %}
+          {% if   header == "カナ名" %}
+            <td><input name="カナ名" value="{{ master_query['カナ名'] }}"></td>
+          {% elif header == "名称" %}
+            <td><input name="名称" value="{{ master_query['名称'] }}"></td>
+          {% elif header == "担当者名" %}
+            <td><input name="担当者名"  value="{{ master_query['担当者名'] }}"></td>
+          {% elif header == "住所" %}
+            <td><input name="住所"   value="{{ master_query['住所'] }}"></td>
+          {% elif header == "図番" %}
+            <td><input name="図番"   value="{{ master_query['図番'] }}"></td>
+          {% elif header == "部番" %}
+            <td><input name="部番"   value="{{ master_query['部番'] }}"></td>
+          {% else %}
+            <td></td>
+          {% endif %}
+        {% endfor %}
       </tr>
-    </table>
-    <!-- メイン画面 -->
-    <div class="content">
-      <div class="subtitle">
-        マスタ検索
-      </div><!--subtitle-->
-    </div><!--content-->
-    <!--Table of Data-->
-    <div class="comments">
-      最終更新日付:{{ setting_dic["最終更新日時"] }}
-    </div><!--comments-->
-    <form method="POST">
-      <div class="dummy">
-        <button name="ok" value="抽出"></button>
-      </div>
-      <button class="bigbutton" name="ok" value="決定">決定</button>
-      <a href="{{ url_for('download',db_name=column, flg='master') }}">ダウンロード</a>
-      <div class="dataframe">
-        <table class="sort-table">
-          <thead>
-            <tr>
-              {% for header in headers %}
-                {% if   header == "カナ名" %}
-                  <td><input name="カナ名" value="{{ master_query['カナ名'] }}"></td>
-                {% elif header == "名称" %}
-                  <td><input name="名称" value="{{ master_query['名称'] }}"></td>
-                {% elif header == "担当者名" %}
-                  <td><input name="担当者名"  value="{{ master_query['担当者名'] }}"></td>
-                {% elif header == "住所" %}
-                  <td><input name="住所"   value="{{ master_query['住所'] }}"></td>
-                {% elif header == "部番" %}
-                  <td><input name="部番"   value="{{ master_query['部番'] }}"></td>
-                {% else %}
-                  <td></td>
-                {% endif %}
-              {% endfor %}
-            </tr>
-            <tr>
-              {% for header in headers %}
-                <th>
-                  {{ header }}
-                </th>
-              {% endfor %}
-            </tr>
-          </thead>
-          <tbody>
-            {% for record in records %}
-                <tr>
-                  {% if record[0] in selects %}
-                    <td><input type="checkbox" name="key_code" value="{{ record[0] }}" checked></td>
-                  {% else %}
-                    <td><input type="checkbox" name="key_code" value="{{ record[0] }}"></td>
-                  {% endif %}
-                  {% for rec in record %}
-                    <td>{{ rec }}</td>
-                  {% endfor %}
-                </tr>
+      <tr>
+        {% for header in headers %}
+          <th>
+            {{ header }}
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in records %}
+          <tr>
+            {% if record[0] in SelectList %}
+              <td><input type="checkbox" name="key_code" value="{{ record[0] }}" checked></td>
+            {% else %}
+              <td><input type="checkbox" name="key_code" value="{{ record[0] }}"></td>
+            {% endif %}
+            {% for rec in record %}
+              <td>{{ rec }}</td>
             {% endfor %}
-          </tbody>
-        </table>
-      </div><!--dataframe-->
-    </form>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function(){
-        $(".sort-table").tablesorter();
-      });
-    </script>
-  </body>
-</html>
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div><!--dataframe-->
+{% endblock %}
