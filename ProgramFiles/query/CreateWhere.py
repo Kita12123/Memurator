@@ -21,10 +21,10 @@ def Equal(
             if column_int == "得意先コード" and len(v) <= 4:
                 # 4ｹﾀ未満でも対応する
                 z = '0'*(4 - len(v))
-                return f" OR ( 得意先コード>={z}{v}00 AND 得意先コード<={z}{v}99 ) "
+                return f"OR ( 得意先コード>={z}{v}00 AND 得意先コード<={z}{v}99 )"
             # 製品の連番対応
             elif column_int == "製品部品コード" and len(v) == 5:
-                return f" OR ( 製品部品コード>={v}00 AND 製品部品コード<={v}99 ) "
+                return f"OR ( 製品部品コード>={v}00 AND 製品部品コード<={v}99 )"
             else:
                 return f"OR {column_int}={v} "
         else:
