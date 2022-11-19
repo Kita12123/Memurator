@@ -308,7 +308,7 @@ TOTAL_SIIRE = FD_CLS(
     columns_dic={
         "伝票日付":("DYMD", "INTEGER"),
         "納期":("NOUKI", "INTEGER"),
-        "手配先コード":("SIR", "TEXT"),
+        "手配先コード":("SIR", "INTEGER"),
         "手配先カナ":("SIRNM", "TEXT"),
         "補用区分":("HOYOKB", "TEXT"),
         "品目コード":("BUCD", "TEXT"),

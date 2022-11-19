@@ -7,7 +7,7 @@
 
 {% block Content %}
 <div class="subtitle">
-  詳細設定
+  システム設定
 </div><!--subtitle-->
 <div class="main-form">
   {% for key, value in setting_dic.items() %}
@@ -15,6 +15,20 @@
     <input name="{{ key }}" value="{{ value }}">
     <br>
   {% endfor %}
+  <div class="subtitle">
+    ユーザー設定
+  </div><!--subtitle-->
+  <label for="Department">ユーザー部署:</label>
+  <select name="Department">
+    {% if user_query["Department"]   == "Sales" %}
+      <option value="Sales" selected>営業</option>
+      <option value="Plant">工場</option>
+    {% else %}
+      <option value="Plant" selected>工場</option>
+      <option value="Sales">営業</option>
+    {% endif %}
+  </select>
+  <br>
   <button class="bigbutton" name="ok" value="設定変更">設定変更</button>
 </div><!--main-form-->
 <div class="subtitle">

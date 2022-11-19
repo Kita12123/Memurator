@@ -1,13 +1,13 @@
-/* MUJNRPF */
+﻿/* MUJNRPF */
 SELECT
     伝票日付+19500000 AS 伝票日付,
     伝票区分,
     ifnull(ET1.名称＊,'') AS 伝票区分名＊,
     委託区分,
     ifnull(ET2.名称＊,'') AS 委託区分名＊,
-    {atu_cd} AS 扱い区分,
+    SUBSTR('000' || 扱い運送,-3,1) AS 扱い区分,
     ifnull(ET4.名称＊,'') AS 扱い区分名＊,
-    {unso_cd} AS 運送会社コード,
+    SUBSTR('000' || 扱い運送,-2,2) AS 運送会社コード,
     ifnull(ET5.名称＊,'') AS 運送会社名＊,
     担当者コード,
     ifnull(ET3.名称＊,'') AS 担当者名＊,
@@ -59,7 +59,7 @@ SELECT
     出荷伝票番号,
     備考,
     オーダー番号
-FROM {file}
+FROM MUJNRPF
 LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=10 AND ET1.コード＊=伝票区分
 LEFT OUTER JOIN ETCMPF ET2 ON ET2.レコード区分＊=20 AND ET2.コード＊=委託区分
 LEFT OUTER JOIN ETCMPF ET3 ON ET3.レコード区分＊=22 AND ET3.コード＊=担当者コード
@@ -80,9 +80,9 @@ SELECT
     ifnull(ET1.名称＊,'') AS 伝票区分名＊,
     委託区分,
     ifnull(ET2.名称＊,'') AS 委託区分名＊,
-    {atu_cd} AS 扱い区分,
+    扱い区分,
     ifnull(ET4.名称＊,'') AS 扱い区分名＊,
-    {unso_cd} AS 運送会社コード,
+    運送会社コード,
     ifnull(ET5.名称＊,'') AS 運送会社名＊,
     担当者コード,
     ifnull(ET3.名称＊,'') AS 担当者名＊,
@@ -155,9 +155,9 @@ SELECT
     ifnull(ET1.名称＊,'') AS 伝票区分名＊,
     委託区分,
     ifnull(ET2.名称＊,'') AS 委託区分名＊,
-    {atu_cd} AS 扱い区分,
+    扱い区分,
     ifnull(ET4.名称＊,'') AS 扱い区分名＊,
-    {unso_cd} AS 運送会社コード,
+    運送会社コード,
     ifnull(ET5.名称＊,'') AS 運送会社名＊,
     担当者コード,
     ifnull(ET3.名称＊,'') AS 担当者名＊,

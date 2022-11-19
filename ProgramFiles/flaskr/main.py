@@ -36,19 +36,12 @@ def index():
         USER.update(ip=user_ip, query=user_query)
     if "Department" not in user_query:
         return render_template("index.html")
-    return redirect("/query")
-
-@app.route("/login", methods=["GET"])
-def login():
-    user_ip = request.remote_addr
-    user_query = USER.load(ip=user_ip)
-    del user_query["Department"]
-    USER.update(ip=user_ip, query=user_query)
-    return redirect("/")
+    else:
+        return redirect("/query")
 
 @app.route("/query", methods=["GET"])
 def query():
-    """初期画面"""
+    """フォーム画面"""
     return render_template(
         "query.html",
     # QUERY
@@ -201,13 +194,19 @@ def download(flg):
 @app.route("/setting", methods=["GET", "POST"])
 def setting():
     """設定画面"""
+    user_ip = request.remote_addr
+    user_query = USER.load(ip=user_ip)
     log_texts=["ログ内容を表示します"]
     if request.method == "POST":
         click = request.form.get("ok")
         if click == "設定変更":
-            for key in SETTING.dic.keys():
-                SETTING.dic[key] = request.form[key]
+            for k, v in request.form.to_dict().items():
+                if k in SETTING.dic:
+                    SETTING.dic[k] = v
+                if k in user_query:
+                    user_query[k] = v
             SETTING.update()
+            USER.update(ip=user_ip, query=user_query)
         elif click == "最新データ取得":
             db.refresh_all(
                 first_date=request.form.get("first_date").replace("-",""),
@@ -218,8 +217,9 @@ def setting():
     return render_template(
         "setting.html",
     # QUERY
-        first_date=(datetime.today() - relativedelta(months=1)).strftime(r"%Y-%m-01"),
+        user_query=user_query,
         setting_dic=SETTING.dic,
+        first_date=(datetime.today() - relativedelta(months=1)).strftime(r"%Y-%m-01"),
         log_texts=log_texts
     )
 
