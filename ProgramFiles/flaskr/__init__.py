@@ -1,34 +1,22 @@
 """
 FLASK Initialize
 """
-from apscheduler.schedulers.background import BackgroundScheduler
-from datetime import datetime
-from flask import Flask
 import warnings
+from flask import Flask
+from apscheduler.schedulers.background import BackgroundScheduler
+
+from ProgramFiles.flaskr.mod import schedule_fuction
+
+# sqlite3でpyodbcに接続するとき、警告が出るので無視する
 warnings.simplefilter("ignore")
 
-from ProgramFiles import db
-from ProgramFiles.flaskr.user_ins import USER
-from ProgramFiles.log import dsp_except
+# Flask app作成
+app = Flask(__name__)
 
-def create_app() -> Flask:
-    def schedule_func():
-        now_hour = datetime.now().strftime(r"%H")
-        USER.refresh()
-        if now_hour in ["08", "10", "12", "14", "16", "18"]:
-            db.refresh_all()
-    app = Flask(__name__)
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(schedule_func, trigger="interval", minutes=60)
-    scheduler.start()
-    try:
-        return app
-    except:
-        dsp_except()
-        scheduler.shutdown()
-#refresh_all()
-app = create_app()
-#app = Flask(__name__)
+# 定期実行処理
+Scheduler = BackgroundScheduler()
+Scheduler.add_job(schedule_fuction, trigger="interval", minutes=60)
+Scheduler.start()
 
 
 from ProgramFiles.flaskr import main

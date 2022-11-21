@@ -1,6 +1,10 @@
 """
 Flask Run TEST
 """
+# .pycを作成しない
+import sys
+sys.dont_write_bytecode = True
+
 from ProgramFiles.log import LOGGER
 from ProgramFiles.flaskr import app
 

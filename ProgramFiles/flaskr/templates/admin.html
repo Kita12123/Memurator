@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+
+{% block Title %}
+管理者画面
+{% endblock %}
+
+{% block Content %}
+<div class="subtitle">
+  SQL接続
+</div>
+<textarea style="width: 80%;font-size: 150%;" name="sql_code" rows="30">
+{{ sql_code }}</textarea>
+<br>
+{% endblock %}
+
+{% block Table %}
+<button style="width:100%;font-size:200%;">SQL送信</button>
+{{ values }}
+{% endblock %}

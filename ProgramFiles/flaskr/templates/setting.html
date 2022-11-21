@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block Title %}
-設定画面
+設定
 {% endblock %}
 
 
@@ -20,10 +20,10 @@
   </div><!--subtitle-->
   <label for="Department">ユーザー部署:</label>
   <select name="Department">
-    {% if user_query["Department"]   == "Sales" %}
+    {% if   user_dic["Department"]   == "Sales" %}
       <option value="Sales" selected>営業</option>
       <option value="Plant">工場</option>
-    {% else %}
+    {% elif user_dic["Department"]   == "Plant" %}
       <option value="Plant" selected>工場</option>
       <option value="Sales">営業</option>
     {% endif %}
@@ -37,8 +37,10 @@
   {% if setting_dic["最終更新日時"] == "更新中" %}
     更新中...
   {% else %}
-    <label for="first_date">更新開始日付:</label>
+    <label for="first_date">開始日付:</label>
     <input type="date" name="first_date" value="{{ first_date }}" max="9999-12-31">
+    <label for="last_date" >終了日付:</label>
+    <input type="date" name="last_date" value="{{ last_date }}" max="9999-12-31">
     <br>
     <input type="checkbox" name="contain_master" checked>
     <label for="contain_master">マスターも更新する</label>

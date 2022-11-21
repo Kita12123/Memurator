@@ -13,15 +13,10 @@ from flask import (
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
-
 from ProgramData import TEMP_CSV, SYSTEMDIR
-from ProgramFiles.flaskr.user_ins import USER
-from ProgramFiles.flaskr.setting_ins import SETTING
-from ProgramFiles.db.sql_ins import DB_SQL
-from ProgramFiles.flaskr import ArrangeDataFrame as age
+from ProgramFiles.flaskr import app, mod
+from ProgramFiles import db, log
 from ProgramFiles import query as qry
-from ProgramFiles import db
-from ProgramFiles.flaskr import app
 
 #
 # Main
@@ -30,59 +25,55 @@ from ProgramFiles.flaskr import app
 def index():
     """部署割り当て"""
     user_ip = request.remote_addr
-    user_query = USER.load(ip=user_ip)
+    user_dic = db.user.load(key=user_ip)
     if request.method == "POST":
-        user_query["Department"] = request.form.get("Department")
-        USER.update(ip=user_ip, query=user_query)
-    if "Department" not in user_query:
+        user_dic["Department"] = request.form.get("Department")
+        db.user.update(key=user_ip, dic=user_dic)
+    if "Department" not in user_dic:
         return render_template("index.html")
     else:
-        return redirect("/query")
+        return redirect("/form")
 
-@app.route("/query", methods=["GET"])
-def query():
+@app.route("/form", methods=["GET"])
+def form():
     """フォーム画面"""
     return render_template(
-        "query.html",
-    # QUERY
-        user_query=USER.load(ip=request.remote_addr),
-        setting_dic=SETTING.dic
+        "form.html",
+        user_dic=db.user.load(key=request.remote_addr),
+        setting_dic=db.setting.dic
     )
 
 @app.route("/show_table", methods=["POST"])
 def show_table():
     """データ表示"""
-    if SETTING.dic["最終更新日時"] == "更新中":
-        return redirect("/")
     user_ip = request.remote_addr
-    user_query = USER.load(ip=user_ip)
-    user_query.update(request.form.to_dict())
-    USER.update(ip=user_ip, query=user_query)
+    user_dic = db.user.load(key=user_ip)
+    user_dic.update(request.form.to_dict())
+    db.user.update(key=user_ip, dic=user_dic)
     # Create DataFrame on sqlite3
-    DB_SQL.db_open()
+    db.sql.open()
     df = pd.read_sql(
-        sql=qry.CreateSqlCode(query=user_query, download=False),
-        con=DB_SQL.connection
+        sql=qry.CreateSqlCode(query=user_dic, download=False),
+        con=db.sql.connection
     )
-    DB_SQL.db_close()
+    db.sql.close()
     # Message
     messages = []
     count=len(df)
-    if count >= int(SETTING.dic["最大表示行数"]):
-        messages.append("件数：{:,} ({})".format(count, int(SETTING.dic["最大表示行数"])))
+    if count >= int(db.setting.dic["最大表示行数"]):
+        messages.append("件数：{:,} ({})".format(count, int(db.setting.dic["最大表示行数"])))
     else:
         messages.append("件数：{:,}".format(count))
     # Arrange DataFrame
     messages.append("合計数量 : {:,}".format(df["数量"].sum()))
     messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
-    df1, df2, df3 = age.Totall(df=df)
-    df_dsp = df.head(int(SETTING.dic["最大表示行数"]))
+    df1, df2, df3 = mod.arrage_df(df=df)
+    df_dsp = df.head(int(db.setting.dic["最大表示行数"]))
     df_dsp.loc[:,("数量","単価","金額")] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
     return render_template(
         "show_table.html",
-    # QUERY
-        user_query=user_query,
-        setting_dic=SETTING.dic,
+        user_dic=user_dic,
+        setting_dic=db.setting.dic,
     # Message
         messages=messages,
     # Table
@@ -99,45 +90,43 @@ def show_table():
 @app.route("/search/<column>", methods=["POST"])
 def search(column):
     """抽出条件をマスタより取得"""
-    if SETTING.dic["最終更新日時"] == "更新中":
-        return redirect("/")
     user_ip = request.remote_addr
-    user_query = USER.load(ip=user_ip)
+    user_dic = db.user.load(key=user_ip)
     # 抽出条件QUERYに反映させる -> "/"へ
     if request.form.get("ok") == "決定":
-        user_query[column] = ",".join(request.form.getlist("key_code"))
-        USER.update(ip=user_ip, query=user_query)
-        return redirect("/query")
-    # user_query, master_query作成
+        user_dic[column] = ",".join(request.form.getlist("key_code"))
+        db.user.update(key=user_ip, dic=user_dic)
+        return redirect("/form")
+    # user_dic, master_query作成
     elif "データ名" in request.form.to_dict():
         # ここのQUERYを保存するかしないかの判定がむずかしい
         # indexからきた場合はする
-        user_query.update(request.form.to_dict())
+        user_dic.update(request.form.to_dict())
         master_query = {}
     elif request.form.get("ok") == "抽出":
-        user_query = USER.load(ip=user_ip)
+        user_dic = db.user.load(key=user_ip)
         master_query = request.form.to_dict()
-        user_query[column] = ",".join(request.form.getlist("key_code"))
-    USER.update(ip=user_ip, query=user_query)
-    DB_SQL.db_open()
+        user_dic[column] = ",".join(request.form.getlist("key_code"))
+    db.user.update(key=user_ip, dic=user_dic)
+    db.sql.open()
     df = pd.read_sql(
         sql=( qry.ReadSqlFile(
-            db_name=user_query["データ名"],
+            db_name=user_dic["データ名"],
             download=False).format(
                 qry.CreateWhereCodeMaster(master_query))
-            + f" LIMIT {SETTING.dic['最大表示行数']}"
+            + f" LIMIT {db.setting.dic['最大表示行数']}"
         ),
-        con=DB_SQL.connection
+        con=db.sql.connection
     )
-    DB_SQL.db_close()
+    db.sql.close()
     return render_template(
         "master.html",
     # QUERY
-        user_query=user_query,
-        setting_dic=SETTING.dic,
+        user_dic=user_dic,
+        setting_dic=db.setting.dic,
         master_query=master_query,
         column=column,
-        SelectList=qry.SelectList(column=column, value=user_query[column]),
+        SelectList=qry.SelectList(column=column, value=user_dic[column]),
         headers=["選択"] + list(df.columns),
         records=df.values.tolist()
     )
@@ -145,36 +134,34 @@ def search(column):
 @app.route("/download/<flg>", methods=["GET"])
 def download(flg):
     """データをダウンロードする"""
-    if SETTING.dic["最終更新日時"] == "更新中":
-        return
     user_ip = request.remote_addr
-    user_query = USER.load(ip=user_ip)
+    user_dic = db.user.load(key=user_ip)
     if flg == "table":
-        DB_SQL.db_open()
+        db.sql.open()
         df = pd.read_sql(
-            sql=qry.CreateSqlCode(query=user_query, download=True),
-            con=DB_SQL.connection
+            sql=qry.CreateSqlCode(query=user_dic, download=True),
+            con=db.sql.connection
         )
-        DB_SQL.db_close()
+        db.sql.close()
     elif flg == "master":
         df = pd.read_sql(
             sql=( qry.ReadSqlFile(
-                db_name=user_query["データ名"],
+                db_name=user_dic["データ名"],
                 download=False
                 ).format("WHERE 1=1")
-                + f" LIMIT {SETTING.dic['最大表示行数']}"
+                + f" LIMIT {db.setting.dic['最大表示行数']}"
             ),
-            con=DB_SQL.connection
+            con=db.sql.connection
         )
-        DB_SQL.db_close()
+        db.sql.close()
     else:
-        DB_SQL.db_open()
+        db.sql.open()
         df = pd.read_sql(
-            sql=qry.CreateSqlCode(query=user_query, download=True),
-            con=DB_SQL.connection
+            sql=qry.CreateSqlCode(query=user_dic, download=True),
+            con=db.sql.connection
         )
-        DB_SQL.db_close()
-        df1, df2, df3 = age.Totall(df=df)
+        db.sql.close()
+        df1, df2, df3 = mod.arrage_df(df=df)
     # To File .csv
     if flg=="totall1":
         df = df1
@@ -195,21 +182,24 @@ def download(flg):
 def setting():
     """設定画面"""
     user_ip = request.remote_addr
-    user_query = USER.load(ip=user_ip)
+    user_dic = db.user.load(key=user_ip)
     log_texts=["ログ内容を表示します"]
     if request.method == "POST":
         click = request.form.get("ok")
         if click == "設定変更":
             for k, v in request.form.to_dict().items():
-                if k in SETTING.dic:
-                    SETTING.dic[k] = v
-                if k in user_query:
-                    user_query[k] = v
-            SETTING.update()
-            USER.update(ip=user_ip, query=user_query)
+                if k in db.setting.dic:
+                    db.setting.dic[k] = v
+                if k in user_dic:
+                    user_dic[k] = v
+            db.setting.update()
+            db.user.update(key=user_ip, dic=user_dic)
         elif click == "最新データ取得":
-            db.refresh_all(
+            db.user.refresh()
+            db.refresh_department(
                 first_date=request.form.get("first_date").replace("-",""),
+                last_date =request.form.get("first_date").replace("-",""),
+                department=user_dic["Department"],
                 contain_master=request.form.get("contain_master"))
         else:
             with open(os.path.join(SYSTEMDIR, f"{click}.txt"), mode="r", encoding="utf-8") as f:
@@ -217,10 +207,33 @@ def setting():
     return render_template(
         "setting.html",
     # QUERY
-        user_query=user_query,
-        setting_dic=SETTING.dic,
+        user_dic=user_dic,
+        setting_dic=db.setting.dic,
         first_date=(datetime.today() - relativedelta(months=1)).strftime(r"%Y-%m-01"),
+        last_date =datetime.now().strftime((r"%Y-%m-%d")),
         log_texts=log_texts
+    )
+
+@app.route("/admin", methods=["GET","POST"])
+def admin():
+    """管理者画面"""
+    sql_code = ""
+    values = []
+    if request.method == "POST":
+        sql_code = request.form.get("sql_code")
+        db.sql.open()
+        try:
+            db.sql.execute(sql=sql_code)
+            values = db.sql.cursor.fetchall()
+            db.sql.commit()
+            db.sql.close()
+        except:
+            values = log.traceback.format_exc()
+            db.sql.close()
+    return render_template(
+        "admin.html",
+        sql_code=sql_code,
+        values=values
     )
 
 @app.route('/favicon.ico')

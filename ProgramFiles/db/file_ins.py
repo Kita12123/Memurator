@@ -6,14 +6,12 @@ Define Instance for Database
 #   -> create_sql_sqlite3を変更して、テーブルを再作成しないといけないので面倒
 import pandas as pd
 from ProgramFiles.log import LOGGER
-from ProgramFiles.db.sql_ins import DB_SQL
-from ProgramFiles.db.host_ins import DB_HOST
-
+from ProgramFiles import db
 
 #
 # Main Class
 #
-class FD_CLS:
+class HostFileDefine:
     def __init__(
         self,
         file_name: str,
@@ -26,16 +24,16 @@ class FD_CLS:
         self.sql_select_sqlite3 = ",".join([f'{k} {v[1]}' for k, v in self.columns_dic.items()])
         self.sql_select_host    = ",".join([f"{v[0]} AS {k}" for k, v in self.columns_dic.items()])
         # テーブルがなければ、作成する
-        DB_SQL.db_open()
-        DB_SQL.db_execute(
+        db.sql.open()
+        db.sql.execute(
             sql=f"""
             CREATE TABLE IF NOT EXISTS {self.file_name}(
                 {self.sql_select_sqlite3}
                 );
             """
         )
-        DB_SQL.db_commit()
-        DB_SQL.db_close()
+        db.sql.commit()
+        db.sql.close()
 
     def refresh(
         self,
@@ -58,28 +56,28 @@ class FD_CLS:
         sql_host = f"SELECT {self.sql_select_host} FROM {self.lib_name}.{self.file_name} {sql_where_host}"
         # host -> df
         LOGGER.debug(f"ODBC Conecting...{self.file_name}({where})")
-        DB_HOST.db_open()
-        df = pd.read_sql(sql=sql_host, con=DB_HOST.connection)
-        DB_HOST.db_close()
+        db.host.open()
+        df = pd.read_sql(sql=sql_host, con=db.host.connection)
+        db.host.close()
         # df -> database.db
         LOGGER.debug("Syncing database.db..." + self.file_name)
-        DB_SQL.db_open()
+        db.sql.open()
         if sql_where_host:
-            DB_SQL.db_execute(sql=f"DELETE FROM {self.file_name} {sql_where_sqlite3}")
+            db.sql.execute(sql=f"DELETE FROM {self.file_name} {sql_where_sqlite3}")
         else:
-            DB_SQL.db_execute(f"DROP TABLE {self.file_name}")
-            DB_SQL.db_execute(f"""
+            db.sql.execute(f"DROP TABLE {self.file_name}")
+            db.sql.execute(f"""
                 CREATE TABLE IF NOT EXISTS {self.file_name}(
                     {self.sql_select_sqlite3}
                     );
                 """)
         df.to_sql(
             name=self.file_name,
-            con=DB_SQL.connection, 
+            con=db.sql.connection, 
             if_exists="append",
             index=False)
-        DB_SQL.db_commit()
-        DB_SQL.db_close()
+        db.sql.commit()
+        db.sql.close()
 
 
 #
@@ -90,7 +88,7 @@ class FD_CLS:
 # 営業
 #
 
-TOTAL_URI = FD_CLS(
+MUJNRPF_MOLIB = HostFileDefine(
     file_name="MUJNRPF",
     lib_name="MOLIB",
     columns_dic= {
@@ -117,7 +115,7 @@ TOTAL_URI = FD_CLS(
         }
 )
 
-TEMP_URI1 = FD_CLS(
+UJNRPFW_FLIB1 = HostFileDefine(
     file_name="UJNRPFW",
     lib_name="FLIB1",
     columns_dic= {
@@ -143,7 +141,7 @@ TEMP_URI1 = FD_CLS(
     }
 )
 
-TEMP_URI2 = FD_CLS(
+UJNRPF_FLIB1 = HostFileDefine(
     file_name="UJNRPF",
     lib_name="FLIB1",
     columns_dic= {
@@ -169,7 +167,7 @@ TEMP_URI2 = FD_CLS(
     }
 )
 
-TOTAL_SYUKA = FD_CLS(
+SYUKAPF_FLIB = HostFileDefine(
     file_name="SYUKAPF",
     lib_name="FLIB",
     columns_dic={
@@ -204,7 +202,7 @@ TOTAL_SYUKA = FD_CLS(
     }
 )
 
-EIGYO_MASTER = FD_CLS(
+ETCMPF_FLIB = HostFileDefine(
     file_name="ETCMPF",
     lib_name="FLIB",
     columns_dic={
@@ -216,7 +214,7 @@ EIGYO_MASTER = FD_CLS(
     }
 )
 
-SOKCD_MASTER = FD_CLS(
+NIHONPF_FLIB = HostFileDefine(
     file_name="NIHONPF",
     lib_name="FLIB",
     columns_dic={
@@ -232,7 +230,7 @@ SOKCD_MASTER = FD_CLS(
     }
 )
 
-TOKCD_MASTER = FD_CLS(
+TOKMPF_FLIB = HostFileDefine(
     file_name="TOKMPF",
     lib_name="FLIB",
     columns_dic={
@@ -253,7 +251,7 @@ TOKCD_MASTER = FD_CLS(
     }
 )
 
-KEN_MASTER = FD_CLS(
+KENPF_FLIB1 = HostFileDefine(
     file_name="KENPF",
     lib_name="FLIB1",
     columns_dic={
@@ -262,7 +260,7 @@ KEN_MASTER = FD_CLS(
     }
 )
 
-SEIHIN_MASTER = FD_CLS(
+SEIMPF_FLIB = HostFileDefine(
     file_name="SEIMPF",
     lib_name="FLIB",
     columns_dic={
@@ -280,7 +278,7 @@ SEIHIN_MASTER = FD_CLS(
     }
 )
 
-BUHIN_MASTER = FD_CLS(
+BUHMPF_FLIB = HostFileDefine(
     file_name="BUHMPF",
     lib_name="FLIB",
     columns_dic={
@@ -302,7 +300,7 @@ BUHIN_MASTER = FD_CLS(
 # 工場
 #
 
-TOTAL_SIIRE = FD_CLS(
+NSFILEP_MOLIB = HostFileDefine(
     file_name="NSFILEP",
     lib_name="MOLIB",
     columns_dic={
@@ -324,7 +322,7 @@ TOTAL_SIIRE = FD_CLS(
     }
 )
 
-KOUJO_MASTER = FD_CLS(
+RIPPET_FLIB = HostFileDefine(
     file_name="RIPPET",
     lib_name="FLIB",
     columns_dic={
@@ -337,7 +335,7 @@ KOUJO_MASTER = FD_CLS(
     }
 )
 
-TEHAI_MASTER = FD_CLS(
+RIPPTR_FLIB = HostFileDefine(
     file_name="RIPPTR",
     lib_name="FLIB",
     columns_dic={
@@ -347,7 +345,7 @@ TEHAI_MASTER = FD_CLS(
     }
 )
 
-HINMOKU_MASTER = FD_CLS(
+PMDBPF_FLIB = HostFileDefine(
     file_name="PMDBPF",
     lib_name="FLIB",
     columns_dic={

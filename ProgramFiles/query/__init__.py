@@ -4,7 +4,7 @@ Query作成
 import os
 from functools import cache
 
-from ProgramFiles.query import CreateWhere
+from ProgramFiles.query import mod
 
 CD = os.path.dirname(__file__)
 
@@ -29,22 +29,22 @@ def CreateWhereCode(
     if   db_name == "売上データ" or db_name == "出荷データ":
         # 各WHERE句を <> AND で結合させ、[:-4]で最後のANDを削除
         return "".join([ f"{q} AND " for q in [
-            CreateWhere.Equal("得意先コード","得意先カナ",query["得意先"]),
-            CreateWhere.Equal("送荷先コード","送荷先カナ",query["送荷先"]),
-            CreateWhere.Equal("雑コード","雑カナ",query["雑"]),
-            CreateWhere.Equal("製品部品コード","製品部品カナ",query["製品部品"]),
-            CreateWhere.Equal("担当者コード","担当者名＊",query["担当者"]),
-            CreateWhere.Equal("伝票区分","伝票区分名＊",query["伝票区分"]),
-            CreateWhere.GreaterEqual("伝票日付",query["開始日付"]),
-            CreateWhere.LessEqual("伝票日付",query["終了日付"]),
-            CreateWhere.Flag(query["製品部品フラグ"]),
+            mod.Equal("得意先コード","得意先カナ",query["得意先"]),
+            mod.Equal("送荷先コード","送荷先カナ",query["送荷先"]),
+            mod.Equal("雑コード","雑カナ",query["雑"]),
+            mod.Equal("製品部品コード","製品部品カナ",query["製品部品"]),
+            mod.Equal("担当者コード","担当者名＊",query["担当者"]),
+            mod.Equal("伝票区分","伝票区分名＊",query["伝票区分"]),
+            mod.GreaterEqual("伝票日付",query["開始日付"]),
+            mod.LessEqual("伝票日付",query["終了日付"]),
+            mod.Flag(query["製品部品フラグ"]),
         ] if q])[:-4]
     elif db_name == "仕入データ":
         return "".join([ f"{q} AND " for q in [
-            CreateWhere.Equal("仕入先コード","仕入先カナ",query["手配先"]),
-            CreateWhere.Equal("品目コード","品目カナ",query["品目"]),
-            CreateWhere.GreaterEqual("伝票日付",query["開始日付"]),
-            CreateWhere.LessEqual("伝票日付",query["終了日付"])
+            mod.Equal("仕入先コード","仕入先カナ",query["手配先"]),
+            mod.Equal("品目コード","品目カナ",query["品目"]),
+            mod.GreaterEqual("伝票日付",query["開始日付"]),
+            mod.LessEqual("伝票日付",query["終了日付"])
         ] if q])[:-4]
     else:
         return "1=1"
@@ -53,7 +53,7 @@ def CreateWhereCodeMaster(
     query: dict
     ):
     if query:
-        return "".join([ f"{CreateWhere.Equal('', c, query[c])} AND "
+        return "".join([ f"{mod.Equal('', c, query[c])} AND "
             for c in ["カナ名","名称","担当者名","住所","図番","部番"]
             if c in query])[:-4]
     else:

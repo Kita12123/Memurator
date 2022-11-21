@@ -17,18 +17,18 @@
 
 
 {% block Title %}
-{{ user_query["データ名"]}}参照
+{{ user_dic["データ名"]}}参照
 {% endblock %}
 
 
 {% block Content %}
 <div class="dummy">
-  <button name="データ名" value="{{ user_query['データ名'] }}" onclick="showLoading();"></button>
+  <button name="データ名" value="{{ user_dic['データ名'] }}" onclick="showLoading();"></button>
 </div><!--dummy-->
-{% if user_query["Department"] == "Sales" %}
-  {% include "_FormSales.html" %}
+{% if user_dic["Department"] == "Sales" %}
+  {% include "form_sales.html" %}
 {% else %}
-  {% include "_FormPlant.html" %}
+  {% include "form_plant.html" %}
 {% endif %}
 {% endblock %}
 

@@ -1,29 +1,29 @@
 <!-- 工場用　クエリフォーム -->
 <div class="subtitle">
-    抽出条件入力
+    入力フォーム
 </div><!--subtitle-->
 <div id="extract" class="main-form">
   <table>
     <tbody>
       <tr>
         <td><label for="開始日付">開始日付:</label></td>
-        <td><input type="date"  name="開始日付" value="{{ user_query['開始日付'] }}" max="9999-12-31"></td>
+        <td><input type="date"  name="開始日付" value="{{ user_dic['開始日付'] }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
         <td><label for="終了日付">終了日付:</label></td>
-        <td><input type="date" name="終了日付" value="{{ user_query['終了日付'] }}" max="9999-12-31"></td>
+        <td><input type="date" name="終了日付" value="{{ user_dic['終了日付'] }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
         <td><label for="手配先">手配先ｺｰﾄﾞ ｶﾅ：</label></td>
-        <td><input type="text" name="手配先" value="{{ user_query['手配先'] }}"></td>
+        <td><input type="text" name="手配先" value="{{ user_dic['手配先'] }}"></td>
         <td><button formaction="{{ url_for('search', column='手配先') }}"
           name="データ名" value="手配先マスタ">手配先マスタ</button></td>
       </tr>
       <tr>
         <td><label for="品目">品目ｺｰﾄﾞ ｶﾅ：</label></td>
-        <td><input type="text" name="品目" value="{{ user_query['品目'] }}"></td>
+        <td><input type="text" name="品目" value="{{ user_dic['品目'] }}"></td>
         <td><button formaction="{{ url_for('search', column='品目') }}"
           name="データ名" value="品目マスタ">品目マスタ</button></td>
       </tr>

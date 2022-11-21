@@ -2,9 +2,23 @@
 統計用モジュール
 """
 import pandas as pd
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
+
+from ProgramFiles import db
 
 
-def Totall(
+def schedule_fuction():
+    """定期実行関数"""
+    now_time = datetime.now()
+    db.user.refresh()
+    db.setting.update()
+    if now_time.strftime(r"%H") in ["08","10","12","14","16","18"]:
+        last_month = datetime.today() - relativedelta(months=1)
+        db.refresh_all(
+            first_date=last_month.strftime(r"%Y%m"+"00"))
+
+def arrage_df(
     df: pd.DataFrame
     ) -> list[pd.DataFrame]:
     if df.empty:

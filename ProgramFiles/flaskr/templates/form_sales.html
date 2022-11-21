@@ -1,48 +1,48 @@
 <!-- 営業用　クエリフォーム -->
 <div class="subtitle">
-    抽出条件入力
+    入力フォーム
 </div><!--subtitle-->
 <div id="extract" class="main-form">
   <table>
     <tbody>
       <tr>
         <td><label for="開始日付">開始日付:</label></td>
-        <td><input type="date"  name="開始日付" value="{{ user_query['開始日付'] }}" max="9999-12-31"></td>
+        <td><input type="date"  name="開始日付" value="{{ user_dic['開始日付'] }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
         <td><label for="終了日付">終了日付:</label></td>
-        <td><input type="date" name="終了日付" value="{{ user_query['終了日付'] }}" max="9999-12-31"></td>
+        <td><input type="date" name="終了日付" value="{{ user_dic['終了日付'] }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
         <td><label for="得意先">得意先ｺｰﾄﾞ ｶﾅ：</label></td>
-        <td><input type="text" name="得意先" value="{{ user_query['得意先'] }}"></td>
+        <td><input type="text" name="得意先" value="{{ user_dic['得意先'] }}"></td>
         <td><button formaction="{{ url_for('search', column='得意先') }}"
               name="データ名" value="得意先マスタ">得意先マスタ</button></td>
       </tr>
       <tr>
         <td><label for="雑">雑ｺｰﾄﾞ ｶﾅ：</label></td>
-        <td><input type="text" name="雑" value="{{ user_query['雑'] }}"></td>
+        <td><input type="text" name="雑" value="{{ user_dic['雑'] }}"></td>
         <td><button formaction="{{ url_for('search', column='雑') }}"
               name="データ名" value="雑マスタ">雑マスタ</button></td>
       </tr>
       <tr>
         <td><label for="送荷先">送荷先ｺｰﾄﾞ ｶﾅ：</label></td>
-        <td><input type="text" name="送荷先" value="{{ user_query['送荷先'] }}"></td>
+        <td><input type="text" name="送荷先" value="{{ user_dic['送荷先'] }}"></td>
         <td><button formaction="{{ url_for('search', column='送荷先') }}"
           name="データ名" value="送荷先マスタ">送荷先マスタ</button></td>
       </tr>
       <tr>
         <td><label for="製品部品">製品部品ｺｰﾄﾞ ｶﾅ：</label></td>
         <td>
-        <input type="text" name="製品部品" value="{{ user_query['製品部品'] }}">
+        <input type="text" name="製品部品" value="{{ user_dic['製品部品'] }}">
         <select name="製品部品フラグ">
-            {% if user_query['製品部品フラグ']   == "製品のみ" %}
+            {% if user_dic['製品部品フラグ']   == "製品のみ" %}
             <option value=""></option>
             <option value="製品のみ" selected>製品のみ</option>
             <option value="部品のみ">部品のみ</option>
-            {% elif user_query['製品部品フラグ'] == "部品のみ" %}
+            {% elif user_dic['製品部品フラグ'] == "部品のみ" %}
             <option value=""></option>
             <option value="製品のみ">製品のみ</option>
             <option value="部品のみ" selected>部品のみ</option>
@@ -58,13 +58,13 @@
       </tr>
       <tr>
         <td><label for="担当者">担当者ｺｰﾄﾞ 名：</label></td>
-        <td><input type="text" name="担当者" value="{{ user_query['担当者'] }}"></td>
+        <td><input type="text" name="担当者" value="{{ user_dic['担当者'] }}"></td>
         <td><button formaction="{{ url_for('search', column='担当者') }}"
           name="データ名" value="担当者マスタ">担当者マスタ</button></td>
       </tr>
       <tr>
         <td><label for="伝票区分">伝票区分ｺｰﾄﾞ 名：</label></td>
-        <td><input type="text" name="伝票区分" value="{{ user_query['伝票区分'] }}"></td>
+        <td><input type="text" name="伝票区分" value="{{ user_dic['伝票区分'] }}"></td>
         <td><button formaction="{{ url_for('search', column='伝票区分') }}"
           name="データ名" value="伝票区分マスタ">伝票区分マスタ</button></td>
         <td></td>
