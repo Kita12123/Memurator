@@ -198,7 +198,7 @@ def setting():
             db.user.refresh()
             db.refresh_department(
                 first_date=request.form.get("first_date").replace("-",""),
-                last_date =request.form.get("first_date").replace("-",""),
+                last_date =request.form.get("last_date").replace("-",""),
                 department=user_dic["Department"],
                 contain_master=request.form.get("contain_master"))
         else:
