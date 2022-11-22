@@ -106,6 +106,8 @@ def search(column):
     elif request.form.get("ok") == "抽出":
         master_query = request.form.to_dict()
         del master_query["ok"]
+        if "key_code" in master_query:
+            del master_query["key_code"]
         db.user.update(
             key=user_ip,
             dic={column : ",".join(request.form.getlist("key_code"))})
