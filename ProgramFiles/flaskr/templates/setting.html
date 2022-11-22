@@ -10,7 +10,7 @@
   システム設定
 </div><!--subtitle-->
 <div class="main-form">
-  {% for key, value in setting_dic.items() %}
+  {% for key, value in system_dic.items() %}
     <label for="{{ key }}" >{{ key }}:</label>
     <input name="{{ key }}" value="{{ value }}">
     <br>
@@ -34,7 +34,7 @@
 <div class="subtitle">
   データ更新
 </div>
-  {% if setting_dic["最終更新日時"] == "更新中" %}
+  {% if system_dic["最終更新日時"] == "更新中" %}
     更新中...
   {% else %}
     <label for="first_date">開始日付:</label>

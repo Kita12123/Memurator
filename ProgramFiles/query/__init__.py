@@ -53,9 +53,8 @@ def CreateWhereCodeMaster(
     query: dict
     ):
     if query:
-        return "".join([ f"{mod.Equal('', c, query[c])} AND "
-            for c in ["カナ名","名称","担当者名","住所","図番","部番"]
-            if c in query])[:-4]
+        return "".join([ f"{mod.Equal(c, c, query[c])} AND "
+            for c in query.keys() ])[:-4]
     else:
         return "1=1"
 

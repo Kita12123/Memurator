@@ -25,7 +25,7 @@
   マスタ検索
 </div><!--subtitle-->
 <div class="comments">
-  最終更新日付:{{ setting_dic["最終更新日時"] }}
+  最終更新日付:{{ system_dic["最終更新日時"] }}
 </div><!--comments-->
 <div class="dummy">
   <button name="ok" value="抽出"></button>
@@ -40,25 +40,15 @@
   <table class="sort-table">
     <thead>
       <tr>
+        <td></td>
         {% for header in headers %}
-          {% if   header == "カナ名" %}
-            <td><input name="カナ名" value="{{ master_query['カナ名'] }}"></td>
-          {% elif header == "名称" %}
-            <td><input name="名称" value="{{ master_query['名称'] }}"></td>
-          {% elif header == "担当者名" %}
-            <td><input name="担当者名"  value="{{ master_query['担当者名'] }}"></td>
-          {% elif header == "住所" %}
-            <td><input name="住所"   value="{{ master_query['住所'] }}"></td>
-          {% elif header == "図番" %}
-            <td><input name="図番"   value="{{ master_query['図番'] }}"></td>
-          {% elif header == "部番" %}
-            <td><input name="部番"   value="{{ master_query['部番'] }}"></td>
-          {% else %}
-            <td></td>
-          {% endif %}
+          <td><input name="{{ header }}" value="{{ master_query[header] }}"></td>
         {% endfor %}
       </tr>
       <tr>
+        <th>
+          選択
+        </th>
         {% for header in headers %}
           <th>
             {{ header }}

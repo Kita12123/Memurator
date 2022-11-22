@@ -11,8 +11,8 @@ from ProgramFiles import db
 def schedule_fuction():
     """定期実行関数"""
     now_time = datetime.now()
-    db.user.refresh()
-    db.setting.update()
+    db.user.save()
+    db.system.save()
     if now_time.strftime(r"%H") in ["08","10","12","14","16","18"]:
         last_month = datetime.today() - relativedelta(months=1)
         db.refresh_all(

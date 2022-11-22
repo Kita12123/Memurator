@@ -52,28 +52,47 @@ class ConnectOnSqlite3:
         self.connection.commit()
 
 
-class SettingDictionary:
+class SystemDictionary:
     """ システム変数クラス """
     def __init__(self, file_path: str):
         self.file = file_path
+        self.con_update_data = True
         try:
             with open(self.file, mode="r", encoding="utf-8") as f:
                self.dic = json.load(f)
         except(FileNotFoundError):
-            self.dic = {
-                    "最大表示行数":"",
-                    "最終更新日時":""
-                    }
-            self.update()
+            self.clear()
+            self.save()
+    
+    @property
+    def max_display_lines(self) -> int:
+        """最大表示行数"""
+        return int(self.dic["最大表示行数"])
 
-    def update(self):
+    def clear(self):
+        self.dic = {
+                "最大表示行数":"",
+                "最終更新日時":""
+                }
+    
+    def update(self, key: str, value: str):
         """更新"""
+        self.dic[key] = value
+
+    def save(self):
+        """ファイル保存"""
         with open(self.file, mode="w", encoding="utf-8") as f:
             json.dump(self.dic, f, indent=2, ensure_ascii=False)
 
 
 class UserDictionary:
-    """ ユーザー変数クラス """
+    """ ユーザー変数クラス 
+    {
+        user1_id : user1_dic,
+        user2_id : user2_dic,
+         ...
+    }
+    """
     def __init__(self, file_path: str):
         self.file = file_path
         try:
@@ -93,9 +112,9 @@ class UserDictionary:
 
     def update(self, key: str, dic: dict):
         """更新"""
-        self.dic[key] = dic
+        self.load(key=key).update(dic)
 
-    def refresh(self):
-        """データ保存"""
+    def save(self):
+        """ファイル保存"""
         with open(self.file, mode="w", encoding="utf-8") as f:
             json.dump(self.dic, f, indent=2, ensure_ascii=False)

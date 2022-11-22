@@ -25,13 +25,14 @@ from ProgramFiles import query as qry
 def index():
     """部署割り当て"""
     user_ip = request.remote_addr
-    user_dic = db.user.load(key=user_ip)
     if request.method == "POST":
-        user_dic["Department"] = request.form.get("Department")
-        db.user.update(key=user_ip, dic=user_dic)
-    if "Department" not in user_dic:
+        # 更新
+        db.user.update(key=user_ip, dic=request.form.to_dict())
+    elif "Department" not in db.user.load(key=user_ip):
+        # 作成
         return render_template("index.html")
     else:
+        # フォーム画面へ
         return redirect("/form")
 
 @app.route("/form", methods=["GET"])
@@ -40,16 +41,15 @@ def form():
     return render_template(
         "form.html",
         user_dic=db.user.load(key=request.remote_addr),
-        setting_dic=db.setting.dic
+        system_dic=db.system.dic
     )
 
 @app.route("/show_table", methods=["POST"])
 def show_table():
     """データ表示"""
     user_ip = request.remote_addr
+    db.user.update(key=user_ip, dic=request.form.to_dict())
     user_dic = db.user.load(key=user_ip)
-    user_dic.update(request.form.to_dict())
-    db.user.update(key=user_ip, dic=user_dic)
     # Create DataFrame on sqlite3
     db.sql.open()
     df = pd.read_sql(
@@ -60,20 +60,20 @@ def show_table():
     # Message
     messages = []
     count=len(df)
-    if count >= int(db.setting.dic["最大表示行数"]):
-        messages.append("件数：{:,} ({})".format(count, int(db.setting.dic["最大表示行数"])))
+    if count >= db.system.max_display_lines:
+        messages.append("件数：{:,} ({})".format(count, db.system.max_display_lines))
     else:
         messages.append("件数：{:,}".format(count))
     # Arrange DataFrame
     messages.append("合計数量 : {:,}".format(df["数量"].sum()))
     messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
     df1, df2, df3 = mod.arrage_df(df=df)
-    df_dsp = df.head(int(db.setting.dic["最大表示行数"]))
+    df_dsp = df.head(db.system.max_display_lines)
     df_dsp.loc[:,("数量","単価","金額")] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
     return render_template(
         "show_table.html",
         user_dic=user_dic,
-        setting_dic=db.setting.dic,
+        system_dic=db.system.dic,
     # Message
         messages=messages,
     # Table
@@ -91,30 +91,32 @@ def show_table():
 def search(column):
     """抽出条件をマスタより取得"""
     user_ip = request.remote_addr
-    user_dic = db.user.load(key=user_ip)
     # 抽出条件QUERYに反映させる -> "/"へ
     if request.form.get("ok") == "決定":
-        user_dic[column] = ",".join(request.form.getlist("key_code"))
-        db.user.update(key=user_ip, dic=user_dic)
+        db.user.update(
+            key=user_ip,
+            dic={column : ",".join(request.form.getlist("key_code"))})
         return redirect("/form")
     # user_dic, master_query作成
     elif "データ名" in request.form.to_dict():
         # ここのQUERYを保存するかしないかの判定がむずかしい
         # indexからきた場合はする
-        user_dic.update(request.form.to_dict())
+        db.user.update(key=user_ip, dic=request.form.to_dict())
         master_query = {}
     elif request.form.get("ok") == "抽出":
-        user_dic = db.user.load(key=user_ip)
         master_query = request.form.to_dict()
-        user_dic[column] = ",".join(request.form.getlist("key_code"))
-    db.user.update(key=user_ip, dic=user_dic)
+        del master_query["ok"]
+        db.user.update(
+            key=user_ip,
+            dic={column : ",".join(request.form.getlist("key_code"))})
+    user_dic = db.user.load(key=user_ip)
     db.sql.open()
     df = pd.read_sql(
         sql=( qry.ReadSqlFile(
             db_name=user_dic["データ名"],
             download=False).format(
                 qry.CreateWhereCodeMaster(master_query))
-            + f" LIMIT {db.setting.dic['最大表示行数']}"
+            + f" LIMIT {db.system.max_display_lines}"
         ),
         con=db.sql.connection
     )
@@ -123,11 +125,11 @@ def search(column):
         "master.html",
     # QUERY
         user_dic=user_dic,
-        setting_dic=db.setting.dic,
+        system_dic=db.system.dic,
         master_query=master_query,
         column=column,
         SelectList=qry.SelectList(column=column, value=user_dic[column]),
-        headers=["選択"] + list(df.columns),
+        headers=df.columns,
         records=df.values.tolist()
     )
 
@@ -149,7 +151,7 @@ def download(flg):
                 db_name=user_dic["データ名"],
                 download=False
                 ).format("WHERE 1=1")
-                + f" LIMIT {db.setting.dic['最大表示行数']}"
+                + f" LIMIT {db.system.max_display_lines}"
             ),
             con=db.sql.connection
         )
@@ -183,19 +185,20 @@ def setting():
     """設定画面"""
     user_ip = request.remote_addr
     user_dic = db.user.load(key=user_ip)
-    log_texts=["ログ内容を表示します"]
+    with open(os.path.join(SYSTEMDIR, f"debug.txt"), mode="r", encoding="utf-8") as f:
+        log_texts = f.readlines()[-1:]
     if request.method == "POST":
         click = request.form.get("ok")
         if click == "設定変更":
             for k, v in request.form.to_dict().items():
-                if k in db.setting.dic:
-                    db.setting.dic[k] = v
+                if k in db.system.dic:
+                    db.system.update(key=k, value=v)
                 if k in user_dic:
                     user_dic[k] = v
-            db.setting.update()
+            db.system.save()
             db.user.update(key=user_ip, dic=user_dic)
         elif click == "最新データ取得":
-            db.user.refresh()
+            db.user.save()
             db.refresh_department(
                 first_date=request.form.get("first_date").replace("-",""),
                 last_date =request.form.get("last_date").replace("-",""),
@@ -208,7 +211,7 @@ def setting():
         "setting.html",
     # QUERY
         user_dic=user_dic,
-        setting_dic=db.setting.dic,
+        system_dic=db.system.dic,
         first_date=(datetime.today() - relativedelta(months=1)).strftime(r"%Y-%m-01"),
         last_date =datetime.now().strftime((r"%Y-%m-%d")),
         log_texts=log_texts
