@@ -176,7 +176,7 @@ def download(flg):
     df.to_csv(TEMP_CSV, index=False, encoding="cp932", escapechar="|")
     return send_file(
         TEMP_CSV,
-        attachment_filename="download.csv"
+        download_name="download.csv"
     )
 
 #

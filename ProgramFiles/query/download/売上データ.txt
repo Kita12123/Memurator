@@ -58,7 +58,9 @@ SELECT
     END AS 金額,
     出荷伝票番号,
     備考,
-    オーダー番号
+    オーダー番号,
+    ブロック番号,
+    ブロック行
 FROM MUJNRPF
 LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=10 AND ET1.コード＊=伝票区分
 LEFT OUTER JOIN ETCMPF ET2 ON ET2.レコード区分＊=20 AND ET2.コード＊=委託区分
@@ -133,7 +135,9 @@ SELECT
     END AS 金額,
     出荷伝票番号,
     備考,
-    オーダー番号
+    オーダー番号,
+    ブロック番号,
+    ブロック行
 FROM UJNRPF
 LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=10 AND ET1.コード＊=伝票区分
 LEFT OUTER JOIN ETCMPF ET2 ON ET2.レコード区分＊=20 AND ET2.コード＊=委託区分
@@ -208,7 +212,9 @@ SELECT
     END AS 金額,
     出荷伝票番号,
     備考,
-    オーダー番号
+    オーダー番号,
+    ブロック番号,
+    ブロック行
 FROM UJNRPFW
 LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=10 AND ET1.コード＊=伝票区分
 LEFT OUTER JOIN ETCMPF ET2 ON ET2.レコード区分＊=20 AND ET2.コード＊=委託区分

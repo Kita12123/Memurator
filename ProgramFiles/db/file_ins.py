@@ -111,7 +111,9 @@ MUJNRPF_MOLIB = HostFileDefine(
         "金額":("KIN", "INTEGER"),
         "出荷伝票番号":("SDENNO", "TEXT"),
         "オーダー番号":("ODER", "TEXT"),
-        "備考":("BIKO", "TEXT")
+        "備考":("BIKO", "TEXT"),
+        "ブロック番号":("BLK","INTEGER"),
+        "ブロック行":("GYO","INTEGER")
         }
 )
 
@@ -137,7 +139,9 @@ UJNRPFW_FLIB1 = HostFileDefine(
         "単価":("TANKA", "INTEGER"),
         "出荷伝票番号":("SYUDEN", "TEXT"),
         "オーダー番号":("ODER", "TEXT"),
-        "備考":("BIKO", "TEXT")
+        "備考":("BIKO", "TEXT"),
+        "ブロック番号":("BLKNO","INTEGER"),
+        "ブロック行":("GYONO","INTEGER")
     }
 )
 
@@ -164,6 +168,8 @@ UJNRPF_FLIB1 = HostFileDefine(
         "出荷伝票番号":("SYUDEN", "TEXT"),
         "オーダー番号":("ODER", "TEXT"),
         "備考":("BIKO", "TEXT"),
+        "ブロック番号":("BLKNO","INTEGER"),
+        "ブロック行":("GYONO","INTEGER")
     }
 )
 
