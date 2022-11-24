@@ -44,9 +44,11 @@ def form():
         system_dic=db.system.dic
     )
 
-@app.route("/show_table", methods=["POST"])
+@app.route("/show_table", methods=["GET", "POST"])
 def show_table():
     """データ表示"""
+    if request.method == "GET":
+        redirect("/form")
     user_ip = request.remote_addr
     db.user.update(key=user_ip, dic=request.form.to_dict())
     user_dic = db.user.load(key=user_ip)

@@ -67,3 +67,14 @@ function showTotall3(){
     CanSelect(id='#tab3', id2='#tab3b');
     Selected(id='#tab4', id2='#tab4b');
 }
+
+//チェックボックス
+let checkBox = document.getElementsByClassName("checkBox");
+
+//全てのチェックボックスをON/OFFする
+function checkBoxChecked(){
+    bool = document.getElementById("checkBoxAll").checked;
+    for (let i = 0; i < checkBox.length; i++) {
+        checkBox[i].checked = bool;
+    }
+}

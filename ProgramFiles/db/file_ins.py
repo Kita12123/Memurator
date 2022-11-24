@@ -37,7 +37,8 @@ class HostFileDefine:
 
     def refresh(
         self,
-        where: str=""
+        where: str="",
+        if_exists: str="append"
         ):
         """Syncing from HOST to sqlite3
 
@@ -74,7 +75,7 @@ class HostFileDefine:
         df.to_sql(
             name=self.file_name,
             con=db.sql.connection, 
-            if_exists="append",
+            if_exists=if_exists,
             index=False)
         db.sql.commit()
         db.sql.close()
@@ -369,5 +370,54 @@ PMDBPF_FLIB = HostFileDefine(
         "検査区分＊":("KENKBN", "INTEGER"),
         "作成日＊":("CRTYMD", "INTEGER"),
         "変更日＊":("UPDYMD", "INTEGER")
+    }
+)
+
+TEHAIPF_KITAURA = HostFileDefine(
+    file_name="TEHAIPF",
+    lib_name="KITAURA",
+    columns_dic={
+        "手配先コード":("手配先コード","INTEGER"),
+        "手配先名":("手配先名","TEXT"),
+        "発注日":("発注日","INTEGER"),
+        "納期":("納期","INTEGER"),
+        "品目コード":("品目コード","TEXT"),
+        "品目カナ":("品目カナ","TEXT"),
+        "品目名":("品目名","TEXT"),
+        "仕様":("仕様","TEXT"),
+        "図番":("図番","TEXT"),
+        "材料単価":("材料単価","REAL"),
+        "加工単価":("加工単価","REAL"),
+        "数量":("数量","REAL"),
+        "納品書番号":("納品書ＮＯ","INTEGER"),
+        "注文番号":("注文ＮＯ","TEXT"),
+        "納入先コード":("納入先コード","INTEGER"),
+        "納入場所":("納入場所","TEXT"),
+        "注文区分":("注文区分","TEXT"),
+        "発注区分":("発注区分","TEXT"),
+        "検査区分":("検査区分","TEXT"),
+        "親コード":("親コード","TEXT"),
+        "親カナ":("親カナ","TEXT"),
+        "親納期":("親納期","INTEGER"),
+        "機種１":("機種１","TEXT"),
+        "原単位１":("原単位１","REAL"),
+        "発注日１":("発注日１","INTEGER"),
+        "不良内容１":("不良内容１","TEXT"),
+        "機種２":("機種２","TEXT"),
+        "原単位２":("原単位２","REAL"),
+        "発注日２":("発注日２","INTEGER"),
+        "不良内容２":("不良内容２","TEXT"),
+        "機種３":("機種３","TEXT"),
+        "原単位３":("原単位３","REAL"),
+        "発注日３":("発注日３","INTEGER"),
+        "不良内容３":("不良内容３","TEXT"),
+        "機種４":("機種４","TEXT"),
+        "原単位４":("原単位４","REAL"),
+        "発注日４":("発注日４","INTEGER"),
+        "不良内容４":("不良内容４","TEXT"),
+        "機種５":("機種５","TEXT"),
+        "原単位５":("原単位５","REAL"),
+        "発注日５":("発注日５","INTEGER"),
+        "不良内容５":("不良内容５","TEXT"),
     }
 )

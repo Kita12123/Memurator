@@ -40,7 +40,7 @@
   <table class="sort-table">
     <thead>
       <tr>
-        <td></td>
+        <td><label><input type="checkbox" id="checkBoxAll" onclick="checkBoxChecked();"></label></td>
         {% for header in headers %}
           <td><input name="{{ header }}" value="{{ master_query[header] }}"></td>
         {% endfor %}
@@ -60,9 +60,9 @@
       {% for record in records %}
           <tr>
             {% if record[0] in SelectList %}
-              <td><input type="checkbox" name="key_code" value="{{ record[0] }}" checked></td>
+              <td><input type="checkbox" class="checkBox" name="key_code" value="{{ record[0] }}" checked></td>
             {% else %}
-              <td><input type="checkbox" name="key_code" value="{{ record[0] }}"></td>
+              <td><input type="checkbox" class="checkBox" name="key_code" value="{{ record[0] }}"></td>
             {% endif %}
             {% for rec in record %}
               <td>{{ rec }}</td>

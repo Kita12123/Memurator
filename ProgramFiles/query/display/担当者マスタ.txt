@@ -1,5 +1,5 @@
 SELECT
-    コード＊ || '' AS 担当者コード,
+    コード＊ AS 担当者コード,
     名称＊ AS 名称,
     カナ＊ AS カナ名
 FROM ETCMPF

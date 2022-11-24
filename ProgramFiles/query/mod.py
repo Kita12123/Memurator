@@ -23,7 +23,7 @@ def Equal(
                 return f"OR {column_int}={v} "
         else:
             return f"OR {column_str} LIKE'%{v}%' "
-    v = value.replace(" ","")
+    v = value.replace(" ","").replace("'","")
     if v == "":
         return "1=1"
     if "," in v:
@@ -37,7 +37,7 @@ def GreaterEqual(
     value: str
     ):
     """WHERE句作成(>=)"""
-    v = value.replace(" ","")
+    v = value.replace(" ","").replace("'","")
     if v == "":
         return
     # 日付の対応
@@ -51,7 +51,7 @@ def LessEqual(
     value: str
     ):
     """WHERE句作成(<=)"""
-    v = value.replace(" ","")
+    v = value.replace(" ","").replace("'","")
     if v == "":
         return
     # 日付の対応

@@ -9,7 +9,7 @@ from ProgramFiles.query import mod
 CD = os.path.dirname(__file__)
 
 # メモリ節約
-#@cache
+@cache
 def ReadSqlFile(
     db_name: dict,
     download :bool
@@ -46,6 +46,13 @@ def CreateWhereCode(
             mod.GreaterEqual("伝票日付",query["開始日付"]),
             mod.LessEqual("伝票日付",query["終了日付"])
         ] if q])[:-4]
+    elif db_name == "定期注文データ":
+        return "".join([ f"{q} AND " for q in [
+            mod.Equal("手配先コード","手配先名",query["手配先"]),
+            mod.Equal("品目コード","品目カナ",query["品目"]),
+            mod.GreaterEqual("納期",query["開始日付"]),
+            mod.LessEqual("納期",query["終了日付"])
+        ] if q])[:-4]
     else:
         return "1=1"
 
@@ -79,11 +86,13 @@ def SelectList(
         """調整する"""
         c = c.replace(" ","")
         if c.isdigit() == False:
-            return []
-        c = str(int(c))
+            return [c]
+        c = int(c)
         if column == "得意先":
-            if len(c) < 5:
+            if len(str(c)) < 5:
                 return [f"{c}10", f"{c}20", f"{c}40"]
+            else:
+                [str(c)]
         return [c]
     if value == "":
         return []

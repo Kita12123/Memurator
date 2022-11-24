@@ -34,11 +34,11 @@ class ConnectOnSqlite3:
             check_same_thread=False
             )
         self.cursor = self.connection.cursor()
-    
+
     def open(self):
         """接続"""
         return
-    
+
     def close(self):
         """接続解除"""
         return
@@ -63,7 +63,7 @@ class SystemDictionary:
         except(FileNotFoundError):
             self.clear()
             self.save()
-    
+
     @property
     def max_display_lines(self) -> int:
         """最大表示行数"""
@@ -74,7 +74,7 @@ class SystemDictionary:
                 "最大表示行数":"",
                 "最終更新日時":""
                 }
-    
+
     def update(self, key: str, value: str):
         """更新"""
         self.dic[key] = value
@@ -102,7 +102,7 @@ class UserDictionary:
             with open(self.file, mode="w", encoding="utf-8") as f:
                 json.dump({}, f)
             self.dic = {}
-    
+
     def load(self, key: str) -> dict:
         """読み込み"""
         if key in self.dic:

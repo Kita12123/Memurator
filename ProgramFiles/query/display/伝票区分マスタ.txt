@@ -1,5 +1,5 @@
 SELECT
-    コード＊ || '' AS 伝票区分,
+    コード＊ AS 伝票区分,
     名称＊ AS 名称,
     カナ＊ AS カナ名
 FROM ETCMPF

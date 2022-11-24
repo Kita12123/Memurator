@@ -39,6 +39,7 @@ def refresh_all(
         file_ins.UJNRPFW_FLIB1.refresh(where=f"伝票日付>={yymmdd_host}")
         file_ins.SYUKAPF_FLIB.refresh(where=f"伝票日付>={yymmdd_host}")
         file_ins.NSFILEP_MOLIB.refresh(where=f"伝票日付>={yymmdd_host}")
+        file_ins.TEHAIPF_KITAURA.refresh(if_exists="replace")
         file_ins.ETCMPF_FLIB.refresh()
         file_ins.RIPPET_FLIB.refresh()
         file_ins.NIHONPF_FLIB.refresh()
@@ -89,6 +90,7 @@ def refresh_department(
         elif department == "Plant":
             file_ins.NSFILEP_MOLIB.refresh(
                 where=f"伝票日付>={first_yymmdd_host} AND 伝票日付<={last_yymmdd_host}")
+            file_ins.TEHAIPF_KITAURA.refresh(if_exists="replace")
             if contain_master:
                 file_ins.RIPPET_FLIB.refresh()
                 file_ins.RIPPTR_FLIB.refresh()
