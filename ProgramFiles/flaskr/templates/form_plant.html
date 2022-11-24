@@ -8,26 +8,27 @@
     <tbody>
       <tr>
         <td><label for="開始日付">開始日付:</label></td>
-        <td><input type="date" class="form"
+        <td><input type="date" class="form" id="開始日付"
           name="開始日付" value="{{ user_dic['開始日付'] }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
         <td><label for="終了日付">終了日付:</label></td>
-        <td><input type="date" class="form"
+        <td><input type="date" class="form" id="終了日付"
           name="終了日付" value="{{ user_dic['終了日付'] }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
         <td><label for="手配先">手配先ｺｰﾄﾞ ｶﾅ：</label></td>
-        <td><input type="text" class="form"
+        <td><input type="text" class="form" id="手配先"
           name="手配先" value="{{ user_dic['手配先'] }}"></td>
         <td><button formaction="{{ url_for('search', column='手配先') }}"
           name="データ名" value="手配先マスタ">手配先マスタ</button></td>
       </tr>
       <tr>
         <td><label for="品目">品目ｺｰﾄﾞ ｶﾅ：</label></td>
-        <td><input type="text" name="品目" value="{{ user_dic['品目'] }}"></td>
+        <td><input type="text" class="form" id="品目"
+          name="品目" value="{{ user_dic['品目'] }}"></td>
         <td><button formaction="{{ url_for('search', column='品目') }}"
           name="データ名" value="品目マスタ">品目マスタ</button></td>
       </tr>

@@ -37,6 +37,12 @@ button {
 input[type=checkbox] {
     cursor: pointer;
 }
+select {
+    cursor: pointer;
+}
+label {
+    cursor: pointer;
+}
 /*
 ###############################################################################
     クラス

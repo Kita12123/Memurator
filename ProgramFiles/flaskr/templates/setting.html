@@ -12,14 +12,14 @@
 <div class="main-form">
   {% for key, value in system_dic.items() %}
     <label for="{{ key }}" >{{ key }}:</label>
-    <input name="{{ key }}" value="{{ value }}">
+    <input id="{{ key }}" name="{{ key }}" value="{{ value }}">
     <br>
   {% endfor %}
   <div class="subtitle">
     ユーザー設定
   </div><!--subtitle-->
   <label for="Department">ユーザー部署:</label>
-  <select name="Department">
+  <select id="Department" name="Department">
     {% if   user_dic["Department"]   == "Sales" %}
       <option value="Sales" selected>営業</option>
       <option value="Plant">工場</option>
@@ -35,17 +35,19 @@
   データ更新
 </div>
   {% if system_dic["最終更新日時"] == "更新中" %}
-    更新中...
+  更新中...
   {% else %}
-    <label for="first_date">開始日付:</label>
-    <input type="date" name="first_date" value="{{ first_date }}" max="9999-12-31">
-    <label for="last_date" >終了日付:</label>
-    <input type="date" name="last_date" value="{{ last_date }}" max="9999-12-31">
-    <br>
-    <input type="checkbox" name="contain_master" checked>
-    <label for="contain_master">マスターも更新する</label>
-    <br>
-    <button class="bigbutton" name="ok" value="最新データ取得" onclick="showLoading();">最新データ取得</button>
+  <label for="first_date">開始日付:</label>
+  <input type="date" id="first_date" 
+    name="first_date" value="{{ first_date }}" max="9999-12-31">
+  <label for="last_date" >終了日付:</label>
+  <input type="date" id="last_date" 
+    name="last_date" value="{{ last_date }}" max="9999-12-31">
+  <br>
+  <input type="checkbox" id="contain_master" name="contain_master" checked>
+  <label for="contain_master">マスターも更新する</label>
+  <br>
+  <button class="bigbutton" name="ok" value="最新データ取得" onclick="showLoading();">最新データ取得</button>
   {% endif %}
 <div class="subtitle">
   ログ参照
