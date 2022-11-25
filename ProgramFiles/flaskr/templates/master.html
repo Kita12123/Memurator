@@ -32,6 +32,10 @@
 </div>
 <button class="bigbutton" name="ok" value="決定">決定</button>
 <a href="{{ url_for('download',flg='master') }}">ダウンロード</a>
+{% for m in messages %}
+&emsp;&emsp;{{ m }}
+{% endfor %}
+
 {% endblock %}
 
 

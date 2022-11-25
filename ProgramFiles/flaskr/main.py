@@ -32,7 +32,7 @@ def index():
         # 作成
         return render_template("index.html")
     elif "MyColor" not in db.user.load(key=user_ip):
-        db.user.update(key=user_ip, dic={"MyColor":"blue"})
+        db.user.update(key=user_ip, dic={"MyColor":"default"})
         return redirect("/form")
     else:
         # フォーム画面へ
@@ -119,25 +119,32 @@ def search(column):
     user_dic = db.user.load(key=user_ip)
     db.sql.open()
     df = pd.read_sql(
-        sql=( qry.ReadSqlFile(
-            db_name=user_dic["データ名"],
-            download=False).format(
-                qry.CreateWhereCodeMaster(master_query))
-            + f" LIMIT {db.system.max_display_lines}"
-        ),
+        sql=qry.ReadSqlFile(
+                db_name=user_dic["データ名"],
+                download=False
+            ).format(qry.CreateWhereCodeMaster(master_query)),
         con=db.sql.connection
     )
     db.sql.close()
+    # Message
+    messages = []
+    count=len(df)
+    if count >= db.system.max_display_lines:
+        messages.append("件数：{:,} ({})".format(count, db.system.max_display_lines))
+    else:
+        messages.append("件数：{:,}".format(count))
+    df_dsp = df.head(db.system.max_display_lines)
     return render_template(
         "master.html",
     # QUERY
         user_dic=user_dic,
         system_dic=db.system.dic,
+        messages=messages,
         master_query=master_query,
         column=column,
         SelectList=qry.SelectList(column=column, value=user_dic[column]),
-        headers=df.columns,
-        records=df.values.tolist()
+        headers=df_dsp.columns,
+        records=df_dsp.values.tolist()
     )
 
 @app.route("/download/<flg>", methods=["GET"])

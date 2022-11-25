@@ -3,12 +3,12 @@
     タグ
 ###############################################################################
 */
-a, a:link, a:visited {
-    color: black;
-}
 button:hover {
     background-color: black;
     color: white;
+}
+a:link, a:visited {
+    color: black;
 }
 /*
 ###############################################################################
@@ -22,7 +22,10 @@ button:hover {
     background-color: black;
     color: white;
 }
-.title > a, a:link, a:visited {
+.title-left > a:link, .title-left > a:visited {
+    color: white;
+}
+.title-right > a:link, .title-right > a:visited {
     color: white;
 }
 /*
