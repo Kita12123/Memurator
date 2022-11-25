@@ -57,6 +57,7 @@ input[type=checkbox] {
 }
 .dataframe thead {
 	border-bottom: 1px solid;
+    border-bottom: black;
 	vertical-align: bottom;
 }
 .dataframe thead input {

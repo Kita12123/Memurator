@@ -5,10 +5,10 @@
 */
 a:link,
 a:visited {
-    color: black;
+    color: green;
 }
 button:hover {
-    background-color: black;
+    background-color: green;
     color: white;
 }
 /*
@@ -16,24 +16,12 @@ button:hover {
     クラス
 ###############################################################################
 */
-/*
-### タイトル ###
-*/
-.title-left > a:link, 
-.title-left > a:visited,
-.title-right > a:link,
-.title-right > a:visited {
-    color: white;
-}
-/*
-### 内容 ###
-*/
 .subtitle {
-    color: black;
+    color: green;
 }
 .title,
 .TableTag > table,
 .dataframe th {
-    background-color: black;
-    color: white;
+    background-color: rgb(190, 255, 210);
+    color: black;
 }

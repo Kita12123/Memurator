@@ -3,7 +3,8 @@
     タグ
 ###############################################################################
 */
-a:link, a:visited {
+a:link,
+a:visited {
     color: rgb(0, 84, 239);
 }
 button:hover {
@@ -15,33 +16,12 @@ button:hover {
     クラス
 ###############################################################################
 */
-/*
-### タイトル ###
-*/
-.title {
-    background-color: rgb(173, 229, 255);
-}
-.content > a:link, a:visited {
-    color: rgb(0, 84, 239);
-}
-/*
-### 内容 ###
-*/
 .subtitle {
     color: rgb(56, 168, 242);
 }
-.TableTag > table {
-    background-color: rgb(173, 229, 255);
-}
-/* 
-### データ表示 ###
-*/
-.dataframe thead {
-	border-bottom: black;
-}
-.dataframe tbody tr:nth-child(odd) {
-	background: #f5f5f5;
-}
+.title,
+.TableTag > table,
 .dataframe th {
-    background: rgb(173, 229, 255);
+    background-color: rgb(170, 230, 255);
+    color: black;
 }

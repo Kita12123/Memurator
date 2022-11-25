@@ -31,14 +31,17 @@
   <br>
   <label for="MyColor">メイン色:</label>
   <select id="MyColor" name="MyColor">
-    {% if   user_dic["MyColor"]   == "black" %}
-    <option value="black" selected>黒色</option>
-    <option value="default">青色</option>
-    {% else %}
-    <option value="default" selected>青色</option>
-    <option value="black">黒色</option>
-    {% endif %}
+    <option value="default">青</option>
+    <option value="black"  >黒</option>
+    <option value="green"  >緑</option>
   </select>
+  <script type="text/javascript">
+    let selected_value = '{{ user_dic["MyColor"] }}';
+    var options = document.querySelector("#MyColor").options;
+    for (let op of options) {
+      if(op.value === selected_value) option.selected = true;
+    }
+  </script>
   <br>
   <button class="bigbutton" name="ok" value="設定変更">設定変更</button>
 </div><!--main-form-->
