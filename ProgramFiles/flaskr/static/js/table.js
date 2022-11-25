@@ -4,21 +4,19 @@
 /*
 ### Function ###
 */
-mycolor = "#719FD3"
 //選択済み
 function Selected(id, id2){
-    document.querySelector(id2).style.backgroundColor = '#FFF';
+    document.querySelector(id2).style.backgroundColor = "#FFF";
     var obj = document.querySelector(id);
-    obj.style.color = '#000000';
-    obj.style.backgroundColor = '#FFF';
-    obj.onselectstart = () => false;
+    obj.style.color = "#000000";
+    obj.style.backgroundColor = "#FFF";
 }
 //選択可能
 function CanSelect(id, id2){
-    document.querySelector(id2).style.backgroundColor = mycolor;
+    document.querySelector(id2).style.backgroundColor = "#AFAFAF";
     var obj = document.querySelector(id);
-    obj.style.color = '#FFF';
-    obj.style.backgroundColor = mycolor;
+    obj.style.color = "#FFF";
+    obj.style.backgroundColor = "#AFAFAF";
 }
 /*
 ### Main ###

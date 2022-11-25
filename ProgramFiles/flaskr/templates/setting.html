@@ -18,7 +18,7 @@
   <div class="subtitle">
     ユーザー設定
   </div><!--subtitle-->
-  <label for="Department">ユーザー部署:</label>
+  <label for="Department">所属部署:</label>
   <select id="Department" name="Department">
     {% if   user_dic["Department"]   == "Sales" %}
       <option value="Sales" selected>営業</option>
@@ -26,6 +26,17 @@
     {% elif user_dic["Department"]   == "Plant" %}
       <option value="Plant" selected>工場</option>
       <option value="Sales">営業</option>
+    {% endif %}
+  </select>
+  <br>
+  <label for="MyColor">メイン色:</label>
+  <select id="MyColor" name="MyColor">
+    {% if   user_dic["MyColor"]   == "black" %}
+    <option value="black" selected>黒色</option>
+    <option value="default">青色</option>
+    {% else %}
+    <option value="default" selected>青色</option>
+    <option value="black">黒色</option>
     {% endif %}
   </select>
   <br>

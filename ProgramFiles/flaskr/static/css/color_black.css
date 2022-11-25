@@ -1,0 +1,50 @@
+/*
+###############################################################################
+    タグ
+###############################################################################
+*/
+a, a:link, a:visited {
+    color: black;
+}
+button:hover {
+    background-color: black;
+    color: white;
+}
+/*
+###############################################################################
+    クラス
+###############################################################################
+*/
+/*
+### タイトル ###
+*/
+.title {
+    background-color: black;
+    color: white;
+}
+.title > a, a:link, a:visited {
+    color: white;
+}
+/*
+### 内容 ###
+*/
+.subtitle {
+    color: black;
+}
+.TableTag > table {
+    background-color: black;
+    color: white;
+}
+/* 
+### データ表示 ###
+*/
+.dataframe thead {
+	border-bottom: black;
+}
+.dataframe tbody tr:nth-child(odd) {
+	background: #f5f5f5;
+}
+.dataframe th {
+    background: black;
+    color: white;
+}

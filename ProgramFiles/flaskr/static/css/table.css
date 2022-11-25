@@ -23,7 +23,7 @@ input[type=checkbox] {
 ###############################################################################
 */
 /*
-### データ抽出 ###
+### 入力フォーム ###
 */
 .main-form table {
     font-size: 85%;
@@ -56,14 +56,14 @@ input[type=checkbox] {
     padding: 1%;
 }
 .dataframe thead {
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid;
 	vertical-align: bottom;
 }
 .dataframe thead input {
     width: 100%;
 }
 .dataframe tbody tr:nth-child(odd) {
-	background: #f5f5f5;
+	background: rgb(245, 245, 245);
 }
 .dataframe tr, th, td {
 	vertical-align: middle;
@@ -75,7 +75,6 @@ input[type=checkbox] {
 }
 .dataframe th {
 	font-weight: bold;
-    background: rgb(173, 229, 255);
     position: sticky;
     top: 0;
     left: 0;
@@ -94,15 +93,15 @@ input[type=checkbox] {
     -webkit-appearance: none;
     appearance: none;
     font-size: 90%;
-    background-color: rgb(113, 159, 211); /* 背景色 */
-    color: #FFF; /* テキストカラー */
+    background-color: rgb(175, 175, 175); /* #AFAFAF */
+    color: white;
     border: 0; /* 枠線を消す */
 }
 #tab1b, #tab2b, #tab3b, #tab4b {
-    background-color: rgb(113, 159, 211);
+    background-color: rgb(175, 175, 175);
 }
 /*tab1, tab1bは選択済みにする*/
 #tab1, #tab1b{
     color: black;
-    background-color: #FFF;
+    background-color: white;
 }

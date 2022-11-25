@@ -11,17 +11,14 @@ a {
     cursor: pointer;  /* カーソルを指マークに */
     text-decoration: none;
 }
+a:hover {
+    text-decoration: underline;
+}
 td {
     padding: 0px;
 }
 td > a, span > a {
     display: block;
-}
-a:link, a:visited {
-    color: rgb(0, 84, 239);
-}
-a:hover {
-    text-decoration: underline;
 }
 body {
     margin: 0%;
@@ -33,6 +30,9 @@ table{
 }
 button {
     cursor: pointer;
+    background-color: rgb(230, 230, 230);
+    border: 0;
+    border-radius: 10px;
 }
 input[type=checkbox] {
     cursor: pointer;
@@ -52,7 +52,6 @@ label {
 ### タイトル ###
 */
 .title {
-    background-color: rgb(173, 229, 255);
     width: 100%;
     display: table;
 }
@@ -79,7 +78,6 @@ label {
 .subtitle {
     font-size: 120%;
     font-weight: bold;
-    color: rgb(56, 168, 242);
     margin-top: 0.4%;
     margin-bottom: 0.1%;
     margin-left: 1%;
@@ -96,7 +94,6 @@ label {
     width: 100%;
     text-align: center;
     font-weight: 700;
-    background-color: rgb(173, 229, 255); /* 背景色 */
 }
 .bigbutton {
     margin-top: 0.3%;
