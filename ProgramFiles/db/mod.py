@@ -105,10 +105,9 @@ class UserDictionary:
 
     def load(self, key: str) -> dict:
         """読み込み"""
-        if key in self.dic:
-            return self.dic[key]
-        else:
-            return {}
+        if key not in self.dic:
+            self.dic[key] = {}
+        return self.dic[key]
 
     def update(self, key: str, dic: dict):
         """更新"""

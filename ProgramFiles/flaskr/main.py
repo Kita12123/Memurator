@@ -28,15 +28,14 @@ def index():
     if request.method == "POST":
         # 更新
         db.user.update(key=user_ip, dic=request.form.to_dict())
-    elif "Department" not in db.user.load(key=user_ip):
+    if "Department" not in db.user.load(key=user_ip):
         # 作成
         return render_template("index.html")
-    elif "MyColor" not in db.user.load(key=user_ip):
+    if "MyColor" not in db.user.load(key=user_ip):
         db.user.update(key=user_ip, dic={"MyColor":"default"})
         return redirect("/form")
-    else:
-        # フォーム画面へ
-        return redirect("/form")
+    # フォーム画面へ
+    return redirect("/form")
 
 @app.route("/form", methods=["GET"])
 def form():
