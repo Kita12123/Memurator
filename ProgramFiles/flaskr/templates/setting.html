@@ -4,6 +4,10 @@
 設定
 {% endblock %}
 
+{% block Scripts %}
+<script type="text/javascript" src="/static/js/setting.js"></script> 
+{% endblock %}
+
 
 {% block Content %}
 <div class="subtitle">
@@ -20,28 +24,18 @@
   </div><!--subtitle-->
   <label for="Department">所属部署:</label>
   <select id="Department" name="Department">
-    {% if   user_dic["Department"]   == "Sales" %}
-      <option value="Sales" selected>営業</option>
-      <option value="Plant">工場</option>
-    {% elif user_dic["Department"]   == "Plant" %}
-      <option value="Plant" selected>工場</option>
-      <option value="Sales">営業</option>
-    {% endif %}
+    <option value="{{ user_dic['Department'] }}" selected>指定なし</option>
+    <option value="Sales">営業</option>
+    <option value="Plant">工場</option>
   </select>
   <br>
   <label for="MyColor">メイン色:</label>
   <select id="MyColor" name="MyColor">
+    <option value="{{ user_dic['MyColor'] }}" selected>指定なし</option>
     <option value="default">青</option>
-    <option value="black"  >黒</option>
     <option value="green"  >緑</option>
+    <option value="black"  >黒</option>
   </select>
-  <script type="text/javascript">
-    let selected_value = '{{ user_dic["MyColor"] }}';
-    var options = document.querySelector("#MyColor").options;
-    for (let op of options) {
-      if(op.value === selected_value) option.selected = true;
-    }
-  </script>
   <br>
   <button class="bigbutton" name="ok" value="設定変更">設定変更</button>
 </div><!--main-form-->
