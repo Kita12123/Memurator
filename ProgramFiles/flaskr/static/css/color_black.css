@@ -1,39 +1,19 @@
-/*
-###############################################################################
-    タグ
-###############################################################################
-*/
+
 a:link,
 a:visited {
-    color: black;
+    color: gray;
 }
 button:hover {
     background-color: black;
     color: white;
 }
-/*
-###############################################################################
-    クラス
-###############################################################################
-*/
-/*
-### タイトル ###
-*/
-.title-left > a:link, 
-.title-left > a:visited,
-.title-right > a:link,
-.title-right > a:visited {
-    color: white;
-}
-/*
-### 内容 ###
-*/
 .subtitle {
     color: black;
 }
-.title,
-.TableTag > table,
-.dataframe th {
+footer,
+.dataframe th,
+#TableTagHeader,
+#Title {
     background-color: black;
     color: white;
 }

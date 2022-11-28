@@ -11,13 +11,15 @@
   </head>
   <body>
     <!-- タイトル画面 -->
-    <div class="title">
-      <span class="title-left"  ><a href="/">初期画面へ</a></span>
-      <span class="title-center">
+    <div id="Title">
+      <div class="item" id="title-left" ><a href="/" 
+        title="※入力中データは保存されません！">初期画面へ</a></div>
+      <div class="item" id="title-center">
         {% block Title %}
         {% endblock %}
-      </span>
-      <span class="title-right" ><a href="/setting">設定画面へ</a></span>
+      </div>
+      <div class="item" id="title-right" ><a href="/setting"
+        title="※入力中データは保存されません！">設定画面へ</a></div>
     </div><!--title-->
     <form method="POST">
       <div class="content">
@@ -31,5 +33,14 @@
     <script type="text/javascript" src="{{ url_for('static',filename='js/base.js') }}"></script>
     {% block Scripts %}
     {% endblock %}
+    <br>
+    <footer class="footer">
+      <p>お問い合わせ先：
+        <a href="mailto:h-kitaura@minoru-sangyo.co.jp" title="メールを開きます">
+          h-kitaura@minoru-sangyo.co.jp
+        </a>
+      </p>
+      <a href="#" title="最上部へ戻ります">トップページへ</a>
+    </footer>
   </body>
 </html>

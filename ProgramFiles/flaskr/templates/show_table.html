@@ -34,18 +34,14 @@
 
 
 {% block Table %}
-<div class="TableTag">
-  <table>
-    <tr>
-      <td colspan="4">データ選択</td>
-    </tr>
-    <tr>
-      <td id="tab1b"><a id="tab1" href="javascript:showTable();">明細データ</a></td>
-      <td id="tab2b"><a id="tab2" href="javascript:showTotall1();">期別集計</a></td>
-      <td id="tab3b"><a id="tab3" href="javascript:showTotall2();">月別集計</a></td>
-      <td id="tab4b"><a id="tab4" href="javascript:showTotall3();">日別集計</a></td>
-    </tr>
-  </table>
+<div id="TableTagHeader">
+  データ選択
+</div>
+<div id="TableTagBody">
+  <div class="item" id="tab1b"><a id="tab1" href="javascript:showTable();"  >明細データ</a></div>
+  <div class="item" id="tab2b"><a id="tab2" href="javascript:showTotall1();">期別集計</a></div>
+  <div class="item" id="tab3b"><a id="tab3" href="javascript:showTotall2();">月別集計</a></div>
+  <div class="item" id="tab4b"><a id="tab4" href="javascript:showTotall3();">日別集計</a></div>
 </div><!--TableTag-->
 <div id="table">
   <div class="content">

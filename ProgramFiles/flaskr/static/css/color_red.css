@@ -1,19 +1,19 @@
 
 a:link,
 a:visited {
-    color: rgb(0, 84, 239);
+    color: red;
 }
 button:hover {
-    background-color: blue;
+    background-color: red;
     color: white;
 }
 .subtitle {
-    color: rgb(56, 168, 242);
+    color: red;
 }
 footer,
 .dataframe th,
 #TableTagHeader,
 #Title {
-    background-color: rgb(170, 230, 255);
+    background-color: rgb(255, 190, 210);
     color: black;
 }

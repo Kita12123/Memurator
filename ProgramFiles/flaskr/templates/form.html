@@ -14,17 +14,20 @@
 {% endblock %}
 
 {% block Content %}
+
 {% if   user_dic["Department"] == "Sales" %}
   <div class="dummy">
-    <button type="hidden" formaction="{{ url_for('show_table') }}" 
+    <button formaction="{{ url_for('show_table') }}" 
       name="データ名" value="売上データ" onclick="showLoading();"></button>
   </div><!--dummy-->
   {% include "form_sales.html" %}
+
 {% elif user_dic["Department"] == "Plant" %}
   <div class="dummy">
-    <button type="hidden" formaction="{{ url_for('show_table') }}" 
+    <button formaction="{{ url_for('show_table') }}" 
       name="データ名" value="仕入データ" onclick="showLoading();"></button>
   </div><!--dummy-->
   {% include "form_plant.html" %}
 {% endif %}
+
 {% endblock %}
