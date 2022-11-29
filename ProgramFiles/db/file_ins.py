@@ -24,16 +24,13 @@ class HostFileDefine:
         self.sql_select_sqlite3 = ",".join([f'{k} {v[1]}' for k, v in self.columns_dic.items()])
         self.sql_select_host    = ",".join([f"{v[0]} AS {k}" for k, v in self.columns_dic.items()])
         # テーブルがなければ、作成する
-        db.sql.open()
-        db.sql.execute(
+        db.sql.update_by_sql(
             sql=f"""
             CREATE TABLE IF NOT EXISTS {self.file_name}(
                 {self.sql_select_sqlite3}
                 );
             """
         )
-        db.sql.commit()
-        db.sql.close()
 
     def refresh(
         self,
@@ -57,28 +54,24 @@ class HostFileDefine:
         sql_host = f"SELECT {self.sql_select_host} FROM {self.lib_name}.{self.file_name} {sql_where_host}"
         # host -> df
         LOGGER.debug(f"ODBC Conecting...{self.file_name}({where})")
-        db.host.open()
-        df = pd.read_sql(sql=sql_host, con=db.host.connection)
-        db.host.close()
+        df = db.host.create_df(sql=sql_host)
         # df -> database.db
         LOGGER.debug("Syncing database.db..." + self.file_name)
-        db.sql.open()
         if sql_where_host:
-            db.sql.execute(sql=f"DELETE FROM {self.file_name} {sql_where_sqlite3}")
+            db.sql.update_by_sql(sql=f"DELETE FROM {self.file_name} {sql_where_sqlite3}")
         else:
-            db.sql.execute(f"DROP TABLE {self.file_name}")
-            db.sql.execute(f"""
+            db.sql.update_by_sql(f"DROP TABLE {self.file_name}")
+            db.sql.update_by_sql(f"""
                 CREATE TABLE IF NOT EXISTS {self.file_name}(
                     {self.sql_select_sqlite3}
                     );
                 """)
-        df.to_sql(
-            name=self.file_name,
-            con=db.sql.connection, 
+        db.sql.update_by_df(
+            df=df,
+            tablename=self.file_name,
             if_exists=if_exists,
-            index=False)
-        db.sql.commit()
-        db.sql.close()
+            index=False
+        )
 
 
 #

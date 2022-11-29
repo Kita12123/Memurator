@@ -1,56 +1,64 @@
 import pyodbc
 import sqlite3
+import pandas as pd
 import json
 
-class ConnectOnOdbc:
+class ConnectHostOnOdbc:
     """ ODBC接続クラス """
     def __init__(self, connstring: str):
         self.connstring = connstring
-        self.connection = None
-        self.cursor = None
+    
+    def create_df(self, sql: str) -> pd.DataFrame:
+        """データフレーム作成"""
+        with pyodbc.connect(self.connstring) as conn:
+            df = pd.read_sql(sql, conn)
+        return df
 
-    def open(self):
-        """接続"""
-        if self.connection is None:
-            self.connection = pyodbc.connect(self.connstring)
-        if self.cursor is None:
-            self.cursor = self.connection.cursor()
-
-    def close(self):
-        """接続解除"""
-        if self.cursor is not None:
-            self.connection.close()
-        self.connection = None
-        self.cursor = None
-
-
-# マルチスレッド非対応
 class ConnectOnSqlite3:
     """ SQLite3接続クラス """
     def __init__(self, database: str):
-        self.connection = sqlite3.connect(
-            database,
-            timeout=8,
-            check_same_thread=False
-            )
-        self.cursor = self.connection.cursor()
+        self.database = database
+    
+    @property
+    def connection(self) -> sqlite3.Connection:
+        return sqlite3.connect(
+                self.database,
+                timeout=8,
+                check_same_thread=False)
 
-    def open(self):
-        """接続"""
-        return
+    def create_df(self, sql: str) -> pd.DataFrame:
+        """データフレーム作成"""
+        with self.connection as conn:
+            df = pd.read_sql(sql, conn)
+        return df
+    
+    def create_list(self, sql: str) -> list:
+        """リスト作成"""
+        with self.connection as conn:
+            results = conn.cursor().execute(sql).fetchall()
+            conn.commit()
+        return results
 
-    def close(self):
-        """接続解除"""
-        return
-
-    def execute(self, sql: str):
-        """参照"""
-        self.cursor.execute(sql)
-
-    def commit(self):
+    def update_by_df(self,
+        df: pd.DataFrame,
+        tablename: str,
+        if_exists: str,
+        index: bool=False) -> None:
         """更新"""
-        self.connection.commit()
+        with self.connection as conn:
+            df.to_sql(
+                name=tablename,
+                con=conn,
+                if_exists=if_exists,
+                index=index)
+            conn.commit()
 
+    def update_by_sql(self,
+        sql: str) -> None:
+        """更新"""
+        with self.connection as conn:
+            conn.cursor().execute(sql)
+            conn.commit()
 
 class SystemDictionary:
     """ システム変数クラス """

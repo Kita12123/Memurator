@@ -55,12 +55,7 @@ def show_table():
     db.user.update(key=user_ip, dic=request.form.to_dict())
     user_dic = db.user.load(key=user_ip)
     # Create DataFrame on sqlite3
-    db.sql.open()
-    df = pd.read_sql(
-        sql=qry.CreateSqlCode(query=user_dic, download=False),
-        con=db.sql.connection
-    )
-    db.sql.close()
+    df = db.sql.create_df(sql=qry.CreateSqlCode(query=user_dic, download=False))
     # Message
     messages = []
     count=len(df)
@@ -116,15 +111,12 @@ def search(column):
             key=user_ip,
             dic={column : ",".join(request.form.getlist("key_code"))})
     user_dic = db.user.load(key=user_ip)
-    db.sql.open()
-    df = pd.read_sql(
+    df = db.sql.create_df(
         sql=qry.ReadSqlFile(
                 db_name=user_dic["データ名"],
                 download=False
             ).format(qry.CreateWhereCodeMaster(master_query)),
-        con=db.sql.connection
     )
-    db.sql.close()
     # Message
     messages = []
     count=len(df)
@@ -152,30 +144,20 @@ def download(flg):
     user_ip = request.remote_addr
     user_dic = db.user.load(key=user_ip)
     if flg == "table":
-        db.sql.open()
-        df = pd.read_sql(
-            sql=qry.CreateSqlCode(query=user_dic, download=True),
-            con=db.sql.connection
-        )
-        db.sql.close()
+        df = db.sql.create_df(sql=qry.CreateSqlCode(query=user_dic, download=True))
     elif flg == "master":
-        df = pd.read_sql(
+        df = db.sql.create_df(
             sql=( qry.ReadSqlFile(
                 db_name=user_dic["データ名"],
                 download=False
                 ).format("WHERE 1=1")
                 + f" LIMIT {db.system.max_display_lines}"
-            ),
-            con=db.sql.connection
+            )
         )
-        db.sql.close()
     else:
-        db.sql.open()
-        df = pd.read_sql(
-            sql=qry.CreateSqlCode(query=user_dic, download=True),
-            con=db.sql.connection
+        df = db.sql.create_df(
+            sql=qry.CreateSqlCode(query=user_dic, download=True)
         )
-        db.sql.close()
         df1, df2, df3 = mod.arrage_df(df=df)
     # To File .csv
     if flg=="totall1":
@@ -237,15 +219,10 @@ def admin():
     values = []
     if request.method == "POST":
         sql_code = request.form.get("sql_code")
-        db.sql.open()
         try:
-            db.sql.execute(sql=sql_code)
-            values = db.sql.cursor.fetchall()
-            db.sql.commit()
-            db.sql.close()
+            values = db.sql.create_list(sql=sql_code)
         except:
             values = log.traceback.format_exc()
-            db.sql.close()
     return render_template(
         "admin.html",
         sql_code=sql_code,

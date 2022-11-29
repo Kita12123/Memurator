@@ -6,10 +6,12 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime
 
 from ProgramFiles import db
+from ProgramFiles.flaskr import scheduler
 
-
+@scheduler.task("interval", id="refresh_all", seconds=1*60*60)
 def schedule_fuction():
     """定期実行関数"""
+    print("Do Schedule Function!")
     now_time = datetime.now()
     db.user.save()
     db.system.save()

@@ -9,7 +9,7 @@ from ProgramFiles.db import mod
 #
 # Initializing
 #
-host = mod.ConnectOnOdbc(
+host = mod.ConnectHostOnOdbc(
     connstring="DSN=HOST;UID=MINORU1;PWD=;SCH=;CNV=K"
 )
 sql  = mod.ConnectOnSqlite3(
