@@ -160,7 +160,7 @@ def download(flg):
             sql=(qry.ReadSqlFile(
                 db_name=user_dic["データ名"],
                 download=False
-                ).format("WHERE 1=1")
+                ).format("1=1")
                 + f" LIMIT {db.system.max_display_lines}"
             )
         )

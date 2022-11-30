@@ -68,7 +68,7 @@ def schedule_fuction():
         last_month = today - relativedelta(months=1)
         refresh_all(
             first_date=last_month.strftime(r"%Y%m00"),
-            last_date=today.strftime(r"%Y%m%d"),
+            last_date=str(999999 + 19500000),
             contain_master=True)
 
 

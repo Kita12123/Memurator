@@ -72,6 +72,9 @@ footer > p {
     margin-bottom: 0.1%;
     margin-left: 1%;
 }
+.subtitle img {
+    width: 20px;
+}
 .dummy {
     display: none;
 }
