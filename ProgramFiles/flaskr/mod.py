@@ -134,7 +134,9 @@ class Log:
 
     def create_logger(self) -> Logger:
         """"""
-        logger = getLogger(__name__)
+        logger = getLogger("__main__")
         logger.setLevel(DEBUG)
-        logger.addHandler(self.handler_default)
+        logger.addHandler(self.handler_debug_file)
+        logger.addHandler(self.handler_info_file)
+        logger.addHandler(self.handler_error_file)
         return logger
