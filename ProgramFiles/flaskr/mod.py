@@ -12,7 +12,8 @@ from logging import (
     Logger,
     DEBUG,
     INFO,
-    ERROR
+    ERROR,
+    CRITICAL
 )
 
 
@@ -63,11 +64,7 @@ def arrage_df(df: pd.DataFrame) -> list[pd.DataFrame]:
 #
 class Log:
     """ログ管理クラス"""
-    def __init__(
-        self,
-        folder: str,
-        toaddrs: list[str]
-    ):
+    def __init__(self, folder: str, toaddrs: list[str]) -> None:
         """
         Args:
             folder (str): ログファイル出力フォルダ
@@ -124,14 +121,14 @@ class Log:
         return handler
 
     @property
-    def handler_error_mail(self) -> handlers.SMTPHandler:
+    def handler_critical_mail(self) -> handlers.SMTPHandler:
         handler = handlers.SMTPHandler(
             mailhost="127.0.0.1",
             fromaddr="server-error@example.com",
             toaddrs=self.toaddrs,
             subject="Application Error"
         )
-        handler.setLevel(ERROR)
+        handler.setLevel(CRITICAL)
         handler.setFormatter(self.formater)
         return handler
 

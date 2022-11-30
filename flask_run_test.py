@@ -1,12 +1,11 @@
 """
 Flask Run TEST
 """
+# .pycを作成しない
 import sys
+sys.dont_write_bytecode = True
 
 from ProgramFiles.flaskr import app
-
-# .pycを作成しない
-sys.dont_write_bytecode = True
 
 if __name__ == "__main__":
     app.run(
