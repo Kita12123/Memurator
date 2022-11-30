@@ -38,11 +38,8 @@
       {% block Table %}
       {% endblock %}
     </form><!--post-->
-    <script type="text/javascript" src="{{ url_for('static',filename='js/base.js') }}"></script>
-    {% block Scripts %}
-    {% endblock %}
     <br>
-    <footer class="footer">
+    <footer class="footer" id="footer">
       <p>お問い合わせ先：
         <a href="mailto:h-kitaura@minoru-sangyo.co.jp" title="メールを開きます">
           h-kitaura@minoru-sangyo.co.jp
@@ -50,5 +47,9 @@
       </p>
       <a href="#" title="最上部へ戻ります">トップページ</a>
     </footer>
+    <script type="text/javascript" src="/static/js/base.js"></script>
+    <script type="text/javascript" src="/static/js/footerFixed.js"></script>
+    {% block Scripts %}
+    {% endblock %}
   </body>
 </html>
