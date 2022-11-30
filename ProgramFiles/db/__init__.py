@@ -25,7 +25,7 @@ user = mod.UserDictionary(
     file_path=USER_JSON
 )
 # テーブルがなければ作成する
-for ins in file_ins.INS_LIST:
+for ins in file_ins.INS_DIC.values():
     sql.update_by_sql(ins.sql_create_table)
 
 
@@ -37,11 +37,11 @@ def refresh(
     where_sqlite3: str = "1=1"
 ) -> None:
     # HOST -> df
-    app.logger.debug(f"ODBC HOST... {ins.file_name} ({where_sqlite3})")
+    app.logger.debug(f"ODBC HOST... {ins.table_name_host} ({where_sqlite3})")
     where_host = ins.to_where_host_by(where_sqlite3)
     df = host.create_df(sql=ins.select_host_where(where_host))
     # df -> SQLite3
-    app.logger.debug(f"Syncing SQL... {ins.file_name} ({where_sqlite3})")
+    app.logger.debug(f"Syncing SQL... {ins.table_name} ({where_sqlite3})")
     if where_sqlite3 == "1=1":
         sql.update_by_sql(ins.sql_deleate_table)
         sql.update_by_sql(ins.sql_create_table)
@@ -49,7 +49,7 @@ def refresh(
         sql.update_by_sql(sql=ins.deleate_sqlite3_where(where_sqlite3))
     sql.update_by_df(
         df=df,
-        tablename=ins.file_name,
+        tablename=ins.table_name,
         if_exists="append",
         index=False)
 
@@ -98,6 +98,14 @@ def refresh_all(
     )
     refresh(
         file_ins.SYUKAPF_FLIB,
+        where_sqlite3=f"伝票日付>={first_host} AND 伝票日付<={last_host}"
+    )
+    refresh(
+        file_ins.SYUKAPF_FLIBK,
+        where_sqlite3=f"伝票日付>={first_host} AND 伝票日付<={last_host}"
+    )
+    refresh(
+        file_ins.SYUKAPF_FLIBN,
         where_sqlite3=f"伝票日付>={first_host} AND 伝票日付<={last_host}"
     )
     refresh(

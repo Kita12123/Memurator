@@ -137,24 +137,32 @@ class HostFileDefine:
         self, *,
         file_name: str,
         lib_name: str,
+        table_name: str,
         columns_dic: dict
     ):
         """ファイル定義
 
         Args:
-            file_name (str): テーブル名
-            lib_name (str): スキーマ名
+            file_name (str): HOSTファイル名
+            lib_name (str): HOSTライブラリ名
+            table_name (str): SQLテーブル名
             columns_dic (dict): {列名:(ホスト列名, データ型)}
         """
         self.file_name = file_name
         self.lib_name = lib_name
+        self.table_name = table_name
         self.columns_dic = columns_dic
+
+    @property
+    def table_name_host(self) -> str:
+        """HOSTテーブル名"""
+        return f"{self.file_name}.{self.lib_name}"
 
     @property
     def sql_create_table(self) -> str:
         """SQLコード(str): テーブル作成"""
         return f"""
-            CREATE TABLE IF NOT EXISTS {self.file_name}(
+            CREATE TABLE IF NOT EXISTS {self.table_name}(
                 {",".join([f'{k} {v[1]}'
                     for k, v in self.columns_dic.items()])
                 });
@@ -163,7 +171,7 @@ class HostFileDefine:
     @property
     def sql_deleate_table(self) -> str:
         """SQLコード(str): テーブル削除"""
-        return f"DROP TABLE {self.file_name}"
+        return f"DROP TABLE {self.table_name}"
 
     def to_where_host_by(
         self,
@@ -192,4 +200,4 @@ class HostFileDefine:
         where_sqlite3: str, /
     ) -> str:
         """SQLコード(str): テーブル条件削除"""
-        return f"DELETE FROM {self.file_name} WHERE {where_sqlite3}"
+        return f"DELETE FROM {self.table_name} WHERE {where_sqlite3}"

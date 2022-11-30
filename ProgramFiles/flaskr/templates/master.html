@@ -31,7 +31,10 @@
   <button name="ok" value="抽出"></button>
 </div>
 <button class="bigbutton" name="ok" value="決定">決定</button>
-<a href="{{ url_for('download',flg='master') }}">ダウンロード</a>
+<a href="{{ url_for('download',flg='master') }}" title="csvファイル">
+  <img src="/static/image/iconDownload.png" alt="ダウンロード" width="18px">
+  &nbsp;ダウンロード
+</a>
 {% for m in messages %}
 &emsp;&emsp;{{ m }}
 {% endfor %}

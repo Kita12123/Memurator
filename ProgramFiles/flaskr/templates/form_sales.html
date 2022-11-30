@@ -90,4 +90,8 @@
        name="データ名" value="売上データ" onclick="showLoading();">売上データ</button>
     <button class="bigbutton" formaction="{{ url_for('show_table') }}"
        name="データ名" value="出荷データ" onclick="showLoading();">出荷データ</button>
+    <button formaction="{{ url_for('show_table') }}"
+       name="データ名" value="出荷データ（九州）" onclick="showLoading();">九州</button>
+    <button formaction="{{ url_for('show_table') }}"
+       name="データ名" value="出荷データ（長野）" onclick="showLoading();">長野</button>
   </div><!--main-form-->

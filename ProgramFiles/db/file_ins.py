@@ -3,8 +3,7 @@
 """
 from ProgramFiles.db.mod import HostFileDefine
 
-INS_LIST: list[HostFileDefine] = []
-
+INS_DIC: dict[str, HostFileDefine] = {}
 #
 # Instance
 #
@@ -16,6 +15,7 @@ INS_LIST: list[HostFileDefine] = []
 MUJNRPF_MOLIB = HostFileDefine(
     file_name="MUJNRPF",
     lib_name="MOLIB",
+    table_name="MUJNRPF",
     columns_dic={
         "伝票日付": ("DYMD", "INTEGER"),
         "得意先コード": ("TOKCD", "INTEGER"),
@@ -41,11 +41,12 @@ MUJNRPF_MOLIB = HostFileDefine(
         "ブロック行": ("GYO", "INTEGER")
         }
 )
-INS_LIST.append(MUJNRPF_MOLIB)
+INS_DIC["累計売上データ"] = MUJNRPF_MOLIB
 
 UJNRPFW_FLIB1 = HostFileDefine(
     file_name="UJNRPFW",
     lib_name="FLIB1",
+    table_name="UJNRPFW",
     columns_dic={
         "伝票日付": ("DENYMD", "INTEGER"),
         "得意先コード": ("TOKCD", "INTEGER"),
@@ -70,11 +71,12 @@ UJNRPFW_FLIB1 = HostFileDefine(
         "ブロック行": ("GYONO", "INTEGER")
     }
 )
-INS_LIST.append(UJNRPFW_FLIB1)
+INS_DIC["当月売上データ１"] = UJNRPFW_FLIB1
 
 UJNRPF_FLIB1 = HostFileDefine(
     file_name="UJNRPF",
     lib_name="FLIB1",
+    table_name="UJNRPF",
     columns_dic={
         "伝票日付": ("DENYMD", "INTEGER"),
         "得意先コード": ("TOKCD", "INTEGER"),
@@ -99,11 +101,12 @@ UJNRPF_FLIB1 = HostFileDefine(
         "ブロック行": ("GYONO", "INTEGER")
     }
 )
-INS_LIST.append(UJNRPF_FLIB1)
+INS_DIC["当月売上データ２"] = UJNRPF_FLIB1
 
 SYUKAPF_FLIB = HostFileDefine(
     file_name="SYUKAPF",
     lib_name="FLIB",
+    table_name="SYUKAPF",
     columns_dic={
         "伝票日付": ("S08", "INTEGER"),
         "指示日付": ("S07", "INTEGER"),
@@ -135,11 +138,12 @@ SYUKAPF_FLIB = HostFileDefine(
         "入力分": ("MM", "INTEGER")
     }
 )
-INS_LIST.append(SYUKAPF_FLIB)
+INS_DIC["累計出荷データ"] = SYUKAPF_FLIB
 
 ETCMPF_FLIB = HostFileDefine(
     file_name="ETCMPF",
     lib_name="FLIB",
+    table_name="ETCMPF",
     columns_dic={
         "レコード区分＊": ("RKBN", "INTEGER"),
         "コード＊": ("CODE", "INTEGER"),
@@ -148,11 +152,12 @@ ETCMPF_FLIB = HostFileDefine(
         "数値＊": ("SUU", "INTEGER")
     }
 )
-INS_LIST.append(ETCMPF_FLIB)
+INS_DIC["営業区分マスタ"] = ETCMPF_FLIB
 
 NIHONPF_FLIB = HostFileDefine(
     file_name="NIHONPF",
     lib_name="FLIB",
+    table_name="NIHONPF",
     columns_dic={
         "送荷先コード＊": ("コード", "INTEGER"),
         "送荷先カナ＊": ("日本語１カナ", "TEXT"),
@@ -165,11 +170,12 @@ NIHONPF_FLIB = HostFileDefine(
         "住所２＊": ("日本語３漢字", "TEXT")
     }
 )
-INS_LIST.append(NIHONPF_FLIB)
+INS_DIC["送荷先マスタ"] = NIHONPF_FLIB
 
 TOKMPF_FLIB = HostFileDefine(
     file_name="TOKMPF",
     lib_name="FLIB",
+    table_name="TOKMPF",
     columns_dic={
         "得意先コード１＊": ("TOKCD1", "INTEGER"),
         "得意先コード２＊": ("TOKCD2", "INTEGER"),
@@ -187,21 +193,23 @@ TOKMPF_FLIB = HostFileDefine(
         "ＬＥＳＳ率＊": ("LESS", "INTEGER")
     }
 )
-INS_LIST.append(TOKMPF_FLIB)
+INS_DIC["得意先マスタ"] = TOKMPF_FLIB
 
 KENPF_FLIB1 = HostFileDefine(
     file_name="KENPF",
     lib_name="FLIB1",
+    table_name="KENPF",
     columns_dic={
         "県コード＊": ("CODE", "INTEGER"),
         "県名＊": ("NAME", "TEXT")
     }
 )
-INS_LIST.append(KENPF_FLIB1)
+INS_DIC["県マスタ"] = KENPF_FLIB1
 
 SEIMPF_FLIB = HostFileDefine(
     file_name="SEIMPF",
     lib_name="FLIB",
+    table_name="SEIMPF",
     columns_dic={
         "製品コード＊": ("機種コード", "INTEGER"),
         "製品カナ＊": ("製品名", "TEXT"),
@@ -217,11 +225,12 @@ SEIMPF_FLIB = HostFileDefine(
         "重量＊": ("重量㎏", "REAL")
     }
 )
-INS_LIST.append(SEIMPF_FLIB)
+INS_DIC["製品マスタ"] = SEIMPF_FLIB
 
 BUHMPF_FLIB = HostFileDefine(
     file_name="BUHMPF",
     lib_name="FLIB",
+    table_name="BUHMPF",
     columns_dic={
         "部品コード＊": ("RKEY", "INTEGER"),
         "部品カナ＊": ("NAME", "TEXT"),
@@ -236,7 +245,7 @@ BUHMPF_FLIB = HostFileDefine(
         "作成日＊": ("CRTYMD", "INTEGER")
     }
 )
-INS_LIST.append(BUHMPF_FLIB)
+INS_DIC["部品マスタ"] = BUHMPF_FLIB
 
 #
 # 工場
@@ -245,6 +254,7 @@ INS_LIST.append(BUHMPF_FLIB)
 NSFILEP_MOLIB = HostFileDefine(
     file_name="NSFILEP",
     lib_name="MOLIB",
+    table_name="NSFILEP",
     columns_dic={
         "伝票日付": ("DYMD", "INTEGER"),
         "納期": ("NOUKI", "INTEGER"),
@@ -263,11 +273,12 @@ NSFILEP_MOLIB = HostFileDefine(
         "注文番号": ("CHU", "TEXT")
     }
 )
-INS_LIST.append(NSFILEP_MOLIB)
+INS_DIC["累計仕入データ"] = NSFILEP_MOLIB
 
 RIPPET_FLIB = HostFileDefine(
     file_name="RIPPET",
     lib_name="FLIB",
+    table_name="RIPPET",
     columns_dic={
         "レコード区分＊": ("データ区分", "INTEGER"),
         "コード＊": ("コード", "INTEGER"),
@@ -277,22 +288,24 @@ RIPPET_FLIB = HostFileDefine(
         "数値２＊": ("数値（２）", "REAL")
     }
 )
-INS_LIST.append(RIPPET_FLIB)
+INS_DIC["工場区分マスタ"] = RIPPET_FLIB
 
 RIPPTR_FLIB = HostFileDefine(
     file_name="RIPPTR",
     lib_name="FLIB",
+    table_name="RIPPTR",
     columns_dic={
         "手配先コード＊": ("コード", "INTEGER"),
         "手配先名＊": ("仕入先名", "TEXT"),
         "手配先略称＊": ("仕入先名（略称）", "TEXT")
     }
 )
-INS_LIST.append(RIPPTR_FLIB)
+INS_DIC["手配先マスタ"] = RIPPTR_FLIB
 
 PMDBPF_FLIB = HostFileDefine(
     file_name="PMDBPF",
     lib_name="FLIB",
+    table_name="PMDBPF",
     columns_dic={
         "品目コード＊": ("DBCTRL", "TEXT"),
         "品目分類＊": ("HSMALL", "INTEGER"),
@@ -310,11 +323,12 @@ PMDBPF_FLIB = HostFileDefine(
         "変更日＊": ("UPDYMD", "INTEGER")
     }
 )
-INS_LIST.append(PMDBPF_FLIB)
+INS_DIC["品目マスタ"] = PMDBPF_FLIB
 
 TEHAIPF_KITAURA = HostFileDefine(
     file_name="TEHAIPF",
     lib_name="KITAURA",
+    table_name="TEHAIPF",
     columns_dic={
         "手配先コード": ("手配先コード", "INTEGER"),
         "手配先名": ("手配先名", "TEXT"),
@@ -360,4 +374,84 @@ TEHAIPF_KITAURA = HostFileDefine(
         "不良内容５": ("不良内容５", "TEXT"),
     }
 )
-INS_LIST.append(TEHAIPF_KITAURA)
+INS_DIC["定期注文データ"] = TEHAIPF_KITAURA
+
+#
+# 九州
+#
+SYUKAPF_FLIBK = HostFileDefine(
+    file_name="SYUKAPF",
+    lib_name="FLIBK",
+    table_name="SYUKAPFK",
+    columns_dic={
+        "伝票日付": ("S08", "INTEGER"),
+        "指示日付": ("S07", "INTEGER"),
+        "出荷伝票番号": ("S03", "TEXT"),
+        "出荷行番号": ("S04", "INTEGER"),
+        "伝票区分": ("S09", "INTEGER"),
+        "委託区分": ("S10", "INTEGER"),
+        "得意先コード": ("S12", "INTEGER"),
+        "得意先カナ": ("S13", "TEXT"),
+        "雑コード": ("ZATUCD", "INTEGER"),
+        "担当者コード": ("S199", "INTEGER"),
+        "送荷先コード": ("S20", "INTEGER"),
+        "送荷先カナ": ("S36", "TEXT"),
+        "扱い運送": ("S21", "INTEGER"),
+        "製品部品コード": ("S25", "INTEGER"),
+        "製品部品カナ": ("S27", "TEXT"),
+        "級区分": ("S24", "INTEGER"),
+        "部番": ("S26", "TEXT"),
+        "受注数": ("S29", "INTEGER"),
+        "出荷数": ("S30", "INTEGER"),
+        "売上数": ("S31", "INTEGER"),
+        "ＢＯ区分": ("S31", "INTEGER"),
+        "単価": ("S33", "INTEGER"),
+        "金額": ("S34", "INTEGER"),
+        "オーダー番号": ("S28", "TEXT"),
+        "備考": ("S35", "TEXT"),
+        "入力日": ("HONJIT", "INTEGER"),
+        "入力時": ("HH", "INTEGER"),
+        "入力分": ("MM", "INTEGER")
+    }
+)
+INS_DIC["累計出荷データ九州"] = SYUKAPF_FLIBK
+
+#
+# 九州
+#
+SYUKAPF_FLIBN = HostFileDefine(
+    file_name="SYUKAPF",
+    lib_name="FLIBN",
+    table_name="SYUKAPFN",
+    columns_dic={
+        "伝票日付": ("S08", "INTEGER"),
+        "指示日付": ("S07", "INTEGER"),
+        "出荷伝票番号": ("S03", "TEXT"),
+        "出荷行番号": ("S04", "INTEGER"),
+        "伝票区分": ("S09", "INTEGER"),
+        "委託区分": ("S10", "INTEGER"),
+        "得意先コード": ("S12", "INTEGER"),
+        "得意先カナ": ("S13", "TEXT"),
+        "雑コード": ("ZATUCD", "INTEGER"),
+        "担当者コード": ("S199", "INTEGER"),
+        "送荷先コード": ("S20", "INTEGER"),
+        "送荷先カナ": ("S36", "TEXT"),
+        "扱い運送": ("S21", "INTEGER"),
+        "製品部品コード": ("S25", "INTEGER"),
+        "製品部品カナ": ("S27", "TEXT"),
+        "級区分": ("S24", "INTEGER"),
+        "部番": ("S26", "TEXT"),
+        "受注数": ("S29", "INTEGER"),
+        "出荷数": ("S30", "INTEGER"),
+        "売上数": ("S31", "INTEGER"),
+        "ＢＯ区分": ("S31", "INTEGER"),
+        "単価": ("S33", "INTEGER"),
+        "金額": ("S34", "INTEGER"),
+        "オーダー番号": ("S28", "TEXT"),
+        "備考": ("S35", "TEXT"),
+        "入力日": ("HONJIT", "INTEGER"),
+        "入力時": ("HH", "INTEGER"),
+        "入力分": ("MM", "INTEGER")
+    }
+)
+INS_DIC["累計出荷データ長野"] = SYUKAPF_FLIBN

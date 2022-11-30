@@ -30,7 +30,11 @@ def ReadSqlFile(
 
 def CreateWhereCode(query: dict):
     db_name = query["データ名"]
-    if db_name == "売上データ" or db_name == "出荷データ":
+    if ( db_name == "売上データ"
+    or db_name == "出荷データ"
+    or db_name == "出荷データ（九州）"
+    or db_name == "出荷データ（長野）"
+    ):
         # 各WHERE句を <> AND で結合させ、[:-4]で最後のANDを削除
         return "".join([f"{q} AND " for q in [
             mod.Equal("得意先コード", "得意先カナ", query["得意先"]),

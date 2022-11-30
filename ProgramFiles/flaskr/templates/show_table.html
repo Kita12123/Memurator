@@ -45,7 +45,10 @@
 </div><!--TableTag-->
 <div id="table">
   <div class="content">
-    <a href="{{ url_for('download',flg='table') }}">ダウンロード</a>&emsp;&emsp;
+    <a href="{{ url_for('download',flg='table') }}">
+      <img src="/static/image/iconDownload.png" alt="ダウンロード" width="18px">
+      &nbsp;ダウンロード
+    </a>&emsp;&emsp;
     {% for m in messages %}
       {{ m }} &emsp;&emsp;
     {% endfor %}

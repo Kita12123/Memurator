@@ -12,14 +12,22 @@
   <body>
     <!-- タイトル画面 -->
     <div id="Title">
-      <div class="item" id="title-left" ><a href="/" 
-        title="※入力中データは保存されません！">初期画面へ</a></div>
+      <div class="item" id="title-left" >
+        <a href="/">
+          初期画面へ&nbsp;
+          <img src="/static/image/iconHome.png" alt="戻る">
+        </a>
+      </div><!--titel-left-->
       <div class="item" id="title-center">
         {% block Title %}
         {% endblock %}
-      </div>
-      <div class="item" id="title-right" ><a href="/setting"
-        title="※入力中データは保存されません！">設定画面へ</a></div>
+      </div><!--title-center-->
+      <div class="item" id="title-right" >
+        <a href="/setting">
+          <img src="/static/image/iconSetting.png" alt="設定">
+          &nbsp;設定画面へ
+        </a>
+      </div><!--title-right-->
     </div><!--title-->
     <form method="POST">
       <div class="content">
@@ -40,7 +48,7 @@
           h-kitaura@minoru-sangyo.co.jp
         </a>
       </p>
-      <a href="#" title="最上部へ戻ります">トップページへ</a>
+      <a href="#" title="最上部へ戻ります">トップページ</a>
     </footer>
   </body>
 </html>
