@@ -2,7 +2,6 @@
 FLASK Main
 """
 import os
-import pandas as pd
 from flask import (
     redirect,
     render_template,
@@ -15,8 +14,9 @@ from dateutil.relativedelta import relativedelta
 
 from ProgramData import TEMP_CSV, SYSTEMDIR
 from ProgramFiles.flaskr import app, mod
-from ProgramFiles import db, log
+from ProgramFiles import db
 from ProgramFiles import query as qry
+
 
 #
 # Main
@@ -32,10 +32,11 @@ def index():
         # 作成
         return render_template("index.html")
     if "MyColor" not in db.user.load(key=user_ip):
-        db.user.update(key=user_ip, dic={"MyColor":"default"})
+        db.user.update(key=user_ip, dic={"MyColor": "default"})
         return redirect("/form")
     # フォーム画面へ
     return redirect("/form")
+
 
 @app.route("/form", methods=["GET"])
 def form():
@@ -46,6 +47,7 @@ def form():
         system_dic=db.system.dic
     )
 
+
 @app.route("/show_table", methods=["GET", "POST"])
 def show_table():
     """データ表示"""
@@ -55,12 +57,16 @@ def show_table():
     db.user.update(key=user_ip, dic=request.form.to_dict())
     user_dic = db.user.load(key=user_ip)
     # Create DataFrame on sqlite3
-    df = db.sql.create_df(sql=qry.CreateSqlCode(query=user_dic, download=False))
+    df = db.sql.create_df(
+        sql=qry.CreateSqlCode(query=user_dic, download=False)
+    )
     # Message
     messages = []
-    count=len(df)
+    count = len(df)
     if count >= db.system.max_display_lines:
-        messages.append("件数：{:,} ({})".format(count, db.system.max_display_lines))
+        messages.append(
+            "件数：{:,} ({})".format(count, db.system.max_display_lines)
+        )
     else:
         messages.append("件数：{:,}".format(count))
     # Arrange DataFrame
@@ -68,14 +74,14 @@ def show_table():
     messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
     df1, df2, df3 = mod.arrage_df(df=df)
     df_dsp = df.head(db.system.max_display_lines)
-    df_dsp.loc[:,("数量","単価","金額")] = df_dsp[["数量","単価","金額"]].applymap("{:,}".format)
+    df_dsp.loc[:, ("数量", "単価", "金額")] = (
+        df_dsp[["数量", "単価", "金額"]].applymap("{:,}".format)
+    )
     return render_template(
         "show_table.html",
         user_dic=user_dic,
         system_dic=db.system.dic,
-    # Message
         messages=messages,
-    # Table
         headers=df_dsp.columns,
         records=df.values.tolist(),
         headers1=df1.columns,
@@ -86,6 +92,7 @@ def show_table():
         records3=df3.values.tolist(),
     )
 
+
 @app.route("/search/<column>", methods=["POST"])
 def search(column):
     """抽出条件をマスタより取得"""
@@ -94,7 +101,7 @@ def search(column):
     if request.form.get("ok") == "決定":
         db.user.update(
             key=user_ip,
-            dic={column : ",".join(request.form.getlist("key_code"))})
+            dic={column: ",".join(request.form.getlist("key_code"))})
         return redirect("/form")
     # user_dic, master_query作成
     elif "データ名" in request.form.to_dict():
@@ -109,7 +116,7 @@ def search(column):
             del master_query["key_code"]
         db.user.update(
             key=user_ip,
-            dic={column : ",".join(request.form.getlist("key_code"))})
+            dic={column: ",".join(request.form.getlist("key_code"))})
     user_dic = db.user.load(key=user_ip)
     df = db.sql.create_df(
         sql=qry.ReadSqlFile(
@@ -119,15 +126,16 @@ def search(column):
     )
     # Message
     messages = []
-    count=len(df)
+    count = len(df)
     if count >= db.system.max_display_lines:
-        messages.append("件数：{:,} ({})".format(count, db.system.max_display_lines))
+        messages.append(
+            "件数：{:,} ({})".format(count, db.system.max_display_lines)
+        )
     else:
         messages.append("件数：{:,}".format(count))
     df_dsp = df.head(db.system.max_display_lines)
     return render_template(
         "master.html",
-    # QUERY
         user_dic=user_dic,
         system_dic=db.system.dic,
         messages=messages,
@@ -138,16 +146,18 @@ def search(column):
         records=df_dsp.values.tolist()
     )
 
+
 @app.route("/download/<flg>", methods=["GET"])
 def download(flg):
     """データをダウンロードする"""
     user_ip = request.remote_addr
     user_dic = db.user.load(key=user_ip)
     if flg == "table":
-        df = db.sql.create_df(sql=qry.CreateSqlCode(query=user_dic, download=True))
+        df = db.sql.create_df(
+            sql=qry.CreateSqlCode(query=user_dic, download=True))
     elif flg == "master":
         df = db.sql.create_df(
-            sql=( qry.ReadSqlFile(
+            sql=(qry.ReadSqlFile(
                 db_name=user_dic["データ名"],
                 download=False
                 ).format("WHERE 1=1")
@@ -160,17 +170,18 @@ def download(flg):
         )
         df1, df2, df3 = mod.arrage_df(df=df)
     # To File .csv
-    if flg=="totall1":
+    if flg == "totall1":
         df = df1
-    elif flg=="totall2":
+    elif flg == "totall2":
         df = df2
-    elif flg=="totall3":
+    elif flg == "totall3":
         df = df3
     df.to_csv(TEMP_CSV, index=False, encoding="cp932", escapechar="|")
     return send_file(
         TEMP_CSV,
         download_name="download.csv"
     )
+
 
 #
 # Setting
@@ -180,7 +191,11 @@ def setting():
     """設定画面"""
     user_ip = request.remote_addr
     user_dic = db.user.load(key=user_ip)
-    with open(os.path.join(SYSTEMDIR, f"debug.txt"), mode="r", encoding="utf-8") as f:
+    with open(
+        os.path.join(SYSTEMDIR, "debug.txt"),
+        mode="r",
+        encoding="utf-8"
+    ) as f:
         log_texts = f.readlines()[-1:]
     if request.method == "POST":
         click = request.form.get("ok")
@@ -194,42 +209,49 @@ def setting():
             db.user.update(key=user_ip, dic=user_dic)
         elif click == "最新データ取得":
             db.user.save()
-            db.refresh_department(
-                first_date=request.form.get("first_date").replace("-",""),
-                last_date =request.form.get("last_date").replace("-",""),
-                department=user_dic["Department"],
+            db.refresh_all(
+                first_date=request.form["first_date"].replace("-", ""),
+                last_date=request.form["last_date"].replace("-", ""),
                 contain_master=request.form.get("contain_master"))
         else:
-            with open(os.path.join(SYSTEMDIR, f"{click}.txt"), mode="r", encoding="utf-8") as f:
+            with open(
+                os.path.join(SYSTEMDIR, f"{click}.txt"),
+                mode="r",
+                encoding="utf-8"
+            ) as f:
                 log_texts = f.readlines()
+    last_month = datetime.today() - relativedelta(months=1)
     return render_template(
         "setting.html",
-    # QUERY
         user_dic=user_dic,
         system_dic=db.system.dic,
-        first_date=(datetime.today() - relativedelta(months=1)).strftime(r"%Y-%m-01"),
-        last_date =datetime.now().strftime((r"%Y-%m-%d")),
+        first_date=last_month.strftime(r"%Y-%m-01"),
+        last_date=datetime.now().strftime((r"%Y-%m-%d")),
         log_texts=log_texts
     )
 
-@app.route("/admin", methods=["GET","POST"])
+
+@app.route("/admin", methods=["GET", "POST"])
 def admin():
     """管理者画面"""
+    user_ip = request.remote_addr
     sql_code = ""
     values = []
     if request.method == "POST":
         sql_code = request.form.get("sql_code")
-        try:
-            values = db.sql.create_list(sql=sql_code)
-        except:
-            values = log.traceback.format_exc()
+        values = db.sql.create_list(sql=sql_code)
     return render_template(
         "admin.html",
+        user_dic=db.user.load(key=user_ip),
         sql_code=sql_code,
         values=values
     )
 
+
 @app.route('/favicon.ico')
 def favicon():
     """Select ico"""
-    return send_from_directory(os.path.join(app.root_path, 'static/image'), 'favicon.ico', )
+    return send_from_directory(
+        os.path.join(app.root_path, 'static/image'),
+        'favicon.ico'
+    )

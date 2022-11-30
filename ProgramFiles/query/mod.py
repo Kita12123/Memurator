@@ -2,11 +2,8 @@
 WHERE句作成
 """
 
-def Equal(
-    column_int: str,
-    column_str: str,
-    value: str
-    ):
+
+def Equal(column_int: str, column_str: str, value: str) -> str:
     """WHERE句作成(=)"""
     def func(v: str):
         # マスタ用にcolumn_int=""であれば、飛ばす
@@ -23,47 +20,42 @@ def Equal(
                 return f"OR {column_int}={v} "
         else:
             return f"OR {column_str} LIKE'%{v}%' "
-    v = value.replace(" ","").replace("'","")
+    v = value.replace(" ", "").replace("'", "")
     if v == "":
         return "1=1"
     if "," in v:
         # [2:]で初期の"OR"を削除
-        return "(" + "".join([ func(code) for code in v.split(",")])[2:] + ")"
+        return "(" + "".join([func(code) for code in v.split(",")])[2:] + ")"
     else:
         return func(v)[2:]
 
-def GreaterEqual(
-    column_int: str,
-    value: str
-    ):
+
+def GreaterEqual(column_int: str, value: str) -> str:
     """WHERE句作成(>=)"""
-    v = value.replace(" ","").replace("'","")
+    v = value.replace(" ", "").replace("'", "")
     if v == "":
         return
     # 日付の対応
     if column_int == "伝票日付":
-        return f"伝票日付>={int(v.replace('-','')) - 19500000}"
+        return f"伝票日付>={int(v.replace('-', '')) - 19500000}"
     else:
         return f"{column_int}>={v}"
 
-def LessEqual(
-    column_int: str,
-    value: str
-    ):
+
+def LessEqual(column_int: str, value: str) -> str:
     """WHERE句作成(<=)"""
-    v = value.replace(" ","").replace("'","")
+    v = value.replace(" ", "").replace("'", "")
     if v == "":
         return
     # 日付の対応
     if column_int == "伝票日付":
-        return f"伝票日付<={int(v.replace('-','')) - 19500000}"
+        return f"伝票日付<={int(v.replace('-', '')) - 19500000}"
     else:
         return f"{column_int}<={v}"
 
-def Flag(
-    flag: str
-    ):
-    if   flag == "製品のみ":
+
+def Flag(flag: str) -> str:
+    if flag == "製品のみ":
         return "製品部品コード< 10000000"
     elif flag == "部品のみ":
         return "製品部品コード>=10000000"
