@@ -4,6 +4,7 @@ from ProgramFiles.flaskr import app
 from ProgramFiles.flaskr.mymod.log import LOGGER
 from ProgramFiles.flaskr.mymod.sql._type import ColumnType
 
+
 def to_sign_value(x_: str, /) -> tuple[str, str]:
     """値と記号に分ける"""
     x = re.sub("[,|&]", "", x_)
@@ -26,6 +27,7 @@ def tokcd(name: str, sign: str, value: str):
     else:
         return f"{name}{sign}{value}"
 
+
 def seibucd(name: str, sign: str, value: str):
     """製品部品コード５ｹﾀ未満を補正する"""
     z = '0'*(5 - len(value))
@@ -39,7 +41,7 @@ def seibucd(name: str, sign: str, value: str):
         return f"{name}{sign}{value}"
 
 
-def to_sql(name:str, type_: ColumnType, sign: str, value: str, /) -> str:
+def to_sql(name: str, type_: ColumnType, sign: str, value: str, /) -> str:
     if type_.istokcd():
         if len(value) <= 4:
             return tokcd(name, sign, value)
@@ -60,12 +62,14 @@ def to_sql(name:str, type_: ColumnType, sign: str, value: str, /) -> str:
         elif sign == "<>":
             return f"{name} NOT LIKE'%{value}%'"
         return f"{name}{sign}'{value}'"
-    raise TypeError(f"ColumnTypeクラス以外を指定しています!!")
+    raise TypeError("ColumnTypeクラス以外を指定しています!!")
 
 
 def main_(name: str, type_: ColumnType, value_: str, /):
     if app.debug:
-        LOGGER.debug(f"to_where.main_\nname: {name}, type: {type_}, value: {value_}")
+        LOGGER.debug(
+            f"to_where.main_\nname: {name}, type: {type_}, value: {value_}"
+        )
     value = value_.replace(" ", "").replace("　", "")
     if type(type_) is not ColumnType:
         raise TypeError("class ColumnTypeを指定してください")
@@ -75,7 +79,7 @@ def main_(name: str, type_: ColumnType, value_: str, /):
         value = value[1:]
     # Markがないとき
     if not any(x in value for x in (",", "|", "&")):
-        return to_sql(name , type_, *to_sign_value(value))
+        return to_sql(name, type_, *to_sign_value(value))
 
     values = re.split("(?=[,|&])", value)
     result = ""

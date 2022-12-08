@@ -3,6 +3,9 @@
 """
 import pandas as pd
 
+from ProgramFiles.flaskr import app
+from ProgramFiles.flaskr.mymod.log import LOGGER
+
 
 #
 # Sub Function
@@ -19,6 +22,8 @@ def year_to_period(date):
 # Main Function
 #
 def arrage_df(df: pd.DataFrame) -> list[pd.DataFrame]:
+    if app.debug:
+        LOGGER.debug(df.head(3))
     if df.empty:
         return (
             pd.DataFrame(index=[], columns=["ﾃﾞｰﾀﾅｼ"]),
@@ -31,10 +36,18 @@ def arrage_df(df: pd.DataFrame) -> list[pd.DataFrame]:
     df1.insert(0, "期", value=df1.index)
     df1.loc[:, ("数量", "金額")] = df1[["数量", "金額"]].applymap("{:,}".format)
     # Create Index
-    df.loc[:, "伝票日付"] = pd.to_datetime(df["伝票日付"], format=r"%Y%m%d", errors="coerce")
+    df.loc[:, "伝票日付"] = pd.to_datetime(
+        df["伝票日付"], format=r"%Y%m%d", errors="coerce"
+    )
     df.set_index("伝票日付", inplace=True)
     # Month
-    df2 = df.copy().groupby(pd.Grouper(freq="1M")).sum()
+    try:
+        df2 = df.copy().groupby(pd.Grouper(freq="1M")).sum()
+    except (AttributeError): # 'NatType object has no attribute 'normalize'
+        return (
+            pd.DataFrame(index=[], columns=["ﾃﾞｰﾀﾅｼ"]),
+            pd.DataFrame(index=[], columns=["ﾃﾞｰﾀﾅｼ"]),
+            pd.DataFrame(index=[], columns=["ﾃﾞｰﾀﾅｼ"]))
     df2.insert(0, "伝票日付", value=df2.index)
     df2.loc[:, "伝票日付"] = df2["伝票日付"].dt.strftime(r"%Y/%m")
     df2.loc[:, ("数量", "金額")] = df2[["数量", "金額"]].applymap("{:,}".format)

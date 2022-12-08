@@ -1,15 +1,14 @@
 import os
 
-CD = os.path.dirname(__file__)
-DOWNLOAD_DIR = os.path.join(CD, "download")
-DISPLAY_DIR = os.path.join(CD, "display")
-
 from ProgramFiles.flaskr.mymod.log import LOGGER
 from ProgramFiles.flaskr.mymod.sql._type import (
     ColumnType, NUM, STR, DATE, TOKCD, SEIBUCD
 )
 from ProgramFiles.flaskr.mymod.sql.to_where import main_
 
+CD = os.path.dirname(__file__)
+DOWNLOAD_DIR = os.path.join(CD, "download")
+DISPLAY_DIR = os.path.join(CD, "display")
 MARK_USERFORM = "\n\n/*" + "-"*50 + "入力フォーム範囲" + "-"*50 + "*/\n\n"
 
 
@@ -198,7 +197,7 @@ DB.add(
 
 DB.add(
     name="伝票区分マスタ",
-        sql_filename="伝票区分マスタ",
+    sql_filename="伝票区分マスタ",
     column_dic={
         "伝票区分": NUM,
         "名称": STR,

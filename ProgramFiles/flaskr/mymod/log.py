@@ -123,4 +123,5 @@ class Log:
         with open(CRITICAL_LOG, mode="r", encoding="utf-8") as f:
             return f.readlines()
 
+
 LOGGER = Log()

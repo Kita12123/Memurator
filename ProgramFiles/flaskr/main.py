@@ -37,6 +37,7 @@ def index():
         user_form=user.form.to_dict(),
     )
 
+
 @app.route("/show_sql", methods=["GET"])
 def show_sql():
     user = system.load(request.remote_addr)
@@ -52,6 +53,7 @@ def show_sql():
         sql_display=sql_display,
         sql_download=sql_download
     )
+
 
 @app.route("/show_table", methods=["POST"])
 def show_table():
@@ -78,7 +80,9 @@ def show_table():
         df_dsp[["数量", "単価", "金額"]].applymap("{:,}".format)
     )
     if app.debug:
-        LOGGER.debug(f"main.show_table\nuser.form.todict(): {user.form.to_dict()}")
+        LOGGER.debug(
+            f"main.show_table\nuser.form.todict(): {user.form.to_dict()}"
+        )
     return render_template(
         "show_table.html",
         MyColor=user.mycolor,
@@ -178,8 +182,10 @@ def setting():
                 MyColor=request.form["MyColor"]
             )
             system.save_file()
-        elif (click == "最新データ取得"
-        and system.last_refresh_date != "更新中"):
+        elif (
+            click == "最新データ取得"
+            and system.last_refresh_date != "更新中"
+        ):
             db.refresh_all(
                 first_date=request.form["first_date"].replace("-", ""),
                 last_date=request.form["last_date"].replace("-", ""),
@@ -205,18 +211,20 @@ def admin():
     sql_code = ""
     values = []
     if request.method == "POST":
-        ok = request.form.get("ok","")
+        ok = request.form.get("ok", "")
         if ok == "設定変更":
             system.last_refresh_date = request.form["LastRefreshDate"]
         elif ok == "SQL送信":
             sql_code = request.form.get("sql_code")
             values = db.sql.create_list(sql=sql_code)
         elif ok == "debug":
-            log_texts=LOGGER.to_text_debug()
+            log_texts = LOGGER.to_text_debug()
         elif ok == "info":
-            log_texts=LOGGER.to_text_info()
-        elif ok == "error":
-            log_texts=LOGGER.to_text_error()
+            log_texts = LOGGER.to_text_info()
+        elif ok == "warning":
+            log_texts = LOGGER.to_text_warning()
+        elif ok == "critical":
+            log_texts = LOGGER.to_text_critical()
     return render_template(
         "admin.html",
         MyColor="default",
@@ -241,10 +249,10 @@ def favicon():
 #
 def e_to_html(e) -> str:
     """HTML側で{% autoescape false %}にする"""
-    return traceback.format_exception_only(e
-    )[-1].replace("¥n", "<br>"
-    ).replace("\n", "<br>"
-    ).replace(" ", "&nbsp;")
+    return traceback.format_exception_only(e)[-1].replace(
+        "¥n", "<br>").replace(
+            "\n", "<br>").replace(
+                " ", "&nbsp;")
 
 
 @app.errorhandler(400)

@@ -25,7 +25,7 @@ for ins in host_ins.INS_DIC.values():
 #
 def refresh(
     ins: host_ins.HostFileDefine, /, *,
-    where_sqlite3: str="1=1"
+    where_sqlite3: str = "1=1"
 ) -> None:
     # HOST -> df
     where_host = ins.to_where_host_by(where_sqlite3)
@@ -106,7 +106,7 @@ def refresh_all(
     )
     # refresh(mod.TEHAIPF_KITAURA)
     if contain_master:
-        LOGGER.info(f"マスタ更新")
+        LOGGER.info("マスタ更新")
         LOGGER.info("[1/9] @ーーーーーーーー Refresh ETCMPF.FLIB...")
         refresh(host_ins.ETCMPF_FLIB)
         LOGGER.info("[2/9] @@ーーーーーーー Refresh NIHONPF.FLIB...")

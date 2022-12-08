@@ -28,7 +28,7 @@ class Form:
                 else:
                     [str(x)]
             return [x]
-        value = self.dic.get(column, "").replace(" ","")
+        value = self.dic.get(column, "").replace(" ", "")
         if not value:
             return []
         elif "," not in value:

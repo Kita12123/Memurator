@@ -10,17 +10,20 @@ class Request:
         return request.form.to_dict()
 
     def form_to_query(self) -> dict[str, str]:
-        dic =  request.form.to_dict()
-        def set_value(old, sign, new_int, replace=False, date=False):
+        dic = request.form.to_dict()
+
+        def set_value(old, sign, new, replace=False, date=False):
             old_v = dic.get(old, "")
             if date:
-                old_v = old_v.replace('-', '')
+                old_v = old_v.replace("-", "")
+            if not old_v:
+                sign = ""
             if replace:
-                dic[new_int] = sign + old_v
+                dic[new] = sign + old_v
                 return
-            dic[new_int] = dic.get(new_int, "") + sign + old_v
-            return dic
-        dic.get("開始日付", "")
+            dic[new] = dic.get(new, "") + sign + old_v
+            return
+
         set_value("開始日付", "&>=", "伝票日付", replace=True, date=True)
         set_value("終了日付", "&<=", "伝票日付", date=True)
         set_value("得意先", "", "得意先コード", replace=True)

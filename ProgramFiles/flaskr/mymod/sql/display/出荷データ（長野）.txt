@@ -1,5 +1,9 @@
 SELECT
-    伝票日付+19500000 AS 伝票日付,
+    CASE
+        WHEN 伝票日付=0 THEN 0
+        WHEN 伝票日付=999999 THEN 99999999
+        ELSE 伝票日付+19500000
+    END AS 伝票日付,
     ifnull(ET1.名称＊,'') AS 伝票区分名＊,
     ifnull(ET2.名称＊,'') AS 委託区分名＊,
     ifnull(ET4.名称＊,'') AS 扱い区分名＊,

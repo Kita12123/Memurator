@@ -1,6 +1,10 @@
 ﻿/* MUJNRPF */
 SELECT
-    伝票日付+19500000 AS 伝票日付,
+    CASE
+        WHEN 伝票日付=0 THEN 0
+        WHEN 伝票日付=999999 THEN 99999999
+        ELSE 伝票日付+19500000
+    END AS 伝票日付,
     伝票区分,
     ifnull(ET1.名称＊,'') AS 伝票区分名＊,
     委託区分,
@@ -77,7 +81,11 @@ UNION ALL
 
 /* UJNRPF */
 SELECT
-    伝票日付+19500000 AS 伝票日付,
+    CASE
+        WHEN 伝票日付=0 THEN 0
+        WHEN 伝票日付=999999 THEN 99999999
+        ELSE 伝票日付+19500000
+    END AS 伝票日付,
     伝票区分,
     ifnull(ET1.名称＊,'') AS 伝票区分名＊,
     委託区分,
@@ -154,7 +162,11 @@ UNION ALL
 
 /* UJNRPFW */
 SELECT
-    伝票日付+19500000 AS 伝票日付,
+    CASE
+        WHEN 伝票日付=0 THEN 0
+        WHEN 伝票日付=999999 THEN 99999999
+        ELSE 伝票日付+19500000
+    END AS 伝票日付,
     伝票区分,
     ifnull(ET1.名称＊,'') AS 伝票区分名＊,
     委託区分,

@@ -19,18 +19,21 @@ class SystemDictionary:
 
     def to_dict(self):
         return {
-            **{k: user.to_dict() for k, user in self.dic.items()}, 
+            **{k: user.to_dict() for k, user in self.dic.items()},
             **{"LastRefreshDate": self.last_refresh_date}
         }
 
     def load(self, id: str, /) -> User:
         if id not in self.dic:
-            LOGGER.debug(f"SystemDictionary.load\nWelcome New User !! ID: {id}")
+            LOGGER.debug(
+                f"SystemDictionary.load\nWelcome New User !! ID: {id}"
+            )
             self.dic[id] = User()
         return self.dic[id]
 
     def save_file(self):
         with open(SYSTEM_JSON, mode="w", encoding="utf-8") as f:
             json.dump(self.to_dict(), f, indent=3, ensure_ascii=False)
+
 
 system = SystemDictionary()

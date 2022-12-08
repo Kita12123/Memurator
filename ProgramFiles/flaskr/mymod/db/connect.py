@@ -36,7 +36,7 @@ class DataBaseOnSqlite3:
         with self.connection as conn:
             try:
                 df = pd.read_sql(sql, conn)
-            except(pd.errors.DatabaseError) as e:
+            except (pd.errors.DatabaseError) as e:
                 raise BadRequest(e)
         return df
 
