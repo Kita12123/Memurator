@@ -108,9 +108,6 @@ def refresh_all(
         refresh(host_ins.SEIMPF_FLIB)
         refresh(host_ins.RIPPET_FLIB)
         refresh(host_ins.RIPPTR_FLIB)
-        refresh(
-            host_ins.PMDBPF_FLIB,
-            where_sqlite3=f"変更日＊>={first_host} AND 変更日＊<={last_host}"
-        )
+        refresh(host_ins.PMDBPF_FLIB)
     system.last_refresh_date = datetime.now().strftime(r"%Y/%m/%d %H時%M分%S秒")
     LOGGER.info("*************** Ended Connect DataBase ***************")
