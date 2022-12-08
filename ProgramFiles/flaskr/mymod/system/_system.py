@@ -13,7 +13,7 @@ class SystemDictionary:
         with open(SYSTEM_JSON, mode="r", encoding="utf-8") as f:
             filedic: dict[str, dict[str, str | dict[str, str]]] = json.load(f)
         self.last_refresh_date = filedic.pop("LastRefreshDate", "")
-        self.dic = {k: User(v) for k, v in filedic.items()}
+        self.dic = {k: User(**v) for k, v in filedic.items()}
 
     def to_dict(self):
         return {
@@ -26,7 +26,7 @@ class SystemDictionary:
             LOGGER.debug(f"SystemDictionary.load\nUser ID List: {self.dic.keys()}")
         if id not in self.dic:
             LOGGER.debug(f"SystemDictionary.load\nWelcome New User !! ID: {id}")
-            self.dic[id] = User({})
+            self.dic[id] = User()
         return self.dic[id]
 
     def save_file(self):

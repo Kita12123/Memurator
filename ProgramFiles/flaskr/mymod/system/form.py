@@ -3,10 +3,9 @@ from ProgramFiles.flaskr.mymod.sql import DB
 
 class Form:
 
-    dic = {}
-
-    def __init__(self, dic: dict[str, str], /):
-        self.dic.update(dic)
+    def __init__(self, **kwargs):
+        self.dic = {}
+        self.update(**kwargs)
 
     @property
     def db_name(self):
