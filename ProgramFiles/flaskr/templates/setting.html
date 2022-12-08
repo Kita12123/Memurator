@@ -7,7 +7,7 @@
 {% block Content %}
 <div class="main-form">
   <div class="subtitle">
-    ユーザー設定変更
+    ユーザー設定
   </div><!--subtitle-->
   <label for="MaxRows">最大行数:</label>
   <input id="MaxRows" name="MaxRows" value="{{ MaxRows }}">
@@ -31,34 +31,30 @@
   <button class="bigbutton" name="ok" value="設定変更">設定変更</button>
 </div><!--main-form-->
 <div class="subtitle">
-  データ更新
-</div>
-  {% if LastRefreshDate == "更新中" %}
-  更新中...
-  {% else %}
-  <label for="first_date">開始日付:</label>
-  <input type="date" id="first_date" 
-    name="first_date" value="{{ first_date }}" max="9999-12-31">
-  <label for="last_date" >終了日付:</label>
-  <input type="date" id="last_date" 
-    name="last_date" value="{{ last_date }}" max="9999-12-31">
-  <br>
-  <input type="checkbox" id="contain_master" name="contain_master" checked>
-  <label for="contain_master">マスターも更新する</label>
-  <br>
-  <button class="bigbutton" name="ok" value="最新データ取得" onclick="showLoading();">最新データ取得</button>
-  {% endif %}
-<div class="subtitle">
   ログ参照
+  <a href="/setting" title="更新">
+    <img src="/static/image/iconRefresh.png" alt="更新">
+  </a>
 </div><!--bigbutton-->
-  <button name="ok" value="debug">debug</button>
-  &emsp;&emsp;
-  <button name="ok" value="info">info</button>
-  &emsp;&emsp;
-  <button name="ok" value="error">error</button>
 <div class="comments">
   {% for t in log_texts %}
     {{ t }}<br>
   {% endfor %}
 </div><!--comments-->
+<div class="subtitle">
+  データ更新
+</div>
+{% if LastRefreshDate == "更新中" %}
+更新中...
+{% else %}
+<label for="first_date">開始日付:</label>
+<input type="date" id="first_date" name="first_date" value="{{ first_date }}" max="9999-12-31">
+<label for="last_date" >終了日付:</label>
+<input type="date" id="last_date" name="last_date" value="{{ last_date }}" max="9999-12-31">
+<br>
+<input type="checkbox" id="contain_master" name="contain_master" checked>
+<label for="contain_master">マスターも更新する</label>
+<br>
+<button class="bigbutton" name="ok" value="最新データ取得" onclick="showLoading();">最新データ取得</button>
+{% endif %}
 {% endblock %}

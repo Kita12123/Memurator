@@ -1,13 +1,33 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <title>初期設定</title>
-  </head>
-  <body>
-    <form method="post">
-      <button style="width:100%;font-size:800%;" name="Department" value="Sales">営業用</button>
-      <button style="width:100%;font-size:800%;" name="Department" value="Plant">工場用</button>
-    </form>
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block Head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/table.css') }}">
+{% endblock %}
+
+
+{% block Title %}
+{% if Department == "Sales" %}
+  営業
+{% elif Department == "Plant" %}
+  工場
+{% endif %}
+{% endblock %}
+
+{% block Content %}
+
+{% if Department == "Sales" %}
+  <div class="dummy">
+    <button formaction="{{ url_for('show_table') }}" 
+      name="DB_name" value="売上データ" onclick="showLoading();"></button>
+  </div><!--dummy-->
+  {% include "form_sales.html" %}
+
+{% elif Department == "Plant" %}
+  <div class="dummy">
+    <button formaction="{{ url_for('show_table') }}" 
+      name="DB_name" value="仕入データ" onclick="showLoading();"></button>
+  </div><!--dummy-->
+  {% include "form_plant.html" %}
+{% endif %}
+
+{% endblock %}

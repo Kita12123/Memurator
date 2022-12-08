@@ -10,6 +10,8 @@ from ProgramFiles.flaskr.mymod.sql._type import (
 )
 from ProgramFiles.flaskr.mymod.sql.to_where import main_
 
+MARK_USERFORM = "\n\n/*" + "-"*50 + "入力フォーム範囲" + "-"*50 + "*/\n\n"
+
 
 class DataBase:
 
@@ -37,13 +39,6 @@ class DataBase:
         with open(download_file, mode="r", encoding="utf-8") as f:
             return f.read()
 
-    def to_sql_where(self, **kwargs: str):
-        """Form確認用"""
-        return [
-            main_(k, self.column_type_dic[k], v) for k, v in kwargs.items()
-            if k in self.columns and v.replace(" ", "")
-        ]
-
     def to_sql_display(self, **kwargs: str):
         lis = [
             main_(k, self.column_type_dic[k], v) for k, v in kwargs.items()
@@ -51,10 +46,10 @@ class DataBase:
         ]
         LOGGER.debug(f"DataBase.to_sql_display\nWHERE list: {lis}")
         if lis:
-            return self.sql_display.format(
-                " AND ".join([f"( {a} )" for a in lis])
-            )
-        return self.sql_display.format("1=1")
+            where = " AND ".join([f"( {a} )\n" for a in lis])
+        else:
+            where = "1=1"
+        return self.sql_display.format(MARK_USERFORM + where + MARK_USERFORM)
 
     def to_sql_download(self, **kwargs: str):
         lis = [
@@ -62,10 +57,10 @@ class DataBase:
             if k in self.columns and v.replace(" ", "")
         ]
         if lis:
-            return self.sql_download.format(
-                " AND ".join([f"( {a} )" for a in lis])
-            )
-        return self.sql_download.format("1=1")
+            where = " AND ".join([f"( {a} )\n" for a in lis])
+        else:
+            where = "1=1"
+        return self.sql_download.format(MARK_USERFORM + where + MARK_USERFORM)
 
 
 class DataBaseDictionary:

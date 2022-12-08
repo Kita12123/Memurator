@@ -9,10 +9,11 @@ from logging import (
     Logger,
     DEBUG,
     INFO,
-    ERROR,
+    WARNING,
+    CRITICAL
 )
 
-from ProgramData import DEBUG_LOG, INFO_LOG, ERROR_LOG
+from ProgramData import DEBUG_LOG, INFO_LOG, WARNING_LOG, CRITICAL_LOG
 
 
 class LoggerDefine:
@@ -53,14 +54,26 @@ class LoggerDefine:
         return handler
 
     @property
-    def handler_error_file(self) -> FileHandler:
+    def handler_warning_file(self) -> FileHandler:
         """Output info.txt"""
         handler = FileHandler(
-            ERROR_LOG,
+            WARNING_LOG,
             mode="w",
             encoding="utf-8"
         )
-        handler.setLevel(ERROR)
+        handler.setLevel(WARNING)
+        handler.setFormatter(self.formater)
+        return handler
+
+    @property
+    def handler_critical_file(self) -> FileHandler:
+        """Output info.txt"""
+        handler = FileHandler(
+            CRITICAL_LOG,
+            mode="a",
+            encoding="utf-8"
+        )
+        handler.setLevel(CRITICAL)
         handler.setFormatter(self.formater)
         return handler
 
@@ -72,7 +85,8 @@ class LoggerDefine:
         logger.addHandler(self.handler_default)
         logger.addHandler(self.handler_debug_file)
         logger.addHandler(self.handler_info_file)
-        logger.addHandler(self.handler_error_file)
+        logger.addHandler(self.handler_warning_file)
+        logger.addHandler(self.handler_critical_file)
         return logger
 
 
@@ -87,27 +101,26 @@ class Log:
     def info(self, msg):
         self.logger.info(msg)
 
-    def error(self, msg):
-        self.logger.error(msg)
+    def warning(self, msg):
+        self.logger.warning(msg)
 
-    @property
-    def text_oneline(self):
-        with open(INFO_LOG, mode="r", encoding="utf-8") as f:
-            return f.readlines()[-1:]
+    def critical(self, msg):
+        self.logger.critical(msg)
 
-    @property
-    def text_debug(self):
+    def to_text_debug(self):
         with open(DEBUG_LOG, mode="r", encoding="utf-8") as f:
             return f.readlines()
 
-    @property
-    def text_info(self):
+    def to_text_info(self):
         with open(INFO_LOG, mode="r", encoding="utf-8") as f:
             return f.readlines()
 
-    @property
-    def text_error(self):
-        with open(ERROR_LOG, mode="r", encoding="utf-8") as f:
+    def to_text_warning(self):
+        with open(WARNING_LOG, mode="r", encoding="utf-8") as f:
+            return f.readlines()
+
+    def to_text_critical(self):
+        with open(CRITICAL_LOG, mode="r", encoding="utf-8") as f:
             return f.readlines()
 
 LOGGER = Log()

@@ -43,6 +43,3 @@ class Form:
             return DB.load(self.db_name).to_sql_download(**self.dic)
         else:
             return DB.load(self.db_name).to_sql_display(**self.dic)
-
-    def to_where(self):
-        return DB.load(self.db_name).to_sql_where(**self.dic)

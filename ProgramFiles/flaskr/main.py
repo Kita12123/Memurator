@@ -27,16 +27,10 @@ from ProgramFiles.flaskr import app
 #
 @app.route("/", methods=["GET"])
 def index():
-    # フォーム画面へ
-    return redirect("/form")
-
-
-@app.route("/form", methods=["GET"])
-def form():
     """フォーム画面"""
     user = system.load(request.remote_addr)
     return render_template(
-        "form.html",
+        "index.html",
         MyColor=user.mycolor,
         Department=user.department,
         LastRefreshDate=system.last_refresh_date,
@@ -111,7 +105,7 @@ def search(column):
         user.form.update(
             **{column: ",".join(request.form.getlist("key_code"))}
         )
-        return redirect("/form")
+        return redirect("/")
     # user_dic, master_query作成
     elif "DB_name" in req.form_to_dict():
         # ここのQUERYを保存するかしないかの判定がむずかしい
@@ -175,7 +169,6 @@ def download(flg):
 def setting():
     """設定画面"""
     user = system.load(request.remote_addr)
-    log_texts = LOGGER.text_oneline
     if request.method == "POST":
         click = request.form.get("ok")
         if click == "設定変更":
@@ -184,6 +177,7 @@ def setting():
                 Department=request.form["Department"],
                 MyColor=request.form["MyColor"]
             )
+            system.save_file()
         elif (click == "最新データ取得"
         and system.last_refresh_date != "更新中"):
             db.refresh_all(
@@ -191,13 +185,6 @@ def setting():
                 last_date=request.form["last_date"].replace("-", ""),
                 contain_master=request.form.get("contain_master"))
             system.save_file()
-        else:
-            if click == "debug":
-                log_texts = LOGGER.text_debug
-            elif click == "info":
-                log_texts = LOGGER.text_info
-            elif click == "error":
-                log_texts = LOGGER.text_error
     last_month = datetime.today() - relativedelta(months=1)
     return render_template(
         "setting.html",
@@ -207,25 +194,33 @@ def setting():
         LastRefreshDate=system.last_refresh_date,
         first_date=last_month.strftime(r"%Y-%m-01"),
         last_date=datetime.now().strftime((r"%Y-%m-%d")),
-        log_texts=log_texts
+        log_texts=LOGGER.to_text_info()[-8:]
     )
 
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
     """管理者画面"""
+    log_texts = []
     sql_code = ""
     values = []
     if request.method == "POST":
         ok = request.form.get("ok","")
         if ok == "設定変更":
             system.last_refresh_date = request.form["LastRefreshDate"]
-        if ok == "SQL送信":
+        elif ok == "SQL送信":
             sql_code = request.form.get("sql_code")
             values = db.sql.create_list(sql=sql_code)
+        elif ok == "debug":
+            log_texts=LOGGER.to_text_debug()
+        elif ok == "info":
+            log_texts=LOGGER.to_text_info()
+        elif ok == "error":
+            log_texts=LOGGER.to_text_error()
     return render_template(
         "admin.html",
         MyColor="default",
+        log_texts=log_texts,
         sql_code=sql_code,
         LastRefreshDate=system.last_refresh_date,
         values=values
@@ -254,6 +249,7 @@ def e_to_html(e) -> str:
 
 @app.errorhandler(400)
 def bad_request(e):
+    LOGGER.warning(f"{e}")
     return render_template(
         "400.html",
         MyColor="default",
@@ -263,11 +259,12 @@ def bad_request(e):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return redirect("/form")
+    return redirect("/")
 
 
 @app.errorhandler(500)
 def internal_server_error(e):
+    LOGGER.critical(f"{e}")
     return render_template(
         "500.html",
         MyColor="default",
