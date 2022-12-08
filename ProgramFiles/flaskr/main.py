@@ -257,7 +257,7 @@ def e_to_html(e) -> str:
 
 @app.errorhandler(400)
 def bad_request(e):
-    LOGGER.warning(f"{e}")
+    LOGGER.debug(f"{e}")
     return render_template(
         "400.html",
         MyColor="default",
@@ -272,7 +272,7 @@ def page_not_found(e):
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    LOGGER.critical(f"{e}")
+    LOGGER.debug(f"{e}")
     return render_template(
         "500.html",
         MyColor="default",

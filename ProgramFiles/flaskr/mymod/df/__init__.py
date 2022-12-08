@@ -43,7 +43,7 @@ def arrage_df(df: pd.DataFrame) -> list[pd.DataFrame]:
     # Month
     try:
         df2 = df.copy().groupby(pd.Grouper(freq="1M")).sum()
-    except (AttributeError): # 'NatType object has no attribute 'normalize'
+    except (AttributeError):  # 'NatType object has no attribute 'normalize'
         return (
             pd.DataFrame(index=[], columns=["ﾃﾞｰﾀﾅｼ"]),
             pd.DataFrame(index=[], columns=["ﾃﾞｰﾀﾅｼ"]),

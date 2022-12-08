@@ -43,7 +43,8 @@ class DataBase:
             main_(k, self.column_type_dic[k], v) for k, v in kwargs.items()
             if k in self.columns and v.replace(" ", "")
         ]
-        LOGGER.debug(f"DataBase.to_sql_display\nWHERE list: {lis}")
+        LOGGER.debug(f"""DataBase.to_sql_display
+        Filename: {self.sql_filename}, WHERE list: {lis}""")
         if lis:
             where = " AND ".join([f"( {a} )\n" for a in lis])
         else:
