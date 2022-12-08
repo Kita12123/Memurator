@@ -1,5 +1,7 @@
 import re
 
+from ProgramFiles.flaskr import app
+from ProgramFiles.flaskr.mymod.log import LOGGER
 from ProgramFiles.flaskr.mymod.sql._type import ColumnType
 
 def to_sign_value(x_: str, /) -> tuple[str, str]:
@@ -61,7 +63,10 @@ def to_sql(name:str, type_: ColumnType, sign: str, value: str, /) -> str:
     raise TypeError(f"ColumnTypeクラス以外を指定しています!!")
 
 
-def main_(name: str, type_: ColumnType, value: str, /):
+def main_(name: str, type_: ColumnType, value_: str, /):
+    if app.debug:
+        LOGGER.debug(f"to_where.main_\nname: {name}, type: {type_}, value: {value_}")
+    value = value_.replace(" ", "")
     if type(type_) is not ColumnType:
         raise TypeError("class ColumnTypeを指定してください")
     if not name or not value:

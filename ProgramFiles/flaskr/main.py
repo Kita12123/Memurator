@@ -247,7 +247,7 @@ def favicon():
 def e_to_html(e) -> str:
     """HTML側で{% autoescape false %}にする"""
     return traceback.format_exception_only(type(e), e
-    )[-1].replace("\n", "<br>").replace(" ", "&nbsp;")
+    )[-1].replace(os.linesep, "<br>").replace(" ", "&nbsp;")
 
 
 @app.errorhandler(400)
