@@ -17,17 +17,17 @@
 
 
 {% block Title %}
-{{ user_dic["データ名"]}}参照
+{{ user_form["DB_name"]}}参照
 {% endblock %}
 
 
 {% block Content %}
 <div class="dummy">
-  <button name="データ名" value="{{ user_dic['データ名'] }}" onclick="showLoading();"></button>
+  <button name="データ名" value="{{ user_form['DB_name'] }}" onclick="showLoading();"></button>
 </div><!--dummy-->
-{% if user_dic["Department"] == "Sales" %}
+{% if Department == "Sales" %}
   {% include "form_sales.html" %}
-{% else %}
+{% elif Department == "Plant" %}
   {% include "form_plant.html" %}
 {% endif %}
 {% endblock %}
@@ -60,6 +60,18 @@
   <div class="dataframe">
     <table class="sort-table">
       <thead>
+        <tr>
+          {% for header in headers %}
+          <!--valueはuser_formから指定すると既に入ってしまう-->
+          <td>
+            {% if header in ["伝票日付","得意先コード","雑コード","送荷先コード","製品部品コード","担当者コード","伝票区分","品目コード"] %}
+            <input class="form" name="{{ header }}" value="{{ user_form[header] }}" readonly>
+            {% else %}
+            <input class="form" name="{{ header }}" value="{{ user_form[header] }}">
+            {% endif %}
+          </td>
+          {% endfor %}
+        </tr>
         <tr>
           {% for header in headers %}
           <th>

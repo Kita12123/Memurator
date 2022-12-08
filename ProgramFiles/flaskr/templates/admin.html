@@ -7,6 +7,13 @@
 
 {% block Content %}
 <div class="subtitle">
+  サーバー設定
+</div><!--subtitle-->
+<label for="LastRefreshDate">最終更新日付:</label>
+<input id="LastRefreshDate" name="LastRefreshDate" value="{{ LastRefreshDate }}">
+<button name="ok" value="設定変更">設定変更</button>
+<br>
+<div class="subtitle">
   SQL接続
 </div>
 <textarea style="width: 80%;font-size: 150%;" name="sql_code" rows="30">
@@ -15,6 +22,6 @@
 {% endblock %}
 
 {% block Table %}
-<button style="width:100%;font-size:200%;">SQL送信</button>
+<button name="ok" value="SQL送信" style="width:100%;font-size:200%;">SQL送信</button>
 {{ values }}
 {% endblock %}

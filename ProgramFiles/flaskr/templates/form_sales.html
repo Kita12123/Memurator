@@ -11,61 +11,61 @@
       <tr>
         <td><label for="開始日付">開始日付:</label></td>
         <td><input type="date" class="form" id="開始日付"
-          name="開始日付" value="{{ user_dic['開始日付'] }}" max="9999-12-31"></td>
+          name="開始日付" value="{{ user_form['開始日付'] }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
         <td><label for="終了日付">終了日付:</label></td>
         <td>
           <input type="date" class="form" id="終了日付"
-          name="終了日付" value="{{ user_dic['終了日付'] }}" max="9999-12-31">
+          name="終了日付" value="{{ user_form['終了日付'] }}" max="9999-12-31">
         </td>
         <td></td>
       </tr>
       <tr>
-        <td><label for="得意先">得意先ｺｰﾄﾞ ｶﾅ：</label></td>
+        <td><label for="得意先">得意先ｺｰﾄﾞ：</label></td>
         <td>
           <input type="text" class="form" id="得意先"
-          name="得意先" value="{{ user_dic['得意先'] }}">
+          name="得意先" value="{{ user_form['得意先'] }}">
         </td>
         <td>
           <button formaction="{{ url_for('search', column='得意先') }}"
-          name="データ名" value="得意先マスタ">得意先マスタ</button>
+          name="DB_name" value="得意先マスタ">得意先マスタ</button>
         </td>
       </tr>
       <tr>
-        <td><label for="雑">雑ｺｰﾄﾞ ｶﾅ：</label></td>
+        <td><label for="雑">雑ｺｰﾄﾞ：</label></td>
         <td>
           <input type="text" class="form" id="雑"
-          name="雑" value="{{ user_dic['雑'] }}">
+          name="雑" value="{{ user_form['雑'] }}">
         </td>
         <td>
           <button formaction="{{ url_for('search', column='雑') }}"
-          name="データ名" value="雑マスタ">雑マスタ</button>
+          name="DB_name" value="雑マスタ">雑マスタ</button>
         </td>
       </tr>
       <tr>
-        <td><label for="送荷先">送荷先ｺｰﾄﾞ ｶﾅ：</label></td>
+        <td><label for="送荷先">送荷先ｺｰﾄﾞ：</label></td>
         <td>
           <input type="text" class="form" id="送荷先"
-          name="送荷先" value="{{ user_dic['送荷先'] }}">
+          name="送荷先" value="{{ user_form['送荷先'] }}">
         </td>
         <td>
           <button formaction="{{ url_for('search', column='送荷先') }}"
-          name="データ名" value="送荷先マスタ">送荷先マスタ</button>
+          name="DB_name" value="送荷先マスタ">送荷先マスタ</button>
         </td>
       </tr>
       <tr>
-        <td><label for="製品部品">製品部品ｺｰﾄﾞ ｶﾅ：</label></td>
+        <td><label for="製品部品">製品部品ｺｰﾄﾞ：</label></td>
         <td>
         <input type="text" class="form" id="製品部品"
-        name="製品部品" value="{{ user_dic['製品部品'] }}">
+        name="製品部品" value="{{ user_form['製品部品'] }}">
         <select class="form" name="製品部品フラグ">
-            {% if user_dic['製品部品フラグ']   == "製品のみ" %}
+            {% if user_form['製品部品フラグ']   == "製品のみ" %}
             <option value=""></option>
             <option value="製品のみ" selected>製品のみ</option>
             <option value="部品のみ">部品のみ</option>
-            {% elif user_dic['製品部品フラグ'] == "部品のみ" %}
+            {% elif user_form['製品部品フラグ'] == "部品のみ" %}
             <option value=""></option>
             <option value="製品のみ">製品のみ</option>
             <option value="部品のみ" selected>部品のみ</option>
@@ -77,28 +77,28 @@
         </select>
         </td>
         <td><button formaction="{{ url_for('search', column='製品部品') }}"
-          name="データ名" value="製品部品マスタ">製品部品マスタ</button></td>
+          name="DB_name" value="製品部品マスタ">製品部品マスタ</button></td>
       </tr>
       <tr>
-        <td><label for="担当者">担当者ｺｰﾄﾞ 名：</label></td>
+        <td><label for="担当者">担当者ｺｰﾄﾞ：</label></td>
         <td>
           <input type="text" class="form" id="担当者"
-          name="担当者" value="{{ user_dic['担当者'] }}">
+          name="担当者" value="{{ user_form['担当者'] }}">
         </td>
         <td>
           <button formaction="{{ url_for('search', column='担当者') }}"
-          name="データ名" value="担当者マスタ">担当者マスタ</button>
+          name="DB_name" value="担当者マスタ">担当者マスタ</button>
         </td>
       </tr>
       <tr>
-        <td><label for="伝票区分">伝票区分ｺｰﾄﾞ 名：</label></td>
+        <td><label for="伝票区分">伝票区分ｺｰﾄﾞ：</label></td>
         <td>
-          <input type="text" class="form" id="伝票区分"
-          name="伝票区分" value="{{ user_dic['伝票区分'] }}">
+          <input type="text" class="form" id="伝区"
+          name="伝区" value="{{ user_form['伝区'] }}">
         </td>
         <td>
-          <button formaction="{{ url_for('search', column='伝票区分') }}"
-          name="データ名" value="伝票区分マスタ">伝票区分マスタ</button>
+          <button formaction="{{ url_for('search', column='伝区') }}"
+          name="DB_name" value="伝票区分マスタ">伝票区分マスタ</button>
         </td>
         <td></td>
       </tr>
@@ -107,14 +107,14 @@
   <div class="comments">
     ※カンマ(,)で区切ることで、複数条件を指定することができます。
     <br>
-    最終更新日付:{{ system_dic["最終更新日時"] }}
+    最終更新日付:{{ LastRefreshDate }}
   </div><!--comments-->
     <button class="bigbutton" formaction="{{ url_for('show_table') }}"
-       name="データ名" value="売上データ" onclick="showLoading();">売上データ</button>
+       name="DB_name" value="売上データ" onclick="showLoading();">売上データ</button>
     <button class="bigbutton" formaction="{{ url_for('show_table') }}"
-       name="データ名" value="出荷データ" onclick="showLoading();">出荷データ</button>
+       name="DB_name" value="出荷データ" onclick="showLoading();">出荷データ</button>
     <button formaction="{{ url_for('show_table') }}"
-       name="データ名" value="出荷データ（九州）" onclick="showLoading();">九州</button>
+       name="DB_name" value="出荷データ（九州）" onclick="showLoading();">九州</button>
     <button formaction="{{ url_for('show_table') }}"
-       name="データ名" value="出荷データ（長野）" onclick="showLoading();">長野</button>
+       name="DB_name" value="出荷データ（長野）" onclick="showLoading();">長野</button>
   </div><!--main-form-->

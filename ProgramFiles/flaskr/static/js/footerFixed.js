@@ -64,11 +64,9 @@ new function(){
 			elm.attachEvent("on"+listener,fn);
 		}
 	}
-
 	addEvent(window,"load",footerFixed);
 	addEvent(window,"load",function(){
-		checkFontSize(footerFixed);
+	  checkFontSize(footerFixed);
 	});
 	addEvent(window,"resize",footerFixed);
-	
 }

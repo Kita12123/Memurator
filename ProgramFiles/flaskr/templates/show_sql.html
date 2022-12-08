@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block Title %}
+
+SQL確認
+
+{% endblock %}
+
+
+{% block Table %}
+
+<h3>表示用</h3>
+{% autoescape false %}
+{{ sql_display }}
+{% endautoescape %}
+
+<h3>ダウンロード用</h3>
+{% autoescape false %}
+{{ sql_download }}
+{% endautoescape %}
+
+{% endblock %}

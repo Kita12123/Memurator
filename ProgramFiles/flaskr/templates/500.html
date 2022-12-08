@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block Title %}
+
+エラーが発生しました！
+
+{% endblock %}
+
+{% block Content %}
+
+サーバー側で問題が発生しました。<br>
+開発者にお問い合わせください。<br>
+
+{% endblock %}
+
+{% block Table %}
+
+{% autoescape false %}
+{{ e }}
+{% endautoescape %}
+
+{% endblock %}

@@ -6,23 +6,23 @@
 
 
 {% block Title %}
-{% if   user_dic["Department"] == "Sales" %}
+{% if Department == "Sales" %}
   営業
-{% elif user_dic["Department"] == "Plant" %}
+{% elif Department == "Plant" %}
   工場
 {% endif %}
 {% endblock %}
 
 {% block Content %}
 
-{% if   user_dic["Department"] == "Sales" %}
+{% if Department == "Sales" %}
   <div class="dummy">
     <button formaction="{{ url_for('show_table') }}" 
       name="データ名" value="売上データ" onclick="showLoading();"></button>
   </div><!--dummy-->
   {% include "form_sales.html" %}
 
-{% elif user_dic["Department"] == "Plant" %}
+{% elif Department == "Plant" %}
   <div class="dummy">
     <button formaction="{{ url_for('show_table') }}" 
       name="データ名" value="仕入データ" onclick="showLoading();"></button>

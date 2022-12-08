@@ -1,12 +1,84 @@
 """
-ファイル定義インスタンス作成
+HOSTファイル管理モジュール
 """
-from ProgramFiles.db.mod import HostFileDefine
 
-INS_DIC: dict[str, HostFileDefine] = {}
+
+class HostFileDefine:
+    """ファイル定義クラス"""
+    def __init__(
+        self, *,
+        file_name: str,
+        lib_name: str,
+        table_name: str,
+        columns_dic: dict
+    ):
+        """ファイル定義
+
+        Args:
+            file_name (str): HOSTファイル名
+            lib_name (str): HOSTライブラリ名
+            table_name (str): SQLテーブル名
+            columns_dic (dict): {列名:(ホスト列名, データ型)}
+        """
+        self.file_name = file_name
+        self.lib_name = lib_name
+        self.table_name = table_name
+        self.columns_dic = columns_dic
+
+    @property
+    def table_name_host(self) -> str:
+        """HOSTテーブル名"""
+        return f"{self.file_name}.{self.lib_name}"
+
+    @property
+    def sql_create_table(self) -> str:
+        """SQLコード(str): テーブル作成"""
+        return f"""
+            CREATE TABLE IF NOT EXISTS {self.table_name}(
+                {",".join([f'{k} {v[1]}'
+                    for k, v in self.columns_dic.items()])
+                });
+        """
+
+    @property
+    def sql_deleate_table(self) -> str:
+        """SQLコード(str): テーブル削除"""
+        return f"DROP TABLE {self.table_name}"
+
+    def to_where_host_by(
+        self,
+        where_sqlite3: str, /
+    ) -> str:
+        """WHERE句(str): ホスト用WHERE句に変更"""
+        where_host = where_sqlite3
+        for c in self.columns_dic:
+            if c in where_sqlite3:
+                where_host = where_host.replace(c, self.columns_dic[c][0])
+        return where_host
+
+    def select_host_where(
+        self,
+        where_host: str, /
+    ) -> str:
+        """SQLコード(str): テーブル条件抽出（ホスト用）"""
+        # HOSTのSQL文は改行するとエラーになる
+        sql = f"""SELECT {','.join([f'{v[0]} AS {k}'
+                    for k, v in self.columns_dic.items()])} """
+        sql += f" FROM {self.lib_name}.{self.file_name} WHERE {where_host} "
+        return sql
+
+    def deleate_sqlite3_where(
+        self,
+        where_sqlite3: str, /
+    ) -> str:
+        """SQLコード(str): テーブル条件削除"""
+        return f"DELETE FROM {self.table_name} WHERE {where_sqlite3}"
+
+
 #
 # Instance
 #
+INS_DIC: dict[str, HostFileDefine] = {}
 
 #
 # 営業
@@ -256,24 +328,71 @@ NSFILEP_MOLIB = HostFileDefine(
     lib_name="MOLIB",
     table_name="NSFILEP",
     columns_dic={
-        "伝票日付": ("DYMD", "INTEGER"),
-        "納期": ("NOUKI", "INTEGER"),
         "手配先コード": ("SIR", "INTEGER"),
-        "手配先カナ": ("SIRNM", "TEXT"),
-        "補用区分": ("HOYOKB", "TEXT"),
         "品目コード": ("BUCD", "TEXT"),
-        "品目カナ": ("BUHNM", "TEXT"),
+        # "加工区分": ("KKBN", "INTEGER"),
+        # "工程コード": ("KOTEI", "INTEGER"),
+        "伝票日付": ("DYMD", "INTEGER"),
+        "データ区分": ("DKBN", "INTEGER"),
+        "伝票番号": ("CHU", "TEXT"),
         "数量": ("SUR", "INTEGER"),
-        "単価": ("TANKA", "REAL"),
-        "金額": ("KIN", "INTEGER"),
+        "単価１": ("TANKA", "REAL"),
+        "金額１": ("KIN", "INTEGER"),
+        "手配先カナ": ("SIRNM", "TEXT"),
+        "品目カナ": ("BUHNM", "TEXT"),
+        "納期": ("NOUKI", "INTEGER"),
         "機種コード": ("KIS", "TEXT"),
-        "機種カナ": ("KISNM", "TEXT"),
+        "単価２": ("TANKA2", "REAL"),
+        "金額２": ("KIN2", "INTEGER"),
+        "勘定科目コード１": ("KCODE1", "INTEGER"),
+        "勘定科目コード２": ("KCODE2", "INTEGER"),
         "勘定科目カナ１": ("KAMOK1", "TEXT"),
         "勘定科目カナ２": ("KAMOK2", "TEXT"),
-        "注文番号": ("CHU", "TEXT")
+        "機種カナ": ("KISNM", "TEXT"),
+        # "貸方区分": ("KKKBN", "INTEGER"),
+        # "相手勘定科目コード": ("AITECD", "INTEGER"),
+        # "相手勘定科目カナ": ("SITEKM", "TEXT"),
+        # "部品入力区分": ("BNKBN", "INTEGER"),
+        # "工程カナ": ("KOTNM": "TEXT"),
+        "補用区分": ("HOYOKB", "TEXT")
+        # "摘要": ("TEKI", "TEXT"),
+        # "ＨＥＮ": ("HEN", "TEXT"),
+        # "ＫＡＲＤＥＮ": ("KARDEN", "TEXT"),
+        # "ＴＡＮＫＡＷ": ("TANKAW", "INTEGER"),
+        # "ＳＥＱ": ("SEQ", "INTEGER")
     }
 )
 INS_DIC["累計仕入データ"] = NSFILEP_MOLIB
+
+RIPPGA_FLIB = HostFileDefine(
+    file_name="RIPPGA",
+    lib_name="FLIB",
+    table_name="RIPPGA",
+    columns_dic={
+        "手配先コード": ("TORCD", "INTEGER"),
+        "伝票日付": ("DATE1", "INTEGER"),
+        "データ区分": ("DKB", "INTEGER"),
+        "伝票番号": ("DNO", "INTEGER"),
+        # "伝票行": ("DGYO", "INTEGER"),
+        "品目コード": ("HINCD", "TEXT"),
+        "品目カナ": ("HINNM", "TEXT"),
+        "納入先コード": ("BASYO", "INTEGER"),
+        "数量": ("SURYO", "REAL"),
+        "材料単価": ("TANKA", "REAL"),
+        "材料金額": ("KIN", "INTEGER"),
+        "納期": ("ODRNO", "INTEGER"),
+        "補用区分": ("PRFKB", "TEXT"),
+        # "反映フラグ": ("CNVKB", "INTEGER"),
+        "加工単価": ("TANKA2", "REAL"),
+        "加工金額": ("KIN2", "INTEGER"),
+        "勘定科目コード": ("KASI", "INTEGER")
+        # "借方コード": ("KASI1", "INTEGER"),
+        # "借方コード２": ("KARI2", "INTEGER"),
+        # "連番": ("SEQ", "INTEGER"),
+        # "日報フラグ": ("FLG", "TEXT")
+    }
+)
+INS_DIC["当月仕入データ"] = RIPPGA_FLIB
 
 RIPPET_FLIB = HostFileDefine(
     file_name="RIPPET",
