@@ -1,3 +1,6 @@
+"""
+Flask Run
+"""
 # .pycを作成しない
 import sys
 sys.dont_write_bytecode = True
@@ -6,7 +9,7 @@ from ProgramFiles.flaskr import app
 
 if __name__ == "__main__":
     app.run(
-        host="0.0.0.0",
+        host="192.168.0.96",
         port=80,
         debug=False,
         threaded=True

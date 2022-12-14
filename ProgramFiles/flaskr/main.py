@@ -16,18 +16,27 @@ from dateutil.relativedelta import relativedelta
 from ProgramData import TEMP_CSV
 from ProgramFiles.flaskr.mymod.log import LOGGER
 from ProgramFiles.flaskr.mymod import db
+from ProgramFiles.flaskr.mymod.db import sync
 from ProgramFiles.flaskr.mymod.df import arrage_df
 from ProgramFiles.flaskr.mymod.system import system
 from ProgramFiles.flaskr.mymod.req import req
-from ProgramFiles.flaskr import app
+from ProgramFiles.flaskr import app, scheduler
 
 
-#
-# Main
-#
+@scheduler.task("interval", id="refresh_db", seconds=1*60*60)
+def schedule_fuction():
+    now_time = datetime.now()
+    if now_time.strftime(r"%H") in ["08", "10", "12", "14", "16", "18"]:
+        last_month = datetime.today() - relativedelta(months=1)
+        sync.refresh_all(
+            first_date=last_month.strftime(r"%Y%m00"),
+            last_date=str(999999 + 19500000),
+            contain_master=True
+        )
+
+
 @app.route("/", methods=["GET"])
 def index():
-    """フォーム画面"""
     user = system.load(request.remote_addr)
     return render_template(
         "index.html",
@@ -57,7 +66,6 @@ def show_sql():
 
 @app.route("/show_table", methods=["POST"])
 def show_table():
-    """データ表示"""
     user = system.load(request.remote_addr)
     user.form.update(**req.form_to_query())
     # Create DataFrame on sqlite3
@@ -66,18 +74,24 @@ def show_table():
     messages = []
     count = len(df)
     if count >= user.max_rows:
-        messages.append(
-            "件数：{:,} ({})".format(count, user.max_rows)
-        )
+        messages.append(f"件数：{count:,} ({user.max_rows})")
     else:
-        messages.append("件数：{:,}".format(count))
+        messages.append(f"件数：{count:,}")
     # Arrange DataFrame
-    messages.append("合計数量 : {:,}".format(df["数量"].sum()))
-    messages.append("合計金額 : ¥{:,}".format(df["金額"].sum()))
     df1, df2, df3 = arrage_df(df=df)
+    columns_sum = [
+        c for c in df.columns
+        if any([x in c for x in ["数量", "金額"]])
+    ]
+    for t_c in columns_sum:
+        messages.append(f"合計{t_c} : {df[t_c].sum():,}")
+    columns_num = [
+        c for c in df.columns
+        if any([x in c for x in ["数量", "単価", "金額"]])
+    ]
     df_dsp = df.head(user.max_rows)
-    df_dsp.loc[:, ("数量", "単価", "金額")] = (
-        df_dsp[["数量", "単価", "金額"]].applymap("{:,}".format)
+    df_dsp.loc[:, columns_num] = (
+        df_dsp[columns_num].applymap("{:,}".format)
     )
     if app.debug:
         LOGGER.debug(
@@ -102,7 +116,6 @@ def show_table():
 
 @app.route("/search/<column>", methods=["POST"])
 def search(column):
-    """抽出条件をマスタより取得"""
     user = system.load(request.remote_addr)
     # 抽出条件QUERYに反映させる -> "/"へ
     if request.form.get("ok") == "決定":
@@ -147,7 +160,6 @@ def search(column):
 
 @app.route("/download/<flg>", methods=["GET"])
 def download(flg):
-    """データをダウンロードする"""
     user = system.load(request.remote_addr)
     df = db.sql.create_df(sql=user.form.to_sql(download=True))
     if flg != "master":
@@ -171,7 +183,6 @@ def download(flg):
 #
 @app.route("/setting", methods=["GET", "POST"])
 def setting():
-    """設定画面"""
     user = system.load(request.remote_addr)
     if request.method == "POST":
         click = request.form.get("ok")
@@ -186,10 +197,11 @@ def setting():
             click == "最新データ取得"
             and system.last_refresh_date != "更新中"
         ):
-            db.refresh_all(
+            sync.refresh_all(
                 first_date=request.form["first_date"].replace("-", ""),
                 last_date=request.form["last_date"].replace("-", ""),
-                contain_master=request.form.get("contain_master"))
+                contain_master=request.form.get("contain_master")
+            )
             system.save_file()
     last_month = datetime.today() - relativedelta(months=1)
     return render_template(
@@ -206,7 +218,6 @@ def setting():
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
-    """管理者画面"""
     log_texts = []
     sql_code = ""
     values = []
@@ -267,6 +278,11 @@ def bad_request(e):
 
 @app.errorhandler(404)
 def page_not_found(e):
+    return redirect("/")
+
+
+@app.errorhandler(405)
+def method_not_allowed(e):
     return redirect("/")
 
 

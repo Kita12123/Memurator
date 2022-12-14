@@ -12,8 +12,9 @@ SELECT
     END AS 廃止区分,
     CASE
         WHEN 作成日＊=0 THEN 0
-        ELSE 作成日＊ + 19500000
-    END AS 作成日
+        WHEN 作成日＊=999999 THEN 99999999
+        ELSE 作成日＊+19500000
+    END AS 作成日,
 FROM SEIMPF
 WHERE
     {0}
@@ -28,8 +29,9 @@ SELECT
     '' AS 廃止区分,
     CASE
         WHEN 作成日＊=0 THEN 0
-        ELSE 作成日＊ + 19500000
-    END AS 作成日
+        WHEN 作成日＊=999999 THEN 99999999
+        ELSE 作成日＊+19500000
+    END AS 作成日,
 FROM BUHMPF
 WHERE
     {0}

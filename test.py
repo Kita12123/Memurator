@@ -12,4 +12,11 @@ print(re.split("(?=[,|&])", v))
     "得意先コード >= 4429 AND 得意先コード <= 5500",
     "送荷先コード = 654192"
 ]
-print(f"aaa{v:'*'^10}")
+print(f"{'aaa':*^5}")
+
+lis = ["a", "b", "c"]
+print(["伝票日付", *lis])
+
+dic = {"a": "1", "b": "2"}
+dic2 = list(dic.values())
+print(type(dic2), dic2)

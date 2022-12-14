@@ -1,4 +1,4 @@
-from ProgramFiles.flaskr.mymod.sql import DB
+from ProgramFiles.flaskr.mymod.sql_code import DB
 
 
 class Form:

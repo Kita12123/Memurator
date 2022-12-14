@@ -2,12 +2,24 @@
 
 1. Pythonインストール
     https://www.python.org/
-    ※3.10推奨
+    ※3.11推奨
 
 2. 仮想環境(.win)作成
     python -m venv .win
     .win\Scripts\activate.bat
     pip install -r requirements.txt
+
+    ※ライブラリ
+    pip install <lib_name> --use-pep517
+    pandas
+    flask
+    Flask-APScheduler
+    flake8
+    pyodbc
+
+3. サーバー設定
+    pip install wfastcgi
+    https://medium.com/@dpralay07/deploy-a-python-flask-application-in-iis-server-and-run-on-machine-ip-address-ddb81df8edf3
 
 
 プログラム説明
@@ -67,5 +79,9 @@ gitの運用
     git remote add origin https://github.com/Kita12123/M_Emurator.git
     git push -u origin master
 
-命名規則（自流）
-・
+
+変更注意
+
+・SQLを変更するとき
+    SQLに対応したファイルも変更する
+    ProgramFiles/flaskr/mymod/sql/__init__.py

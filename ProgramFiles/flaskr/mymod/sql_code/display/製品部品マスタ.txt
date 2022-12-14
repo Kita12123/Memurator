@@ -11,7 +11,11 @@ SELECT
         WHEN 廃止区分＊ = 1 THEN '廃止コード'
         ELSE ''
     END AS 廃止区分,
-    作成日＊ + 19500000 AS 作成日
+    CASE
+        WHEN 作成日＊=0 THEN 0
+        WHEN 作成日＊=999999 THEN 99999999
+        ELSE 作成日＊+19500000
+    END AS 作成日,
 FROM SEIMPF
 WHERE
     {0}
@@ -28,7 +32,11 @@ SELECT
     原価＊ AS 原価,
     重量＊ AS 重量,
     '' AS 廃止区分,
-    作成日＊ + 19500000 AS 作成日
+    CASE
+        WHEN 作成日＊=0 THEN 0
+        WHEN 作成日＊=999999 THEN 99999999
+        ELSE 作成日＊+19500000
+    END AS 作成日,
 FROM BUHMPF
 WHERE
     {0}

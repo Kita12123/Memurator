@@ -4,10 +4,11 @@ import pandas as pd
 from werkzeug.exceptions import BadRequest
 
 from ProgramData import DATABASE
+from ProgramFiles.flaskr.mymod.log import LOGGER
 
 
 class HostOnOdbc:
-    """ ODBC接続クラス """
+    """ODBC接続クラス"""
 
     def create_df(self, sql: str) -> pd.DataFrame:
         """データフレーム作成"""
@@ -19,9 +20,9 @@ class HostOnOdbc:
 
 
 class DataBaseOnSqlite3:
-    """ SQLite3接続クラス """
-    def __init__(self):
-        self.database = DATABASE
+    """SQLite3接続クラス"""
+
+    database = DATABASE
 
     @property
     def connection(self) -> sqlite3.Connection:
@@ -50,8 +51,12 @@ class DataBaseOnSqlite3:
     def update_by_sql(self, sql: str) -> None:
         """更新"""
         with self.connection as conn:
-            conn.cursor().execute(sql)
-            conn.commit()
+            try:
+                conn.cursor().execute(sql)
+                conn.commit()
+            except (sqlite3.OperationalError) as e:
+                LOGGER.critical(e)
+                raise sqlite3.OperationalError(e)
 
     def update_by_df(
         self,

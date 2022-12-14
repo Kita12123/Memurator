@@ -2,7 +2,7 @@ import re
 
 from ProgramFiles.flaskr import app
 from ProgramFiles.flaskr.mymod.log import LOGGER
-from ProgramFiles.flaskr.mymod.sql._type import ColumnType
+from ProgramFiles.flaskr.mymod.sql_code._type import ColumnType
 
 
 def to_sign_value(x_: str, /) -> tuple[str, str]:

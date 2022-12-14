@@ -1,33 +1,29 @@
 {% extends "base.html" %}
 
-{% block Head %}
-<link rel="stylesheet" href="{{ url_for('static',filename='css/table.css') }}">
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/table.css') }}">
 {% endblock %}
 
-
-{% block Title %}
-{% if Department == "Sales" %}
-  営業
-{% elif Department == "Plant" %}
-  工場
-{% endif %}
+{% block title %}
+  {% if Department == "Sales" %}
+    営業
+  {% elif Department == "Plant" %}
+    工場
+  {% endif %}
 {% endblock %}
 
-{% block Content %}
-
-{% if Department == "Sales" %}
-  <div class="dummy">
-    <button formaction="{{ url_for('show_table') }}" 
-      name="DB_name" value="売上データ" onclick="showLoading();"></button>
-  </div><!--dummy-->
-  {% include "form_sales.html" %}
-
-{% elif Department == "Plant" %}
-  <div class="dummy">
-    <button formaction="{{ url_for('show_table') }}" 
-      name="DB_name" value="仕入データ" onclick="showLoading();"></button>
-  </div><!--dummy-->
-  {% include "form_plant.html" %}
-{% endif %}
-
+{% block content %}
+  {% if Department == "Sales" %}
+    <div class="dummy">
+      <button formaction="{{ url_for('show_table') }}" 
+        name="DB_name" value="売上データ" onclick="showLoading();"></button>
+    </div><!--dummy-->
+    {% include "form_sales.html" %}
+  {% elif Department == "Plant" %}
+    <div class="dummy">
+      <button formaction="{{ url_for('show_table') }}" 
+        name="DB_name" value="仕入データ" onclick="showLoading();"></button>
+    </div><!--dummy-->
+    {% include "form_plant.html" %}
+  {% endif %}
 {% endblock %}

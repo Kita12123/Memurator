@@ -3,7 +3,7 @@
 """
 from ProgramFiles.db.file_ins import TOTAL_SYUKA
 from ProgramFiles.db.sql_ins import DB_SQL
-from ProgramFiles.flaskr.mymod.log import LOGGER, dsp_except
+from ProgramFiles.flaskr.mymod.log.handler import LOGGER, dsp_except
 
 #
 # Main Function

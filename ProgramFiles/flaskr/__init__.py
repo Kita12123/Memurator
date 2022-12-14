@@ -5,6 +5,9 @@ import warnings
 from flask import Flask
 from flask_apscheduler import APScheduler
 
+from ProgramFiles.flaskr.mymod.log import LOGGER
+
+LOGGER.info("*************** M emurator Run ***************")
 
 class Config:
     SCHEDULER_API_ENABLED = True
@@ -21,7 +24,5 @@ app.config.from_object(Config())
 scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
-
-app.logger.info("*************** M emurator Run ***************")
 
 from ProgramFiles.flaskr import main  # noqa <- flake8で無視する

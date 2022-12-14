@@ -46,7 +46,7 @@ SELECT
     END AS 加工金額,
     機種コード,
     機種カナ,
-    注文番号
+    伝票番号
 FROM NSFILEP
 LEFT OUTER JOIN PMDBPF PM ON PM.品目コード＊=品目コード
 LEFT OUTER JOIN RIPPTR TR ON TR.手配先コード＊=手配先コード
@@ -79,10 +79,10 @@ SELECT
     加工金額,
     '' AS 機種コード,
     '' AS 機種カナ,
-    伝票番号 AS 注文番号
+    伝票番号
 FROM RIPPGA
 LEFT OUTER JOIN PMDBPF PM ON PM.品目コード＊=品目コード
-LEFT OUTER JOIN RIPPTR TR ON TR.手配先コード＊=手配先コード,
+LEFT OUTER JOIN RIPPTR TR ON TR.手配先コード＊=手配先コード
 WHERE
     {0}
 ORDER BY 伝票日付 ASC

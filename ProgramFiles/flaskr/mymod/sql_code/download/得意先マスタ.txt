@@ -16,8 +16,9 @@ SELECT
     ＬＥＳＳ率＊ AS ＬＥＳＳ率,
     CASE
         WHEN 作成日＊=0 THEN 0
-        ELSE 作成日＊ + 19500000
-    END AS 作成日
+        WHEN 作成日＊=999999 THEN 99999999
+        ELSE 作成日＊+19500000
+    END AS 作成日,
 FROM TOKMPF
 LEFT OUTER JOIN ETCMPF ET1 ON ET1.レコード区分＊=22 AND ET1.コード＊=担当者コード＊
 WHERE

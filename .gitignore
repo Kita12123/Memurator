@@ -1,4 +1,5 @@
 __trush__/
+.venv/
 .win/
 ProgramData/__pycache__/
 ProgramData/database.db

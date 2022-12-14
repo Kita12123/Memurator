@@ -1,10 +1,10 @@
 import os
 
 from ProgramFiles.flaskr.mymod.log import LOGGER
-from ProgramFiles.flaskr.mymod.sql._type import (
+from ProgramFiles.flaskr.mymod.sql_code._type import (
     ColumnType, NUM, STR, DATE, TOKCD, SEIBUCD
 )
-from ProgramFiles.flaskr.mymod.sql.to_where import main_
+from ProgramFiles.flaskr.mymod.sql_code.to_where import main_
 
 CD = os.path.dirname(__file__)
 DOWNLOAD_DIR = os.path.join(CD, "download")
@@ -267,7 +267,9 @@ DB.add(
         "製品部品コード": SEIBUCD,
         "カナ名": STR,
         "部番": STR,
-        "単価": NUM,
+        "旧小売単価": NUM,
+        "小売単価": NUM,
+        "原価": NUM,
         "重量": NUM,
         "廃止区分": STR,
         "作成日": DATE

@@ -1,0 +1,1 @@
+[CRITICAL]2022-12-14 10:39:32,879-no such table: TEHAIPF

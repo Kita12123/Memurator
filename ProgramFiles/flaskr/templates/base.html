@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" 
       href="{{ url_for('static',filename='css/color_' + MyColor + '.css') }}">
-    {% block Head %}
+    {% block head %}
     {% endblock %}
   </head>
   <body>
@@ -20,7 +20,7 @@
       </div><!--titel-left-->
       <div class="item" id="title-center">
         <a href="/show_sql" style="color: black;">
-        {% block Title %}
+        {% block title %}
         {% endblock %}
         </a>
       </div><!--title-center-->
@@ -33,11 +33,11 @@
     </div><!--title-->
     <form method="POST">
       <div class="content">
-        {% block Content %}
+        {% block content %}
         {% endblock %}
         <div id="loading" style="display:none;"></div>
       </div><!--content-->
-      {% block Table %}
+      {% block body %}
       {% endblock %}
     </form><!--post-->
     <br>
@@ -51,7 +51,7 @@
     </footer>
     <script type="text/javascript" src="/static/js/base.js"></script>
     <script type="text/javascript" src="/static/js/footerFixed.js"></script>
-    {% block Scripts %}
+    {% block script %}
     {% endblock %}
   </body>
 </html>
