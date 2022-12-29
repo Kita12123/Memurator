@@ -1,0 +1,9 @@
+SELECT
+    コード＊ AS 伝票区分,
+    名称＊ AS 伝票区分名,
+    カナ＊ AS 伝票区分カナ
+FROM ETCMPF
+WHERE
+    {0}
+AND  レコード区分＊ = 10
+ORDER BY コード＊ ASC

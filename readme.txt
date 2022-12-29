@@ -85,3 +85,31 @@ gitの運用
 ・SQLを変更するとき
     SQLに対応したファイルも変更する
     ProgramFiles/flaskr/mymod/sql/__init__.py
+
+フォルダ構造
+
+flaskr
+├ common
+│ ├ libs
+│ └ models  --- モデル
+│ 　 ├ user.py
+│ 　 └ ・・・
+├ config　---　設定フォルダ
+│ ├ base_setting.py　--- 各環境共通設定
+│ ├ local_setting.py　--- ローカル開発環境用設定 
+│ └ production_setting.py --- 本番環境用設定
+├ controllers --- コントローラ
+│ ├ index.py
+│ └ ・・・
+├ interceptors 
+│ ├ auth.py --- 認証系処理
+│ └ error_handler.py　--- エラー処理
+├ static　--- 静的ファイル置き場所
+├ templates　--- テンプレート
+│ ├ common
+│ │ └ layout.html
+│ └ index.html
+├ application.py　--- 複数のファイルが利用するものを定義（Flaskインスタンス、DB、環境変数など）
+├ manager.py --- アプリ実行用スクリプト（アプリの入り口）
+├ requirements.py --- ライブラリ一覧
+└ www.py --- ルーティング

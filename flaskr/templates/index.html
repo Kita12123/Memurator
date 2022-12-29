@@ -1,0 +1,23 @@
+{% extends "common/base.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/table.css') }}">
+{% endblock %}
+
+{% block content %}
+<form method="POST">
+  <div class="content">
+    {% if Department == "Sales" %}
+      <div class="dummy">
+        <button name="db_name" value="売上データ" onclick="showLoading();"></button>
+      </div><!--dummy-->
+      {% include "common/form_sales.html" %}
+    {% elif Department == "Plant" %}
+      <div class="dummy">
+        <button name="db_name" value="仕入データ" onclick="showLoading();"></button>
+      </div><!--dummy-->
+      {% include "common/form_plant.html" %}
+    {% endif %}
+  </div><!--content-->
+</form>
+{% endblock %}

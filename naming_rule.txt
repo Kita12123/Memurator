@@ -1,0 +1,55 @@
+
+・データ名
+データ        data
+マスタ        master
+累計          total
+当月          a_month
+出荷          shipping
+売上          earning
+仕入          purchase
+区分          category
+県            prefecture
+製品          product
+部品          parts
+製品部品      goods
+
+・列
+営業          sales
+工場          factory
+コード        code
+カナ          kana
+名称          name
+率            rate
+伝票          slip
+指示          instruction
+得意先        customer
+仕入先        supplier
+送荷先        destination
+雑            buyer
+担当者        manager
+量            amount
+数量          quantity
+単価          unit_price
+原価          cost
+金額          price
+級            grade
+委託          consign
+運賃          fare
+作成          create
+変更          change
+税            tax
+重量          weight
+廃止          abolition
+電話          phone
+住所          address
+締め          closing
+備考          note
+補用          supplement
+勘定          payment
+口座          account
+代替          alternative
+仕様          specification
+図番          diagram
+納入          include
+材料          material
+検査          scan
