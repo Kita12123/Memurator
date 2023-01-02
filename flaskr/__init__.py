@@ -8,7 +8,7 @@ from flask_apscheduler import APScheduler
 
 from flaskr.common.log import LOGGER
 
-LOGGER.info(f"{'M emurator START':^*4}")
+LOGGER.info("M emurator START")
 
 
 class Config:

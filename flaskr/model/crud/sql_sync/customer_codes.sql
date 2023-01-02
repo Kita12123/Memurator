@@ -1,14 +1,15 @@
 SELECT
-    TOKCD1 as customer_code1,
-    TOKCD2 as customer_code2,
-    TOKA1 as customer_kana,
-    TOKJ1 as customer_name,
-    LESS as customer_less_rate,
+    ltrim(rtrim(to_char(TOKCD1, '0000'))
+    || ltrim(to_char(TOKCD2, '00'))) as customer_code,
+    TOKA1 as kana,
+    TOKJ1 as name,
+    LESS as less_rate,
     SIMEBI as closing_date,
     TANCD as customer_manager_code,
     KENCD as prefecture_code,
-    YUBIA1 as post_code1,
-    YUBIA2 as post_code2,
+    ltrim(rtrim(to_char(YUBIA1, '0000'))
+    || '-'
+    || ltrim(to_char(YUBIA2, '000'))) as post_code,
     ADLJ1 || ADLJ2 as address,
     TELNO as phone_number,
     SAKUSE as create_date

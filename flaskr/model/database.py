@@ -1,10 +1,8 @@
 from sqlalchemy import Column
 from sqlalchemy import Float
+from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
-from sqlalchemy import literal_column
-from sqlalchemy import select
 from sqlalchemy import String
-from sqlalchemy import table
 
 from flaskr.model import Base
 
@@ -269,8 +267,7 @@ class PrefectureCodeMaster(Base):
 
     __tablename__ = "prefecture_codes"
 
-    id = Column(Integer, primary_key=True)
-    code = Column(Integer, unique=True)
+    prefecture_code = Column(Integer, primary_key=True)
     name = Column(String)
 
 
@@ -279,17 +276,14 @@ class CustomerCodeMaster(Base):
 
     __tablename__ = "customer_codes"
 
-    id = Column(Integer, primary_key=True)
-    customer_code1 = Column(Integer)
-    customer_code2 = Column(Integer)
-    customer_kana = Column(String)
-    customer_name = Column(String)
-    customer_less_rate = Column(Integer)
+    customer_code = Column(Integer, primary_key=True)
+    kana = Column(String)
+    name = Column(String)
+    less_rate = Column(Integer)
     closing_date = Column(Integer)
     customer_manager_code = Column(Integer)
     prefecture_code = Column(Integer)
-    post_code1 = Column(Integer)
-    post_code2 = Column(Integer)
+    post_code = Column(Integer)
     address = Column(String)
     phone_number = Column(String)
     create_date = Column(Integer)
@@ -300,8 +294,7 @@ class DestinationCodeMaster(Base):
 
     __tablename__ = "destination_codes"
 
-    id = Column(Integer, primary_key=True)
-    code = Column(Integer, unique=True)
+    destination_code = Column(Integer, primary_key=True)
     kana = Column(String)
     name = Column(String)
     prefecture_code = Column(Integer)

@@ -1,26 +1,11 @@
 from flask import redirect
 from flask import render_template
 from flask import request
-from pathlib import Path
 
 from flaskr import app
-from flaskr.model import Base
+from flaskr.controller.common import read_query_file
 from flaskr.model import crud
 from flaskr.model import Session
-
-sql_dir = Path(__file__).parent
-sql_display_dir = sql_dir / "sql_display"
-sql_download_dir = sql_dir / "sql_download"
-
-
-def read_query_file(filename, /, download=False) -> str:
-    if download:
-        dir = sql_download_dir
-    else:
-        dir = sql_display_dir
-    with open(dir / filename, mode="r", encoding="utf-8") as f:
-        query = f.read()
-    return query
 
 
 @app.route("/master/<db_name>", methods=["GET", "POST"])
