@@ -9,96 +9,89 @@
   <table>
     <tbody>
       <tr>
-        <td><label for="開始日付">開始日付:</label></td>
-        <td><input type="date" class="form" id="開始日付"
-          name="開始日付" value="{{ user_form['開始日付'] }}" max="9999-12-31"></td>
+        <td><label for="first-date">開始日付:</label></td>
+        <td><input type="date" class="form" id="first-date"
+          name="first_date" value="{{ first_date }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
-        <td><label for="終了日付">終了日付:</label></td>
+        <td><label for="last-date">終了日付:</label></td>
         <td>
-          <input type="date" class="form" id="終了日付"
-          name="終了日付" value="{{ user_form['終了日付'] }}" max="9999-12-31">
+          <input type="date" class="form" id="last-date"
+          name="last_date" value="{{ last_date }}" max="9999-12-31">
         </td>
         <td></td>
       </tr>
       <tr>
-        <td><label for="得意先">得意先ｺｰﾄﾞ：</label></td>
+        <td><label for="customer-code">得意先コード：</label></td>
         <td>
-          <input type="text" class="form" id="得意先"
-          name="得意先" value="{{ user_form['得意先'] }}">
+          <input type="text" class="form" id="customer-code" name="customer_code">
         </td>
         <td>
-          <button formaction="{{ url_for('search', column='得意先') }}"
-          name="db_name" value="得意先マスタ">得意先マスタ</button>
+          <button name="db_name" value="得意先マスタ">得意先マスタ</button>
         </td>
       </tr>
       <tr>
-        <td><label for="雑">雑ｺｰﾄﾞ：</label></td>
+        <td><label for="buyer-code">雑コード：</label></td>
         <td>
-          <input type="text" class="form" id="雑"
-          name="雑" value="{{ user_form['雑'] }}">
+          <input type="text" class="form" id="buyer-code"
+           name="buyer_code" value="{{ buyer_code }}">
         </td>
         <td>
-          <button formaction="{{ url_for('search', column='雑') }}"
-          name="db_name" value="雑マスタ">雑マスタ</button>
-        </td>
-      </tr>
-      <tr>
-        <td><label for="送荷先">送荷先ｺｰﾄﾞ：</label></td>
-        <td>
-          <input type="text" class="form" id="送荷先"
-          name="送荷先" value="{{ user_form['送荷先'] }}">
-        </td>
-        <td>
-          <button formaction="{{ url_for('search', column='送荷先') }}"
-          name="db_name" value="送荷先マスタ">送荷先マスタ</button>
+          <button name="db_name" value="雑マスタ">雑マスタ</button>
         </td>
       </tr>
       <tr>
-        <td><label for="製品部品">製品部品ｺｰﾄﾞ：</label></td>
+        <td><label for="destination-code">送荷先コード：</label></td>
         <td>
-        <input type="text" class="form" id="製品部品"
-        name="製品部品" value="{{ user_form['製品部品'] }}">
-        <select class="form" name="製品部品フラグ">
-            {% if user_form['製品部品フラグ']   == "製品のみ" %}
+          <input type="text" class="form" id="destination-code"
+          name="destination_code" value="{{ destination_code }}">
+        </td>
+        <td>
+          <button name="db_name" value="送荷先マスタ">送荷先マスタ</button>
+        </td>
+      </tr>
+      <tr>
+        <td><label for="goods-sales-code">製品部品コード：</label></td>
+        <td>
+        <input type="text" class="form" id="goods-sales-code"
+        name="goods_sales_code" value="{{ goods_sales_code }}">
+        <select class="form" name="goods_sales_flg">
+            {% if goods_sales_flg   == "Product" %}
             <option value=""></option>
-            <option value="製品のみ" selected>製品のみ</option>
-            <option value="部品のみ">部品のみ</option>
-            {% elif user_form['製品部品フラグ'] == "部品のみ" %}
+            <option value="Product" selected>製品のみ</option>
+            <option value="Parts">部品のみ</option>
+            {% elif goods_sales_flg == "Parts" %}
             <option value=""></option>
-            <option value="製品のみ">製品のみ</option>
-            <option value="部品のみ" selected>部品のみ</option>
+            <option value="Product">製品のみ</option>
+            <option value="Parts" selected>部品のみ</option>
             {% else %}
             <option value="" selected></option>
-            <option value="製品のみ">製品のみ</option>
-            <option value="部品のみ">部品のみ</option>
+            <option value="Product">製品のみ</option>
+            <option value="Parts">部品のみ</option>
             {% endif %}
         </select>
         </td>
-        <td><button formaction="{{ url_for('search', column='製品部品') }}"
-          name="db_name" value="製品部品マスタ">製品部品マスタ</button></td>
+        <td><button name="db_name" value="製品部品マスタ">製品部品マスタ</button></td>
       </tr>
       <tr>
-        <td><label for="担当者">担当者ｺｰﾄﾞ：</label></td>
+        <td><label for="customer-manager-code">担当者コード：</label></td>
         <td>
-          <input type="text" class="form" id="担当者"
-          name="担当者" value="{{ user_form['担当者'] }}">
+          <input type="text" class="form" id="customer-manager-code"
+          name="customer_manager_code" value="{{ customer_manager_code }}">
         </td>
         <td>
-          <button formaction="{{ url_for('search', column='担当者') }}"
-          name="db_name" value="担当者マスタ">担当者マスタ</button>
+          <button name="db_name" value="担当者マスタ">担当者マスタ</button>
         </td>
       </tr>
       <tr>
-        <td><label for="伝票区分">伝票区分ｺｰﾄﾞ：</label></td>
+        <td><label for="shipping-category">伝票区分コード：</label></td>
         <td>
-          <input type="text" class="form" id="伝区"
-          name="伝区" value="{{ user_form['伝区'] }}">
+          <input type="text" class="form" id="shipping-category"
+          name="shipping_category" value="{{ shipping_category }}">
         </td>
         <td>
-          <button formaction="{{ url_for('search', column='伝区') }}"
-          name="db_name" value="伝票区分マスタ">伝票区分マスタ</button>
+          <button name="db_name" value="伝票区分マスタ">伝票区分マスタ</button>
         </td>
         <td></td>
       </tr>

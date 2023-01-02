@@ -75,7 +75,7 @@ footer > p {
 .subtitle img {
     width: 20px;
 }
-.dummy {
+.display-none {
     display: none;
 }
 .comments {
@@ -98,31 +98,31 @@ footer > p {
 /*
 ### タイトル ###
 */
-#Title {
+#topTitle {
     width: 100%;
     height: 30px;
     display: flex;
 }
-#title-left {
+#topTitle-left {
     text-align: left;
     font-size: 15px;
     padding: 3px 0;
     width: 33%;
 }
-#title-center {
+#topTitle-center {
     text-align: center;
     font-weight: bold;
     font-size: 20px;
     width: 34%;
 }
-#title-right {
+#topTitle-right {
     text-align: right;
     font-size: 15px;
     padding: 3px 0;
     width: 33%;
 }
-#title-left img,
-#title-right img {
+#topTitle-left img,
+#topTitle-right img {
     width: 15px;
 }
 /*

@@ -7,15 +7,15 @@
 {% block content %}
 <form method="POST">
   <div class="content">
-    {% if Department == "Sales" %}
-      <div class="dummy">
+    {% if user_dic["department"] == "Sales" %}
+      <div class="display-none">
         <button name="db_name" value="売上データ" onclick="showLoading();"></button>
-      </div><!--dummy-->
+      </div><!--.display-none-->
       {% include "common/form_sales.html" %}
-    {% elif Department == "Plant" %}
-      <div class="dummy">
+    {% elif user_dic["department"] == "Plant" %}
+      <div class="display-none">
         <button name="db_name" value="仕入データ" onclick="showLoading();"></button>
-      </div><!--dummy-->
+      </div><!--display-none-->
       {% include "common/form_plant.html" %}
     {% endif %}
   </div><!--content-->

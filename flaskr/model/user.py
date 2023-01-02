@@ -15,3 +15,11 @@ class User(Base):
     mycolor = Column(String, default="default")
     department = Column(String, default="Sales")
     maxrows = Column(Integer, default=500)
+
+    def to_dict(self) -> dict[str, str | int]:
+        return {
+            "name": self.name,
+            "mycolor": self.mycolor,
+            "department": self.department,
+            "maxrows": self.maxrows
+        }

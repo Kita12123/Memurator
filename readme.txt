@@ -1,8 +1,19 @@
 環境構築
 
+0. Github取得
+    git init
+    git branch -m main
+    git config --global user.name "Kita12123"
+    git config --global user.email "kitahide12123@gmail.com"
+    git remote add origin https://github.com/Kita12123/Memurator.git
+    git pull origin main
+
+
 1. Pythonインストール
     https://www.python.org/
     ※3.11推奨
+    # pyenv(Mac)使用
+    eval "$(pyenv init --path)"
 
 2. 仮想環境(.win)作成
     python -m venv .win

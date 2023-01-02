@@ -5,39 +5,33 @@
     <title>M端末</title>
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" 
-      href="{{ url_for('static',filename='css/color/' + mycolor + '.css') }}">
+      href="{{ url_for('static',filename='css/color/' + user_dic['mycolor'] + '.css') }}"/>
     {% block head %}
     {% endblock %}
   </head>
   <body>
     <!-- タイトル画面 -->
-    <div id="Title">
-      <div class="item" id="title-left" >
+    <div id="topTitle">
+      <div class="item" id="topTitle-left" >
         <a href="/">
-          初期画面へ&nbsp;
-          <img src="/static/image/ico/home.png" alt="戻る">
+          初期画面へ&nbsp;<img src="/static/image/ico/home.png" alt="戻る">
         </a>
-      </div><!--titel-left-->
-      <div class="item" id="title-center">
+      </div><!--#topTtitel-left-->
+      <div class="item" id="topTitle-center">
         {{ title }}
-      </div><!--title-center-->
-      <div class="item" id="title-right" >
+      </div><!--#topTitle-center-->
+      <div class="item" id="topTitle-right" >
         <a href="/setting">
-          <img src="/static/image/ico/setting.png" alt="設定">
-          &nbsp;設定画面へ
+          <img src="/static/image/ico/setting.png" alt="設定">&nbsp;設定画面へ
         </a>
-      </div><!--title-right-->
-    </div><!--title-->
-    <form method="POST">
-      <div class="content">
-        {% block content %}
-        {% endblock %}
-        <div id="loading" style="display:none;"></div>
-      </div><!--content-->
-      {% block body %}
-      {% endblock %}
-    </form><!--post-->
-    <br>
+      </div><!--#topTitle-right-->
+    </div><!--#topTitle-->
+    <!-- メイン画面 -->
+    <div id="loading" style="display:none;"></div>
+    {% block content %}
+    {% endblock %}
+    <br/>
+    <!-- フッター -->
     <footer class="footer" id="footer">
       <p>
         お問い合わせ先：
@@ -49,7 +43,7 @@
     </footer>
     <script type="text/javascript" src="/static/js/base.js"></script>
     <script type="text/javascript" src="/static/js/footerFixed.js"></script>
-    {% block script %}
+    {% block scripts %}
     {% endblock %}
   </body>
 </html>

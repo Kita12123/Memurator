@@ -1,7 +1,10 @@
 from sqlalchemy import Column
 from sqlalchemy import Float
 from sqlalchemy import Integer
+from sqlalchemy import literal_column
+from sqlalchemy import select
 from sqlalchemy import String
+from sqlalchemy import table
 
 from flaskr.model import Base
 
@@ -237,8 +240,8 @@ class ConsignCategoryMaster(Base):
     __tablename__ = "consign_categories"
 
     id = Column(Integer, primary_key=True)
-    category = Column(Integer, unique=True)
-    name = Column(String)
+    consign_category = Column(Integer, unique=True)
+    consign_name = Column(String)
 
 
 class CustomerManagerCodeMaster(Base):
@@ -247,8 +250,8 @@ class CustomerManagerCodeMaster(Base):
     __tablename__ = "customer_manager_codes"
 
     id = Column(Integer, primary_key=True)
-    code = Column(Integer, unique=True)
-    name = Column(String)
+    customer_manager_code = Column(Integer, unique=True)
+    customer_manager_name = Column(String)
 
 
 class ShippingCompanyCodeMaster(Base):
@@ -257,8 +260,8 @@ class ShippingCompanyCodeMaster(Base):
     __tablename__ = "shipping_campany_codes"
 
     id = Column(Integer, primary_key=True)
-    code = Column(Integer, unique=True)
-    name = Column(String)
+    shipping_company_code = Column(Integer, unique=True)
+    shipping_company_name = Column(String)
 
 
 class PrefectureCodeMaster(Base):
@@ -277,17 +280,35 @@ class CustomerCodeMaster(Base):
     __tablename__ = "customer_codes"
 
     id = Column(Integer, primary_key=True)
+    customer_code1 = Column(Integer)
+    customer_code2 = Column(Integer)
+    customer_kana = Column(String)
+    customer_name = Column(String)
+    customer_less_rate = Column(Integer)
+    closing_date = Column(Integer)
+    customer_manager_code = Column(Integer)
+    prefecture_code = Column(Integer)
+    post_code1 = Column(Integer)
+    post_code2 = Column(Integer)
+    address = Column(String)
+    phone_number = Column(String)
+    create_date = Column(Integer)
+
+
+class DestinationCodeMaster(Base):
+    """送荷先コードマスター"""
+
+    __tablename__ = "destination_codes"
+
+    id = Column(Integer, primary_key=True)
     code = Column(Integer, unique=True)
     kana = Column(String)
     name = Column(String)
-    less_rate = Column(Integer)
-    closing_date = Column(Integer)
-    manager_code = Column(Integer)
     prefecture_code = Column(Integer)
     post_code = Column(String)
     address = Column(String)
     phone_number = Column(String)
-    create_date = Column(Integer)
+    flg = Column(Integer)
 
 
 class GoodsSalesCodeMaster(Base):

@@ -1,6 +1,6 @@
 SELECT
-    ET.CODE as category,
-    ET.NAME as name
+    ET.CODE as consign_category,
+    ET.NAME as consign_name
 FROM
     FLIB.ETCMPF ET
 WHERE

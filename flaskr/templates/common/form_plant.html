@@ -11,28 +11,24 @@
       <tr>
         <td><label for="開始日付">開始日付:</label></td>
         <td><input type="date" class="form" id="開始日付"
-          name="開始日付" value="{{ user_form['開始日付'] }}" max="9999-12-31"></td>
+          name="開始日付" value="{{ first_date }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
         <td><label for="終了日付">終了日付:</label></td>
         <td><input type="date" class="form" id="終了日付"
-          name="終了日付" value="{{ user_form['終了日付'] }}" max="9999-12-31"></td>
+          name="終了日付" value="{{ last_date }}" max="9999-12-31"></td>
         <td></td>
       </tr>
       <tr>
-        <td><label for="手配先">手配先ｺｰﾄﾞ：</label></td>
-        <td><input type="text" class="form" id="手配先"
-          name="手配先" value="{{ user_form['手配先'] }}"></td>
-        <td><button formaction="{{ url_for('search', column='手配先') }}"
-          name="DB_name" value="手配先マスタ">手配先マスタ</button></td>
+        <td><label for="supplier-code">手配先コード：</label></td>
+        <td><input type="text" class="form" id="supplier-code" name="supplier_code"></td>
+        <td><button name="db_name" value="手配先マスタ">手配先マスタ</button></td>
       </tr>
       <tr>
-        <td><label for="品目">品目ｺｰﾄﾞ：</label></td>
-        <td><input type="text" class="form" id="品目"
-          name="品目" value="{{ user_form['品目'] }}"></td>
-        <td><button formaction="{{ url_for('search', column='品目') }}"
-          name="DB_name" value="品目マスタ">品目マスタ</button></td>
+        <td><label for="goods-factory-code">品目コード：</label></td>
+        <td><input type="text" class="form" id="goods-factory-code" name="goods_factory_code"></td>
+        <td><button name="db_name" value="品目マスタ">品目マスタ</button></td>
       </tr>
     </tbody>
   </table>
@@ -42,7 +38,5 @@
     最終更新日付:{{ LastRefreshDate }}
   </div><!--comments-->
     <button class="bigbutton" formaction="{{ url_for('show_table') }}" 
-      name="DB_name" value="仕入データ" onclick="showLoading();">仕入データ</button>
-      <!--<button class="bigbutton" formaction="{{ url_for('show_table') }}" 
-      name="DB_name" value="定期注文データ" onclick="showLoading();">定期注文データ</button>-->
+      name="db_name" value="仕入データ" onclick="showLoading();">仕入データ</button>
   </div><!--main-form-->
