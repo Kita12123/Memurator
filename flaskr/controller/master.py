@@ -4,8 +4,8 @@ from flask import request
 
 from flaskr import app
 from flaskr.controller.common import read_query_file
-from flaskr.model import crud
-from flaskr.model import Session
+from flaskr.common.model import crud
+from flaskr.common.model import Session
 
 
 @app.route("/master/<db_name>", methods=["GET", "POST"])

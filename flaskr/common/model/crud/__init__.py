@@ -1,5 +1,5 @@
-from flaskr.model import Session
-from flaskr.model.user import User
+from flaskr.common.model import Session
+from flaskr.common.model.user import User
 
 def user_load(id: str, /) -> dict[str, str | int]:
     with Session() as session, session.begin():

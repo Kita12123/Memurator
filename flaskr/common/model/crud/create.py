@@ -9,9 +9,9 @@ import pyodbc
 from sqlalchemy import and_
 from werkzeug.exceptions import BadRequest
 
-from flaskr.model import Base
-from flaskr.model import engine
-from flaskr.model import Session
+from flaskr.common.model import Base
+from flaskr.common.model import engine
+from flaskr.common.model import Session
 
 
 CONNECT_STRING = "DSN=HOST;UID=MINORU1;PWD=;SCH=;CNV=K"

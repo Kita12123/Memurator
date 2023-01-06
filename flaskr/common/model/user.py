@@ -2,7 +2,7 @@ from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
 
-from flaskr.model import Base
+from flaskr.common.model import Base
 
 
 class User(Base):

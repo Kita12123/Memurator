@@ -1,4 +1,3 @@
-from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -26,7 +25,7 @@ Session = sessionmaker(
 
 
 # データベース作成
-from flaskr.model import database
-from flaskr.model import user
+from flaskr.common.model import database
+from flaskr.common.model import user
 
 Base.metadata.create_all(engine)

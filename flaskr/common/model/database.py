@@ -1,10 +1,9 @@
 from sqlalchemy import Column
 from sqlalchemy import Float
-from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
 
-from flaskr.model import Base
+from flaskr.common.model import Base
 
 
 # モデルクラスの定義にはdb.Modelクラスを継承する必要がある。
@@ -227,8 +226,7 @@ class ShippingCategoryMaster(Base):
 
     __tablename__ = "shipping_categories"
 
-    id = Column(Integer, primary_key=True)
-    category = Column(Integer, unique=True)
+    category = Column(Integer, primary_key=True)
     name = Column(String)
 
 
@@ -237,9 +235,8 @@ class ConsignCategoryMaster(Base):
 
     __tablename__ = "consign_categories"
 
-    id = Column(Integer, primary_key=True)
-    consign_category = Column(Integer, unique=True)
-    consign_name = Column(String)
+    category = Column(Integer, primary_key=True)
+    name = Column(String)
 
 
 class CustomerManagerCodeMaster(Base):
@@ -247,9 +244,8 @@ class CustomerManagerCodeMaster(Base):
 
     __tablename__ = "customer_manager_codes"
 
-    id = Column(Integer, primary_key=True)
-    customer_manager_code = Column(Integer, unique=True)
-    customer_manager_name = Column(String)
+    code = Column(Integer, primary_key=True)
+    name = Column(String)
 
 
 class ShippingCompanyCodeMaster(Base):
@@ -257,9 +253,17 @@ class ShippingCompanyCodeMaster(Base):
 
     __tablename__ = "shipping_campany_codes"
 
-    id = Column(Integer, primary_key=True)
-    shipping_company_code = Column(Integer, unique=True)
-    shipping_company_name = Column(String)
+    code = Column(Integer, primary_key=True)
+    name = Column(String)
+
+
+class FareCategoryMaster(Base):
+    """扱い区分マスター"""
+
+    __talbename__ = "fare_categories"
+
+    category = Column(Integer, primary_key=True)
+    name = Column(String)
 
 
 class PrefectureCodeMaster(Base):
@@ -267,7 +271,7 @@ class PrefectureCodeMaster(Base):
 
     __tablename__ = "prefecture_codes"
 
-    prefecture_code = Column(Integer, primary_key=True)
+    code = Column(Integer, primary_key=True)
     name = Column(String)
 
 
@@ -276,12 +280,12 @@ class CustomerCodeMaster(Base):
 
     __tablename__ = "customer_codes"
 
-    customer_code = Column(Integer, primary_key=True)
+    code = Column(Integer, primary_key=True)
     kana = Column(String)
     name = Column(String)
     less_rate = Column(Integer)
     closing_date = Column(Integer)
-    customer_manager_code = Column(Integer)
+    manager_code = Column(Integer)
     prefecture_code = Column(Integer)
     post_code = Column(Integer)
     address = Column(String)
@@ -294,7 +298,7 @@ class DestinationCodeMaster(Base):
 
     __tablename__ = "destination_codes"
 
-    destination_code = Column(Integer, primary_key=True)
+    code = Column(Integer, primary_key=True)
     kana = Column(String)
     name = Column(String)
     prefecture_code = Column(Integer)
@@ -309,8 +313,7 @@ class GoodsSalesCodeMaster(Base):
 
     __tablename__ = "goods_sales_codes"
 
-    id = Column(Integer, primary_key=True)
-    code = Column(Integer, unique=True)
+    code = Column(Integer, primary_key=True)
     kana = Column(String)
     parts_number = Column(String)
     wight = Column(Float)
@@ -329,8 +332,7 @@ class SupplierCodeMaster(Base):
 
     __tablename__ = "supplier_codes"
 
-    id = Column(Integer, primary_key=True)
-    code = Column(Integer, unique=True)
+    code = Column(Integer, primary_key=True)
     name = Column(String)
 
 
@@ -339,8 +341,7 @@ class GoodsFactoryCodeMaster(Base):
 
     __tablename__ = "goods_factory_codes"
 
-    id = Column(Integer, primary_key=True)
-    code = Column(String, unique=True)
+    code = Column(String, primary_key=True)
     kana = Column(String)
     name = Column(String)
     category = Column(Integer)
