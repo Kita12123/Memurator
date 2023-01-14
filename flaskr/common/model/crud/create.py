@@ -42,13 +42,13 @@ def sync_host(tablename, /, **kwargs):
     last_yyyymm = int((today - relativedelta(months=1)).strftime(r"%Y%m"))
     first_now_month = int(str(now_yyyymm - 195000) + "00")
     first_last_month = int(str(last_yyyymm - 195000) + "00")
-    last_last_month = int(str(last_yyyymm - 195000) + "99")
+    last_date = 999999
     # ホストODBC接続SQL作成
     first_date = kwargs.get(
         "first_date", first_last_month
     )
     last_date = kwargs.get(
-        "last_date", last_last_month
+        "last_date", last_date
     )
     if first_now_month < first_date:
         # 開始日付が月始めより新しい時
@@ -78,7 +78,6 @@ def sync_host(tablename, /, **kwargs):
             # テーブルを削除
             session.query(table_model).delete()
         session.commit()
-    print(df)
     df.to_sql(tablename, engine, if_exists="append", index=False)
     setattr(
         table_model,
@@ -89,4 +88,6 @@ def sync_host(tablename, /, **kwargs):
 
 def sync_host_all(**kwargs):
     for tablename in Base.metadata.tables:
+        if tablename == "users":
+            continue
         sync_host(tablename, **kwargs)

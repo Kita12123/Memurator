@@ -27,14 +27,14 @@ class Earning(Base):
     shipping_campany_code = Column(Integer)
     # 運賃扱い区分
     fare_category = Column(Integer)
+    # 委託区分
+    consign_category = Column(Integer)
     # 得意先コード
     customer_code = Column(Integer)
     customer_kana = Column(String)
     customer_manager_code = Column(Integer)
     # 雑コード
     buyer_code = Column(Integer)
-    # 委託区分
-    consign_category = Column(Integer)
     # 送荷先コード
     destination_code = Column(Integer)
     destination_kana = Column(String)
@@ -74,13 +74,13 @@ class Shipping(Base):
     shipping_category = Column(Integer)
     shipping_campany_code = Column(Integer)
     fare_category = Column(Integer)
+    consign_category = Column(Integer)
     # 指示日
     instruction_date = Column(Integer)
     customer_code = Column(Integer)
     customer_kana = Column(String)
     customer_manager_code = Column(Integer)
     buyer_code = Column(Integer)
-    consign_category = Column(Integer)
     destination_code = Column(Integer)
     destination_kana = Column(String)
     goods_sales_code = Column(Integer)
@@ -92,7 +92,7 @@ class Shipping(Base):
     order_quantity = Column(Integer)
     back_order_category = Column(Integer)
     back_order_quantity = Column(Integer)
-    shipping_quantity = Column(Integer)
+    quantity = Column(Integer)
     unit_price = Column(Integer)
     price = Column(Integer)
     note = Column(String)
@@ -117,12 +117,12 @@ class ShippingKyusyu(Base):
     shipping_category = Column(Integer)
     shipping_campany_code = Column(Integer)
     fare_category = Column(Integer)
+    consign_category = Column(Integer)
     instruction_date = Column(Integer)
     customer_code = Column(Integer)
     customer_kana = Column(String)
     customer_manager_code = Column(Integer)
     buyer_code = Column(Integer)
-    consign_category = Column(Integer)
     destination_code = Column(Integer)
     destination_kana = Column(String)
     goods_sales_code = Column(Integer)
@@ -133,7 +133,7 @@ class ShippingKyusyu(Base):
     order_quantity = Column(Integer)
     back_order_category = Column(Integer)
     back_order_quantity = Column(Integer)
-    shipping_quantity = Column(Integer)
+    quantity = Column(Integer)
     unit_price = Column(Integer)
     price = Column(Integer)
     note = Column(String)
@@ -159,12 +159,12 @@ class ShippingNagano(Base):
     shipping_category = Column(Integer)
     shipping_campany_code = Column(Integer)
     fare_category = Column(Integer)
+    consign_category = Column(Integer)
     instruction_date = Column(Integer)
     customer_code = Column(Integer)
     customer_kana = Column(String)
     customer_manager_code = Column(Integer)
     buyer_code = Column(Integer)
-    consign_category = Column(Integer)
     destination_code = Column(Integer)
     destination_kana = Column(String)
     goods_sales_code = Column(Integer)
@@ -175,7 +175,7 @@ class ShippingNagano(Base):
     order_quantity = Column(Integer)
     back_order_category = Column(Integer)
     back_order_quantity = Column(Integer)
-    shipping_quantity = Column(Integer)
+    quantity = Column(Integer)
     unit_price = Column(Integer)
     price = Column(Integer)
     note = Column(String)
@@ -260,7 +260,7 @@ class ShippingCompanyCodeMaster(Base):
 class FareCategoryMaster(Base):
     """扱い区分マスター"""
 
-    __talbename__ = "fare_categories"
+    __tablename__ = "fare_categories"
 
     category = Column(Integer, primary_key=True)
     name = Column(String)

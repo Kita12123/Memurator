@@ -1,5 +1,5 @@
 SELECT
-    コード as destination_code,
+    コード as code,
     日本語１カナ as kana,
     日本語１漢字 as name,
     県コード as prefecture_code,

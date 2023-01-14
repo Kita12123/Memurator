@@ -2,7 +2,7 @@ SELECT
     CASE shipping_date
         WHEN 0 THEN 0
         WHEN 999999 THEN 99999999
-        ELSE shipping_date + 19500000
+        ELSE shipping_date+19500000
     END AS 伝票日付,
     ifnull(shipping_categories.name, '') AS 伝票区分名＊,
     ifnull(consign_categories.name, '') AS 委託区分名＊,
@@ -37,16 +37,15 @@ SELECT
         WHEN 30 OR 90 THEN quantity * unit_price * -1
         ELSE quantity * unit_price
     END AS 金額,
-    出荷伝票番号 || 出荷行番号 AS 出荷伝票番号,
-    備考
-FROM SYUKAPF
+    shipping_slip_number AS 出荷伝票番号,
+    note AS 備考
+FROM shippings
 LEFT OUTER JOIN shipping_categories ON shipping_categories.category=shipping_category
 LEFT OUTER JOIN consign_categories ON consign_categories.category=consign_category
 LEFT OUTER JOIN customer_manager_codes ON customer_manager_codes.code=customer_manager_code
 LEFT OUTER JOIN shipping_campany_codes ON shipping_campany_codes.code=shipping_campany_code
 LEFT OUTER JOIN fare_categories ON fare_categories.category=fare_category
 LEFT OUTER JOIN destination_codes ON destination_codes.code=destination_code
-WHERE
-    {0}
-AND   出荷数<>0
-ORDER BY 伝票日付 ASC
+WHERE 
+    {where}
+AND   quantity<>0

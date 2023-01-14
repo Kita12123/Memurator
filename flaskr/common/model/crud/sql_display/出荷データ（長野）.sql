@@ -2,7 +2,7 @@ SELECT
     CASE shipping_date
         WHEN 0 THEN 0
         WHEN 999999 THEN 99999999
-        ELSE shipping_date + 19500000
+        ELSE shipping_date+19500000
     END AS 伝票日付,
     ifnull(shipping_categories.name, '') AS 伝票区分名＊,
     ifnull(consign_categories.name, '') AS 委託区分名＊,
@@ -39,7 +39,7 @@ SELECT
     END AS 金額,
     shipping_slip_number AS 出荷伝票番号,
     note AS 備考
-FROM earnings
+FROM shippings_nagano
 LEFT OUTER JOIN shipping_categories ON shipping_categories.category=shipping_category
 LEFT OUTER JOIN consign_categories ON consign_categories.category=consign_category
 LEFT OUTER JOIN customer_manager_codes ON customer_manager_codes.code=customer_manager_code
