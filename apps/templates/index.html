@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+{% endblock %}
+
+{% block title %}初期画面{% endblock %}
+
+{% block content %}
+
+<p class="subtitle">
+  詳細検索
+</p>
+<a href="/">営業メニュー</a>
+<p class="subtitle">
+  その他
+</p>
+<ul>
+  <li>
+    <a href="https://asp07.wawa.ne.jp/minoru/index.html" target="_blank">
+      <img class="iconStartMenu" src="{{ url_for('static', filename='image/photoWaWaOffice.jpg') }}" />
+      <p class="iconStartMenu">WaWaOffice</p>
+    </a>
+  </li>
+  <li>
+    <a href="https://www.minoru-sangyo.co.jp/" target="_blank">
+      <img class="iconStartMenu" src="{{ url_for('static', filename='image/photoMinoru.png') }}" />
+      <p class="iconStartMenu">みのる産業</p>
+    </a>
+  </li>
+</ul>
+
+{% endblock %}

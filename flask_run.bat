@@ -1,6 +1,5 @@
 @echo off
-H:
-cd H:\M_Emurator
+cd %CD%
 call %CD%\.venv\Scripts\activate.bat
-python %CD%\flask_run.py
+flask run --host 0.0.0.0
 pause
