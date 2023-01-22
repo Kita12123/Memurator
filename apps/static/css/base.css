@@ -156,24 +156,11 @@ footer > p {
 ### ロード画面 ###
 */
 #loading {
-    width: 50px; /* ローディングアイコンのサイズ */
-    height: 50px;
-    border: 8px solid rgb(116, 253, 116);  /* 先の太さや色 */
-    border-right-color: transparent;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;  /* 1秒ごとのアニメーションの指定 */
-}
-/* アニメーションの設定 */
-@keyframes spin {
-0% {
-    transform: rotate(0deg); /* 0度回す */
-}
-50% {
-    transform: rotate(180deg);  /* 180度回す */
-}
-100% {
-    transform: rotate(360deg);  /* 360度回す */
-}
+    display: none;
+    position: absolute;
+    left: 42%;
+    top: 20%;
+    width: 16%;
 }
 /*
 ###############################################################################

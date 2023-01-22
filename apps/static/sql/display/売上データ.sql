@@ -2,13 +2,13 @@ SELECT
     CASE shipping_date
         WHEN 0 THEN 0
         WHEN 999999 THEN 99999999
-        ELSE shipping_date + 19500000
+        ELSE shipping_date+19500000
     END AS 伝票日付,
-    ifnull(shipping_categories.name, '') AS 伝票区分名＊,
-    ifnull(consign_categories.name, '') AS 委託区分名＊,
-    ifnull(fare_categories.name, '') AS 扱い区分名＊,
-    ifnull(shipping_campany_codes.name, '') AS 運送会社名＊,
-    ifnull(customer_manager_codes.name, '') AS 担当者名＊,
+    ifnull(伝票区分マスタ.name, '') AS 伝票区分名＊,
+    ifnull(委託区分マスタ.name, '') AS 委託区分名＊,
+    ifnull(運賃扱い区分マスタ.name, '') AS 扱い区分名＊,
+    ifnull(運送会社コードマスタ.name, '') AS 運送会社名＊,
+    ifnull(得意先担当者コードマスタ.name, '') AS 担当者名＊,
     customer_code AS 得意先コード,
     customer_kana AS 得意先カナ,
     CASE
@@ -18,7 +18,7 @@ SELECT
     END AS 雑コード,
     CASE
         WHEN ( customer_code>=500000 AND customer_code< 600000 )
-        OR   ( customer_code>=333800 AND customer_code<=333899 ) THEN destination_codes.kana
+        OR   ( customer_code>=333800 AND customer_code<=333899 ) THEN 送荷先コードマスタ.kana
         ELSE ''
     END AS 雑カナ＊,
     destination_code AS 送荷先コード,
@@ -39,13 +39,13 @@ SELECT
     END AS 金額,
     shipping_slip_number AS 出荷伝票番号,
     note AS 備考
-FROM earnings
-LEFT OUTER JOIN shipping_categories ON shipping_categories.category=shipping_category
-LEFT OUTER JOIN consign_categories ON consign_categories.category=consign_category
-LEFT OUTER JOIN customer_manager_codes ON customer_manager_codes.code=customer_manager_code
-LEFT OUTER JOIN shipping_campany_codes ON shipping_campany_codes.code=shipping_campany_code
-LEFT OUTER JOIN fare_categories ON fare_categories.category=fare_category
-LEFT OUTER JOIN destination_codes ON destination_codes.code=destination_code
+FROM 売上データ
+LEFT OUTER JOIN 伝票区分マスタ ON 伝票区分マスタ.category=shipping_category
+LEFT OUTER JOIN 委託区分マスタ ON 委託区分マスタ.category=consign_category
+LEFT OUTER JOIN 得意先担当者コードマスタ ON 得意先担当者コードマスタ.code=customer_manager_code
+LEFT OUTER JOIN 運送会社コードマスタ ON 運送会社コードマスタ.code=shipping_campany_code
+LEFT OUTER JOIN 運賃扱い区分マスタ ON 運賃扱い区分マスタ.category=fare_category
+LEFT OUTER JOIN 送荷先コードマスタ ON 送荷先コードマスタ.code=destination_code
 WHERE 
     {where}
 AND   quantity<>0

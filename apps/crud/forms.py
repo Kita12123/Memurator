@@ -1,21 +1,15 @@
 from datetime import datetime
 
+from apps.app import db
 from dateutil.relativedelta import relativedelta
 from flask_wtf import FlaskForm
-from wtforms import DateField, SelectField, SubmitField
+from wtforms import DateField, SelectField, StringField, SubmitField
 from wtforms.validators import DataRequired
 
-from apps.app import db
+TABLES = sorted([table for table in db.metadata.tables])
 
 
-# ユーザー新規作成とユーザー編集フォームクラス
-class SyncingForm(FlaskForm):
-
-    db_tables = [
-        table for table in db.metadata.tables
-        if table not in ("ユーザー")
-    ]
-    db_tables.sort()
+class CreateForm(FlaskForm):
 
     first_date = DateField(
         "開始日付",
@@ -30,8 +24,22 @@ class SyncingForm(FlaskForm):
     )
     db_name = SelectField(
         "データ名",
-        choices=["すべて", *db_tables],
+        choices=["すべて", *TABLES],
         validators=[DataRequired(message="データ名は必須です。")]
+    )
+
+    submit = SubmitField("データ同期")
+
+
+class ReadForm(FlaskForm):
+
+    tablename = SelectField(
+        "データ名",
+        choices=TABLES,
+        validators=[DataRequired(message="データ名は必須です。")]
+    )
+    where = StringField(
+        "WHERE句"
     )
 
     submit = SubmitField("データ同期")

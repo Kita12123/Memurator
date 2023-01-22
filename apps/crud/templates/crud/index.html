@@ -4,6 +4,8 @@
 
 {% block content %}
 
-データベース同期
+<a href="{{ url_for('crud.create') }}">データ同期</a>
+<br>
+<a href="{{ url_for('crud.read') }}">データ参照</a>
 
 {% endblock %}

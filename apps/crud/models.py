@@ -185,7 +185,7 @@ class ShippingNagano(db.Model):
 
 class Purchase(db.Model):
 
-    __tablename__ = "仕入データ"
+    __tablename__ = "仕入れデータ"
 
     id = db.Column(db.Integer, primary_key=True)
     # 仕入日付

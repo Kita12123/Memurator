@@ -14,7 +14,7 @@ SELECT
         WHEN 999999 THEN 99999999
         ELSE             create_date + 19500000
     END AS 作成日
-FROM customer_codes
+FROM 得意先コードマスタ
 LEFT OUTER JOIN customer_manager_codes cmc ON cmc.code=manager_code
 WHERE
     {where}

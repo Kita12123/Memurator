@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}管理画面{% endblock %}
+
+{% block content %}
+
+<h2>データクエリ</h2>
+<form action="{{ url_for('crud.read') }}" method="POST" novalidate="novalidate">
+{{ form.csrf_token }}
+<p>{{ form.tablename.label }} {{ form.tablename }}</p>
+{% for error in form.tablename.errors %}
+<span style="color: red;">{{ error }}</span>
+{% endfor %}
+<p>{{ form.where.label }} {{ form.where }}</p>
+{% for error in form.where.errors %}
+<span style="color: red;">{{ error }}</span>
+{% endfor %}
+<p>{{ form.submit() }}</p>
+</form>
+
+{% if not df.empty %}
+{{ df | safe }}
+{% endif %}
+
+{% endblock %}

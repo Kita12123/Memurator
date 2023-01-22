@@ -8,10 +8,12 @@
     {% endblock %}
   </head>
   <body>
+    <!--ロード画面-->
+    <img id="loading" src="{{ url_for('static', filename='image/loading.gif') }}" />
     <!-- タイトル画面 -->
     <div id="Title">
       <div class="item" id="title-left" >
-        <a href="/">
+        <a href="/" onclick="showLoading()">
           初期画面へ&nbsp;
           <img src="{{ url_for('static', filename='image/iconHome.png') }}" alt="Home">
         </a>
@@ -23,22 +25,15 @@
         </a>
       </div><!--title-center-->
       <div class="item" id="title-right" >
-        <a href="{{ url_for('crud.index') }}">
+        <a href="{{ url_for('crud.index') }}" onclick="showLoading()">
           <img src="{{ url_for('static', filename='image/iconSetting.png') }}" alt="Setting">
           &nbsp;管理画面へ
         </a>
       </div><!--title-right-->
     </div><!--title-->
-    <form method="POST">
-      <div class="content">
-        {% block content %}
-        {% endblock %}
-        <div id="loading" style="display:none;"></div>
-      </div><!--content-->
-      {% block body %}
-      {% endblock %}
-    </form><!--post-->
-    <br>
+    <!--メイン画面-->
+    {% block content %}
+    {% endblock %}
     <footer class="footer" id="footer">
       <p>お問い合わせ先：
         <a href="mailto:h-kitaura@minoru-sangyo.co.jp" title="メールを開きます">

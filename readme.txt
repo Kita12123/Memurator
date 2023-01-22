@@ -10,3 +10,5 @@
     (Mac). .venv/bin/activate
     (Win).venv¥Scripts¥activate.bat
     pip install -r requirements.txt
+    (Mac)pip uninstall pyodbc
+    .venv/lib/...site-packagesにpyodbcフォルダを追加する --- pyodbcはMacで使えないため、存在するように認識させる必要がある

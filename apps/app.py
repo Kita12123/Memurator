@@ -47,6 +47,12 @@ def create_app(config_key):
     # データベース編集アプリ登録
     from apps.crud import views as crud_views
     app.register_blueprint(crud_views.crud, url_prefix="/crud")
+    # SQL直接問い合わせアプリ登録
+    from apps.direct import views as direct_views
+    app.register_blueprint(direct_views.direct, url_prefix="/direct")
+    # データベース問い合わせアプリ登録
+    from apps.search import views as search_views
+    app.register_blueprint(search_views.search, url_prefix="/search")
     # 定期実行処理
     scheduler.init_app(app)
     scheduler.start()

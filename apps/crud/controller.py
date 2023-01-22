@@ -3,17 +3,16 @@ from pathlib import Path
 
 import pandas as pd
 import pyodbc
+from apps.app import db
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import and_
 
-from apps.app import db
-
 CONNECT_STRING = "DSN=HOST;UID=MINORU1;PWD=;SCH=;CNV=K"
-SQL_DIR = Path(__file__).parent / "static" / "sql"
 
 
 def _real_sql_syncing(filename: str, /) -> str:
-    sql_file = SQL_DIR / "syncing" / f"{filename}.sql"
+    sql_dir = Path(__file__).parent / "static" / "sql" / "syncing"
+    sql_file = sql_dir / f"{filename}.sql"
     with open(sql_file, "r", encoding="utf-8") as f:
         text = f.read()
     # ホストのODBCは改行が入っているとエラーになる
@@ -23,7 +22,8 @@ def _real_sql_syncing(filename: str, /) -> str:
 
 
 def _real_sql_display(filename, where, /) -> str:
-    sql_file = SQL_DIR / "display" / f"{filename}.sql"
+    sql_dir = Path(__file__).parent.parent / "static" / "sql" / "display"
+    sql_file = sql_dir / f"{filename}.sql"
     with open(sql_file, "r", encoding="utf-8") as f:
         text = f.read()
     sql = text.format(where=where)
@@ -99,12 +99,10 @@ def sync_host_all(**kwargs):
         last_date(str): 終了日付
     """
     for tablename in db.metadata.tables:
-        if tablename == "users":
-            continue
         sync_host(tablename, **kwargs)
 
 
-def create_df(tablename, where="true") -> pd.DataFrame:
+def create_df(tablename, where="true", /) -> pd.DataFrame:
     """データ取得
 
     Args:

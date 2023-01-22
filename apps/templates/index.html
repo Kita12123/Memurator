@@ -9,12 +9,40 @@
 {% block content %}
 
 <p class="subtitle">
-  詳細検索
+  簡易検索
 </p>
-<a href="/">営業メニュー</a>
+<ul>
+  <li>
+    <a href="{{ url_for('search.index') }}">
+      <img class="iconStartMenu" src="{{ url_for('static', filename='image/icoSales.svg') }}" />
+      <p class="iconStartMenu">営業</p>
+    </a>
+  </li>
+  <li>
+    <a href="{{ url_for('search.index') }}">
+      <img class="iconStartMenu" src="{{ url_for('static', filename='image/icoFactory.svg') }}" />
+      <p class="iconStartMenu">工場</p>
+    </a>
+  </li>
+</ul>
 <p class="subtitle">
-  その他
+  SQL直接問い合わせ
 </p>
+<ul>
+  <li>
+    <a href="{{ url_for('direct.index') }}">
+      <img class="iconStartMenu" src="{{ url_for('static', filename='image/icoSales.svg') }}" />
+      <p class="iconStartMenu">営業</p>
+    </a>
+  </li>
+  <li>
+    <a href="{{ url_for('direct.index') }}">
+      <img class="iconStartMenu" src="{{ url_for('static', filename='image/icoFactory.svg') }}" />
+      <p class="iconStartMenu">工場</p>
+    </a>
+  </li>
+</ul>
+<p class="subtitle">その他</p>
 <ul>
   <li>
     <a href="https://asp07.wawa.ne.jp/minoru/index.html" target="_blank">

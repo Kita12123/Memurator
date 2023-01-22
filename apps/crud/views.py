@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template
-
+import pandas as pd
 from apps.crud import controller
-from apps.crud.forms import SyncingForm
+from apps.crud.forms import CreateForm, ReadForm
+from flask import Blueprint, render_template
 
 # Blueprintでアプリを作成する
 crud = Blueprint(
@@ -14,15 +14,14 @@ crud = Blueprint(
 
 @crud.route("/")
 def index():
-    """ユーザーの一覧を取得"""
     return render_template(
         "crud/index.html"
     )
 
 
-@crud.route("/syncing", methods=["GET", "POST"])
-def syncing():
-    form = SyncingForm()
+@crud.route("/create", methods=["GET", "POST"])
+def create():
+    form = CreateForm()
     if form.validate_on_submit():
         first_date_ = form.first_date.data.strftime(r"%Y%m%d")
         last_date_ = form.last_date.data.strftime(r"%Y%m%d")
@@ -40,4 +39,24 @@ def syncing():
                 first_date=first_date,
                 last_date=last_date
             )
-    return render_template("table/syncing.html", form=form)
+    return render_template("crud/create.html", form=form)
+
+
+@crud.route("/read", methods=["GET", "POST"])
+def read():
+    form = ReadForm()
+    df = pd.DataFrame()
+    if form.validate_on_submit():
+        tablename = form.tablename.data
+        where = form.where.data
+        form.tablename.default = tablename
+        form.where.default = where
+        if where:
+            df = controller.create_df(tablename, where)
+        else:
+            df = controller.create_df(tablename)
+    return render_template(
+        "crud/read.html",
+        form=form,
+        df=df
+    )

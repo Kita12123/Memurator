@@ -1,16 +1,10 @@
 {% extends "base.html" %}
 
 {% block title %}
-  エラーが発生しました！
+  Internal Server Error
 {% endblock %}
 
 {% block content %}
-  サーバー側で問題が発生しました。<br>
-  開発者にお問い合わせください。<br>
-{% endblock %}
-
-{% block body %}
-  {% autoescape false %}
-    {{ e }}
-  {% endautoescape %}
+  <h2>サーバー側で問題が発生しました。</h2>
+  <h3>開発者にお問い合わせください。</h3>
 {% endblock %}

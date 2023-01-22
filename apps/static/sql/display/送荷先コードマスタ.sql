@@ -6,7 +6,7 @@ SELECT
     address AS 住所,
     phone_number AS 電話番号,
     flg AS 社員フラグ
-FROM destination_codes
+FROM 送荷先コードマスタ
 WHERE
     {where}
 ORDER BY code ASC

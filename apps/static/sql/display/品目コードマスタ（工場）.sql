@@ -20,7 +20,7 @@ SELECT
         WHEN 999999 THEN 99999999
         ELSE             create_date + 19500000
     END AS 作成日
-FROM goods_factory_codes
+FROM 品目マスタ（工場）
 WHERE
     {where}
 ORDER BY code ASC
