@@ -3,9 +3,10 @@ from pathlib import Path
 
 import pandas as pd
 import pyodbc
-from apps.app import db
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import and_
+
+from apps.app import db
 
 CONNECT_STRING = "DSN=HOST;UID=MINORU1;PWD=;SCH=;CNV=K"
 
@@ -22,7 +23,7 @@ def _real_sql_syncing(filename: str, /) -> str:
 
 
 def _real_sql_display(filename, where, /) -> str:
-    sql_dir = Path(__file__).parent.parent / "static" / "sql" / "display"
+    sql_dir = Path(__file__).parent / "static" / "sql" / "display"
     sql_file = sql_dir / f"{filename}.sql"
     with open(sql_file, "r", encoding="utf-8") as f:
         text = f.read()

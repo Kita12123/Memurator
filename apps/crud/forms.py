@@ -35,11 +35,10 @@ class ReadForm(FlaskForm):
 
     tablename = SelectField(
         "データ名",
-        choices=TABLES,
-        validators=[DataRequired(message="データ名は必須です。")]
+        choices=TABLES
     )
     where = StringField(
         "WHERE句"
     )
 
-    submit = SubmitField("データ同期")
+    submit = SubmitField("データ参照")

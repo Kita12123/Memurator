@@ -49,4 +49,4 @@ LEFT OUTER JOIN 送荷先コードマスタ ON 送荷先コードマスタ.code=
 WHERE 
     {where}
 AND   quantity<>0
-ORDER BY shipping_date customer_code ASC
+ORDER BY shipping_date, customer_code ASC

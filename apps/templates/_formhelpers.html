@@ -1,0 +1,18 @@
+{% macro render_field(field, master=false) %}
+<dt>{{ field.label }}
+  {% if master %}
+  <a href="{{ url_for('search.master', tablename=master ) }}">
+    <img class="iconQuery" src="{{ url_for('static', filename='image/iconSearch.svg') }}" />
+  </a>
+  {% endif %}
+  <dd>{{ field(**kwargs)|safe }}
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li style="color: red;">{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  </dd>
+</dt>
+{% endmacro %}

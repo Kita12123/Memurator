@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}管理画面{% endblock %}
+{% block title %}
+<a href="{{ url_for('crud.index') }}">管理画面</a>
+{% endblock %}
 
 {% block content %}
 
-<h2>データクエリ</h2>
+<h2>データ参照</h2>
 <form action="{{ url_for('crud.read') }}" method="POST" novalidate="novalidate">
 {{ form.csrf_token }}
 <p>{{ form.tablename.label }} {{ form.tablename }}</p>
@@ -18,8 +20,7 @@
 <p>{{ form.submit() }}</p>
 </form>
 
-{% if not df.empty %}
+<h2>データテーブル</h2>
 {{ df | safe }}
-{% endif %}
 
 {% endblock %}

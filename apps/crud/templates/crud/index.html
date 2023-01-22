@@ -1,11 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}管理画面{% endblock %}
+{% block title %}
+<a href="{{ url_for('crud.index') }}">管理画面</a>
+{% endblock %}
 
 {% block content %}
 
-<a href="{{ url_for('crud.create') }}">データ同期</a>
-<br>
-<a href="{{ url_for('crud.read') }}">データ参照</a>
+<h2>データ参照</h2>
+<form action="{{ url_for('crud.read') }}" method="POST" novalidate="novalidate">
+  {{ read_form.csrf_token }}
+  <p>{{ read_form.tablename.label }} {{ read_form.tablename }}</p>
+  {% for error in read_form.tablename.errors %}
+  <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <p>{{ read_form.where.label }} {{ read_form.where }}</p>
+  {% for error in read_form.where.errors %}
+  <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <p>{{ read_form.submit() }}</p>
+</form>
+
+<h2>データ同期</h2>
+<form action="{{ url_for('crud.create') }}" method="POST" novalidate="novalidate">
+  {{ create_form.csrf_token }}
+  <p>{{ create_form.first_date.label }} {{ create_form.first_date }}</p>
+  {% for error in create_form.first_date.errors %}
+  <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <p>{{ create_form.last_date.label }} {{ create_form.last_date }}</p>
+  {% for error in create_form.last_date.errors %}
+  <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <p>{{ create_form.db_name.label }} {{ create_form.db_name }}</p>
+  {% for error in create_form.db_name.errors %}
+  <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <p>{{ create_form.submit() }}</p>
+</form>
 
 {% endblock %}

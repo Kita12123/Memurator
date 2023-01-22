@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}管理画面{% endblock %}
+{% block title %}
+<a href="{{ url_for('crud.index') }}">管理画面</a>
+{% endblock %}
 
 {% block content %}
 

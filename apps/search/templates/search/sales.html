@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+<a href="{{ url_for('search.index') }}">簡易検索</a>
+{% endblock %}
+
+{% block content %}
+
+<h2>営業</h2>
+{% from "_formhelpers.html" import render_field %}
+<form action="{{ url_for('search.sales') }}" method="POST" novalidate="novalidate">
+  <dl>
+    {{ render_field(form.tablename) }}
+    {{ render_field(form.first_date) }}
+    {{ render_field(form.last_date) }}
+    {{ render_field(form.customer_code, master="得意先コードマスタ") }}
+    {{ render_field(form.buyer_code) }}
+    {{ render_field(form.destination_code) }}
+    {{ render_field(form.goods_sales_code) }}
+    {{ render_field(form.goods_sales_flg) }}
+    {{ render_field(form.shipping_slip_number) }}
+  </dl>
+  <p>{{ form.submit() }}</p>
+</form>
+
+{{ df | safe }}
+
+{% endblock %}

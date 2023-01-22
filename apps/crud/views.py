@@ -1,5 +1,5 @@
 import pandas as pd
-from apps.crud import controller
+from apps import controller
 from apps.crud.forms import CreateForm, ReadForm
 from flask import Blueprint, render_template
 
@@ -14,8 +14,12 @@ crud = Blueprint(
 
 @crud.route("/")
 def index():
+    read_form = ReadForm()
+    create_form = CreateForm()
     return render_template(
-        "crud/index.html"
+        "crud/index.html",
+        read_form=read_form,
+        create_form=create_form
     )
 
 
@@ -49,8 +53,6 @@ def read():
     if form.validate_on_submit():
         tablename = form.tablename.data
         where = form.where.data
-        form.tablename.default = tablename
-        form.where.default = where
         if where:
             df = controller.create_df(tablename, where)
         else:
@@ -58,5 +60,5 @@ def read():
     return render_template(
         "crud/read.html",
         form=form,
-        df=df
+        df=df.to_html(index=False)
     )

@@ -137,3 +137,5 @@ ProgramData/error.txt
 ProgramData/info.txt
 system.json
 ProgramData/warning.txt
+local.sqlite
+testing.sqlite

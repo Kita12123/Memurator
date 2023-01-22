@@ -19,10 +19,8 @@
         </a>
       </div><!--titel-left-->
       <div class="item" id="title-center">
-        <a href="/show_sql" style="color: black;">
         {% block title %}
         {% endblock %}
-        </a>
       </div><!--title-center-->
       <div class="item" id="title-right" >
         <a href="{{ url_for('crud.index') }}" onclick="showLoading()">

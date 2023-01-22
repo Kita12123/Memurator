@@ -90,6 +90,9 @@ footer > p {
     margin-left: 0.5%;
     width: 1.5%;
 }
+.iconQuery {
+    width: 20px;
+}
 /*
 ###############################################################################
     ID
@@ -114,6 +117,9 @@ footer > p {
     font-weight: bold;
     font-size: 20px;
     width: 34%;
+}
+#title-center > a {
+    color: black;
 }
 #title-right {
     text-align: right;
