@@ -1,6 +1,8 @@
-from apps import controller
-from apps.search.forms import SalesForm
 from flask import Blueprint, render_template
+
+from apps import controller
+from apps.crud.forms import ReadForm
+from apps.search.forms import SalesForm
 
 search = Blueprint(
     "search",
@@ -25,6 +27,27 @@ def sales():
         tablename = form.tablename.data
         where = form.create_where()
         df = controller.create_df(tablename, where).to_html()
+        read_form = ReadForm(
+            tablename=tablename,
+            where=where
+        )
+        return render_template("crud/read.html", form=read_form, df=df)
+    return render_template("search/sales.html", form=form, df=df)
+
+
+@search.route("/factory", methods=["GET", "POST"])
+def factory():
+    form = SalesForm()
+    df = ""
+    if form.validate_on_submit():
+        tablename = form.tablename.data
+        where = form.create_where()
+        df = controller.create_df(tablename, where).to_html()
+        read_form = ReadForm(
+            tablename=tablename,
+            where=where
+        )
+        return render_template("crud/read.html", form=read_form, df=df)
     return render_template("search/sales.html", form=form, df=df)
 
 

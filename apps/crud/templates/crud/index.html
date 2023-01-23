@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-<a href="{{ url_for('crud.index') }}">管理画面</a>
+管理画面
 {% endblock %}
 
 {% block content %}
@@ -37,5 +37,11 @@
   {% endfor %}
   <p>{{ create_form.submit() }}</p>
 </form>
+
+<h2>お問い合わせ先</h2>
+Mail:
+<a href="mailto:h-kitaura@minoru-sangyo.co.jp">
+  h-kitaura@minoru-sangyo.co.jp
+</a>
 
 {% endblock %}

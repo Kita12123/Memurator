@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}
-<a href="{{ url_for('search.index') }}">簡易検索</a>
-{% endblock %}
+{% block title %}営業フォーム{% endblock %}
 
 {% block content %}
 
-<h2>営業</h2>
+<h2>
+  <img width="40px" src="{{ url_for('static', filename='image/iconEdit.svg') }}" />
+  フォーム
+</h2>
 {% from "_formhelpers.html" import render_field %}
 <form action="{{ url_for('search.sales') }}" method="POST" novalidate="novalidate">
   <dl>

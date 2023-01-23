@@ -2,7 +2,8 @@
 <dt>{{ field.label }}
   {% if master %}
   <a href="{{ url_for('search.master', tablename=master ) }}">
-    <img class="iconQuery" src="{{ url_for('static', filename='image/iconSearch.svg') }}" />
+    <img width="21px" src="{{ url_for('static', filename='image/iconSearch.svg') }}" />
+    マスタ検索
   </a>
   {% endif %}
   <dd>{{ field(**kwargs)|safe }}

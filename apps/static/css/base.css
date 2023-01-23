@@ -1,8 +1,34 @@
+html {
+    /*overflow-y: scroll;*/
+    overflow-x: hidden;
+}
+body {
+    background-color: #f5f5f5;
+}
 /*
+### トップページへ ###
+*/
+#page_top{
+    position: fixed;
+    right: 0;
+    bottom: 20px;
+    opacity: 0.6; /* 透過度 */
+}
+/*
+### ロード画面 ###
+*/
+#loading {
+    position: absolute;
+    left: 42%;
+    top: 20%;
+    width: 16%;
+}
+/*
+/
 ###############################################################################
     タグ
 ###############################################################################
-*/
+/
 html {
     overflow-y: scroll;
     overflow-x: hidden;
@@ -11,7 +37,7 @@ p {
     margin: 0;
 }
 a {
-    cursor: pointer;  /* カーソルを指マークに */
+    cursor: pointer;  / カーソルを指マークに /
     text-decoration: none;
 }
 a:hover {
@@ -54,11 +80,11 @@ footer {
 footer > p {
     text-align: right;
 }
-/*
+/
 ###############################################################################
     クラス
 ###############################################################################
-*/
+/
 .item > a {
     display: block;
 }
@@ -93,47 +119,14 @@ footer > p {
 .iconQuery {
     width: 20px;
 }
-/*
+/
 ###############################################################################
     ID
 ###############################################################################
-*/
-/*
-### タイトル ###
-*/
-#Title {
-    width: 100%;
-    height: 30px;
-    display: flex;
-}
-#title-left {
-    text-align: left;
-    font-size: 15px;
-    padding: 3px 0;
-    width: 33%;
-}
-#title-center {
-    text-align: center;
-    font-weight: bold;
-    font-size: 20px;
-    width: 34%;
-}
-#title-center > a {
-    color: black;
-}
-#title-right {
-    text-align: right;
-    font-size: 15px;
-    padding: 3px 0;
-    width: 33%;
-}
-#title-left img,
-#title-right img {
-    width: 15px;
-}
-/*
+/
+/
 ### データ種類選択 ###
-*/
+/
 #TableTagHeader {
     margin-top: 1%;
     width: 100%;
@@ -153,26 +146,16 @@ footer > p {
     font-size: 95%;
     width: 25%;
 }
-/*tab1, tab1bは選択済みにする*/
+/tab1, tab1bは選択済みにする/
 #tab1, #tab1b{
     color: black;
     background-color: white;
 }
-/*
-### ロード画面 ###
-*/
-#loading {
-    display: none;
-    position: absolute;
-    left: 42%;
-    top: 20%;
-    width: 16%;
-}
-/*
+/
 ###############################################################################
     Color
 ###############################################################################
-*/
+/
 a:link,
 a:visited {
     color: rgb(0, 84, 239);
@@ -191,3 +174,4 @@ footer,
     background-color: rgb(170, 230, 255);
     color: black;
 }
+*/

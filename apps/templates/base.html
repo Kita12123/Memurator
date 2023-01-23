@@ -3,45 +3,60 @@
   <head>
     <meta charset="UTF-8">
     <title>M端末</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
     {% block head %}
     {% endblock %}
   </head>
   <body>
+    <!--トップページへボタン-->
+    <div id="page_top">
+      <a href="#">
+        <img width="50px" src="{{ url_for('static', filename='image/iconTopPage.svg') }}" />
+      </a>
+    </div>
     <!--ロード画面-->
-    <img id="loading" src="{{ url_for('static', filename='image/loading.gif') }}" />
-    <!-- タイトル画面 -->
-    <div id="Title">
-      <div class="item" id="title-left" >
-        <a href="/" onclick="showLoading()">
-          初期画面へ&nbsp;
-          <img src="{{ url_for('static', filename='image/iconHome.png') }}" alt="Home">
-        </a>
-      </div><!--titel-left-->
-      <div class="item" id="title-center">
-        {% block title %}
-        {% endblock %}
-      </div><!--title-center-->
-      <div class="item" id="title-right" >
-        <a href="{{ url_for('crud.index') }}" onclick="showLoading()">
-          <img src="{{ url_for('static', filename='image/iconSetting.png') }}" alt="Setting">
-          &nbsp;管理画面へ
-        </a>
-      </div><!--title-right-->
-    </div><!--title-->
+    <img id="loading" style="display: none;" src="{{ url_for('static', filename='image/loading.svg') }}" />
+    <!-- ナビゲーション -->
+    <!--navbar-expand-sm: 画面が小さい時にメニューアイコンを表示する-->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <a href="/" class="navbar-brand" onclick="showLoading()">
+        <img width="25px" src="{{ url_for('static', filename='image/iconCat.svg') }}" />
+        M端末
+      </a>
+      <div class="navbar-brand">ー&nbsp;{% block title %}{% endblock %}&nbsp;ー</div>
+      <button class="navbar-toggler" type="button"
+        data-toggle="collapse"
+        data-target="#navmenu1"
+        aria-controls="navmenu1"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navmenu1">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="{{ url_for('search.sales') }}" onclick="showLoading()">
+            <img width="23px" src="{{ url_for('static', filename='image/iconSales.svg') }}" />
+            営業フォーム
+          </a>
+          <a class="nav-item nav-link" href="{{ url_for('search.factory') }}" onclick="showLoading()">
+            <img width="23px" src="{{ url_for('static', filename='image/iconFactory.svg') }}" />
+            工場フォーム
+          </a>
+          <a class="nav-item nav-link" href="{{ url_for('crud.index') }}" onclick="showLoading()">
+            <img width="23px" src="{{ url_for('static', filename='image/iconSetting2.svg') }}" />
+            管理画面
+          </a>
+        </div><!--.navbar-nav-->
+      </div><!--#navmenu1-->
+    </nav>
     <!--メイン画面-->
     {% block content %}
     {% endblock %}
-    <footer class="footer" id="footer">
-      <p>お問い合わせ先：
-        <a href="mailto:h-kitaura@minoru-sangyo.co.jp" title="メールを開きます">
-          h-kitaura@minoru-sangyo.co.jp
-        </a>
-      </p>
-      <a href="#" title="最上部へ戻ります">トップページ</a>
-    </footer>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.6.3.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/base.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/footerFixed.js') }}"></script>
     {% block script %}
     {% endblock %}
   </body>
