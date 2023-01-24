@@ -8,22 +8,63 @@
   <img width="40px" src="{{ url_for('static', filename='image/iconEdit.svg') }}" />
   フォーム
 </h2>
-{% from "_formhelpers.html" import render_field %}
-<form action="{{ url_for('search.sales') }}" method="POST" novalidate="novalidate">
-  <dl>
-    {{ render_field(form.tablename) }}
-    {{ render_field(form.first_date) }}
-    {{ render_field(form.last_date) }}
-    {{ render_field(form.customer_code, master="得意先コードマスタ") }}
-    {{ render_field(form.buyer_code) }}
-    {{ render_field(form.destination_code) }}
-    {{ render_field(form.goods_sales_code) }}
-    {{ render_field(form.goods_sales_flg) }}
-    {{ render_field(form.shipping_slip_number) }}
-  </dl>
-  <p>{{ form.submit() }}</p>
-</form>
-
-{{ df | safe }}
+<div class="row">
+  <div class="col-2">
+    <form action="{{ url_for('search.sales') }}" method="POST" novalidate="novalidate">
+      {{ form.csrf_token }}
+      <dl>
+        {% from "_formhelpers.html" import render_field %}
+        {{ render_field(form.tablename) }}
+        {{ render_field(form.first_date) }}
+        {{ render_field(form.last_date) }}
+        {{ render_field(form.customer_code, master="得意先コードマスタ") }}
+        {{ render_field(form.buyer_code) }}
+        {{ render_field(form.destination_code) }}
+        {{ render_field(form.goods_sales_code) }}
+        {{ render_field(form.goods_sales_flg) }}
+        {{ render_field(form.shipping_slip_number) }}
+      </dl>
+      <p>{{ form.submit() }}</p>
+    </form>
+  </div><!-- .col-2 -->
+  <div class="col-10">
+    <talbe class="talbe table-striped">
+      <thead>
+        <tr>
+          <th scope="col">伝票日付</th>
+          <th scope="col">伝票区分名</th>
+          <th scope="col">委託区分名</th>
+          <th scope="col">扱い区分名</th>
+          <th scope="col">運送会社名</th>
+          <th scope="col">担当者名</th>
+          <th scope="col">得意先コード</th>
+          <th scope="col">得意先カナ</th>
+          <th scope="col">雑コード</th>
+          <th scope="col">雑カナ</th>
+          <th scope="col">送荷先コード</th>
+          <th scope="col">送荷先カナ</th>
+          <th scope="col">製品部品コード</th>
+          <th scope="col">製品部品カナ</th>
+          <th scope="col">級区分</th>
+          <th scope="col">数量</th>
+          <th scope="col">単価</th>
+          <th scope="col">金額</th>
+          <th scope="col">出荷伝票番号</th>
+          <th scope="col">備考</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for list in df_lists %}
+        <tr>
+          {% for d in list %}
+          <td>{{ d }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </talbe>
+    {{ df | safe }}
+  </div><!-- col-10 -->
+</div><!-- .row -->
 
 {% endblock %}

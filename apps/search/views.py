@@ -22,17 +22,18 @@ def index():
 @search.route("/sales", methods=["GET", "POST"])
 def sales():
     form = SalesForm()
-    df = ""
+    df_lists = []
     if form.validate_on_submit():
         tablename = form.tablename.data
         where = form.create_where()
-        df = controller.create_df(tablename, where).to_html()
-        read_form = ReadForm(
-            tablename=tablename,
-            where=where
+        df = controller.create_df(tablename, where)
+        df_lists = df.values.tolist()
+        return render_template(
+            "search/sales.html",
+            form=form,
+            df_lists=df_lists
         )
-        return render_template("crud/read.html", form=read_form, df=df)
-    return render_template("search/sales.html", form=form, df=df)
+    return render_template("search/sales.html", form=form, df_lists=df_lists)
 
 
 @search.route("/factory", methods=["GET", "POST"])

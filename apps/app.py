@@ -6,6 +6,7 @@ import warnings
 
 from flask import Flask, render_template
 from flask_apscheduler import APScheduler
+from flask_debugtoolbar import DebugToolbarExtension
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
@@ -35,6 +36,7 @@ def create_app(config_key):
     app = Flask(__name__)
     app.config.from_object(config[config_key])
     # デバッグツールバー設定
+    DebugToolbarExtension(app)
     # データベース設定
     db.init_app(app)
     Migrate(app, db)

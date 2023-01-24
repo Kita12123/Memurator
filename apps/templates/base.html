@@ -5,8 +5,7 @@
     <title>M端末</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
-    {% block head %}
-    {% endblock %}
+    {% block head %}{% endblock %}
   </head>
   <body>
     <!--トップページへボタン-->
@@ -52,12 +51,12 @@
       </div><!--#navmenu1-->
     </nav>
     <!--メイン画面-->
-    {% block content %}
-    {% endblock %}
+    <div class="container-fluid">
+      {% block content %}{% endblock %}
+    </div><!-- .container-fluid -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.6.3.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/base.js') }}"></script>
-    {% block script %}
-    {% endblock %}
+    {% block script %}{% endblock %}
   </body>
 </html>

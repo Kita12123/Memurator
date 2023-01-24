@@ -1,27 +1,19 @@
 {% extends "base.html" %}
 
 {% block title %}
-<a href="{{ url_for('crud.index') }}">管理画面</a>
+管理画面
 {% endblock %}
 
 {% block content %}
 
 <h2>データ同期</h2>
 <form action="{{ url_for('crud.create') }}" method="POST" novalidate="novalidate">
-{{ form.csrf_token }}
-<p>{{ form.first_date.label }} {{ form.first_date }}</p>
-{% for error in form.first_date.errors %}
-<span style="color: red;">{{ error }}</span>
-{% endfor %}
-<p>{{ form.last_date.label }} {{ form.last_date }}</p>
-{% for error in form.last_date.errors %}
-<span style="color: red;">{{ error }}</span>
-{% endfor %}
-<p>{{ form.db_name.label }} {{ form.db_name }}</p>
-{% for error in form.db_name.errors %}
-<span style="color: red;">{{ error }}</span>
-{% endfor %}
-<p>{{ form.submit() }}</p>
+  {{ form.csrf_token }}
+  {% from "_formhelpers.html" import render_field %}
+  {{ render_field(form.first_date) }}
+  {{ render_field(form.last_date) }}
+  {{ render_field(form.db_name) }}
+  <p>{{ form.submit() }}</p>
 </form>
 
 {% endblock %}
