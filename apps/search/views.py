@@ -31,9 +31,15 @@ def sales():
         return render_template(
             "search/sales.html",
             form=form,
+            tablename=tablename,
             df_lists=df_lists
         )
-    return render_template("search/sales.html", form=form, df_lists=df_lists)
+    return render_template(
+        "search/sales.html",
+        tablename="フォーム",
+        form=form,
+        df_lists=df_lists
+    )
 
 
 @search.route("/factory", methods=["GET", "POST"])

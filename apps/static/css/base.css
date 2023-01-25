@@ -9,10 +9,12 @@ body {
 ### トップページへ ###
 */
 #page_top{
+    z-index:10000; /* 最前面 */
+    cursor: pointer;
     position: fixed;
     right: 0;
     bottom: 20px;
-    opacity: 0.6; /* 透過度 */
+    opacity: 0.4; /* 透過度 */
 }
 /*
 ### ロード画面 ###

@@ -11,13 +11,20 @@
 {% block content %}
 
 <h2>
-  <img width="40px" src="{{ url_for('search.static', filename='img/iconEdit.svg') }}" />
-  フォーム
+  <a id="main-form-fadein">
+    <img width="40px" src="{{ url_for('search.static', filename='icon/edit.svg') }}" />
+    {{ tablename }}
+  </a>
 </h2>
-<div class="row">
-  <div class="col-2">
-    <form action="{{ url_for('search.sales') }}" method="POST" novalidate="novalidate">
-      {{ form.csrf_token }}
+<div id="main-form">
+  <h2>
+    <a id="main-form-fadeout">
+      <img width="40px" src="{{ url_for('search.static', filename='icon/edit.svg') }}" />
+      {{ tablename }}
+    </a>
+  </h2>
+  <form action="{{ url_for('search.sales') }}" method="POST" novalidate="novalidate">
+    {{ form.csrf_token }}
       <dl>
         {% from "_formhelpers.html" import render_field %}
         {{ render_field(form.tablename) }}
@@ -29,49 +36,45 @@
         {{ render_field(form.goods_sales_code) }}
         {{ render_field(form.goods_sales_flg) }}
         {{ render_field(form.shipping_slip_number) }}
-      </dl>
-      <p>{{ form.submit() }}</p>
-    </form>
-  </div><!-- .col-2 -->
-  <div class="col-10">
-    <talbe class="talbe table-striped">
-      <thead>
-        <tr>
-          <th scope="col">伝票日付</th>
-          <th scope="col">伝票区分名</th>
-          <th scope="col">委託区分名</th>
-          <th scope="col">扱い区分名</th>
-          <th scope="col">運送会社名</th>
-          <th scope="col">担当者名</th>
-          <th scope="col">得意先コード</th>
-          <th scope="col">得意先カナ</th>
-          <th scope="col">雑コード</th>
-          <th scope="col">雑カナ</th>
-          <th scope="col">送荷先コード</th>
-          <th scope="col">送荷先カナ</th>
-          <th scope="col">製品部品コード</th>
-          <th scope="col">製品部品カナ</th>
-          <th scope="col">級区分</th>
-          <th scope="col">数量</th>
-          <th scope="col">単価</th>
-          <th scope="col">金額</th>
-          <th scope="col">出荷伝票番号</th>
-          <th scope="col">備考</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for list in df_lists %}
-        <tr>
-          {% for d in list %}
-          <td>{{ d }}</td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </talbe>
-    {{ df | safe }}
-  </div><!-- col-10 -->
-</div><!-- .row -->
+    </dl>
+    <p>{{ form.submit() }}</p>
+  </form>
+</div><!-- #main-form -->
+<talbe class="talbe table-striped">
+  <thead>
+    <tr>
+      <th>伝票日付</th>
+      <th>伝票区分名</th>
+      <th>委託区分名</th>
+      <th>扱い区分名</th>
+      <th>運送会社名</th>
+      <th>担当者名</th>
+      <th>得意先コード</th>
+      <th>得意先カナ</th>
+      <th>雑コード</th>
+      <th>雑カナ</th>
+      <th>送荷先コード</th>
+      <th>送荷先カナ</th>
+      <th>製品部品コード</th>
+      <th>製品部品カナ</th>
+      <th>級区分</th>
+      <th>数量</th>
+      <th>単価</th>
+      <th>金額</th>
+      <th>出荷伝票番号</th>
+      <th>備考</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for list in df_lists %}
+    <tr>
+      {% for d in list %}
+      <td>{{ d }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</talbe>
 
 {% endblock %}
 
