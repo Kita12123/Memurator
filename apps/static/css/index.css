@@ -10,6 +10,10 @@ li {
     display: inline;
 }
 
+.jumbotron {
+    background-color: skyblue;
+}
+
 .iconStartMenu {
     margin: auto;
     text-align: center;

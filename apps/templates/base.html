@@ -8,22 +8,29 @@
     {% block head %}{% endblock %}
   </head>
   <body>
+
     <!--トップページへボタン-->
     <div id="page_top">
       <a href="#">
-        <img width="50px" src="{{ url_for('static', filename='image/iconTopPage.svg') }}" />
+        <img width="50px" src="{{ url_for('static', filename='icon/page_top.svg') }}" />
       </a>
-    </div>
+    </div><!-- #page_top -->
+
     <!--ロード画面-->
-    <img id="loading" style="display: none;" src="{{ url_for('static', filename='image/loading.svg') }}" />
+    <img id="loading" style="display: none;"
+      src="{{ url_for('static', filename='image/loading.svg') }}"
+    />
+    
     <!-- ナビゲーション -->
     <!--navbar-expand-sm: 画面が小さい時にメニューアイコンを表示する-->
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
       <a href="/" class="navbar-brand" onclick="showLoading()">
-        <img width="25px" src="{{ url_for('static', filename='image/iconCat.svg') }}" />
+        <img width="25px" src="{{ url_for('static', filename='icon/main.svg') }}" />
         M端末
       </a>
-      <div class="navbar-brand">ー&nbsp;{% block title %}{% endblock %}&nbsp;ー</div>
+      <div class="navbar-brand">
+        ー&nbsp;{% block title %}{% endblock %}&nbsp;ー
+      </div>
       <button class="navbar-toggler" type="button"
         data-toggle="collapse"
         data-target="#navmenu1"
@@ -36,20 +43,21 @@
       <div class="collapse navbar-collapse" id="navmenu1">
         <div class="navbar-nav">
           <a class="nav-item nav-link" href="{{ url_for('search.sales') }}" onclick="showLoading()">
-            <img width="23px" src="{{ url_for('static', filename='image/iconSales.svg') }}" />
+            <img width="23px" src="{{ url_for('static', filename='icon/sales.svg') }}" />
             営業フォーム
           </a>
           <a class="nav-item nav-link" href="{{ url_for('search.factory') }}" onclick="showLoading()">
-            <img width="23px" src="{{ url_for('static', filename='image/iconFactory.svg') }}" />
+            <img width="23px" src="{{ url_for('static', filename='icon/factory.svg') }}" />
             工場フォーム
           </a>
           <a class="nav-item nav-link" href="{{ url_for('crud.index') }}" onclick="showLoading()">
-            <img width="23px" src="{{ url_for('static', filename='image/iconSetting2.svg') }}" />
+            <img width="23px" src="{{ url_for('static', filename='icon/setting.svg') }}" />
             管理画面
           </a>
         </div><!--.navbar-nav-->
       </div><!--#navmenu1-->
     </nav>
+
     <!--メイン画面-->
     <div class="container-fluid">
       {% block content %}{% endblock %}

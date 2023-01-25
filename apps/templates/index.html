@@ -8,20 +8,84 @@
 
 {% block content %}
 
-<p class="subtitle">その他</p>
-<ul>
-  <li>
-    <a href="https://asp07.wawa.ne.jp/minoru/index.html" target="_blank">
-      <img class="iconStartMenu" src="{{ url_for('static', filename='image/photoWaWaOffice.jpg') }}" />
-      <p class="iconStartMenu">WaWaOffice</p>
-    </a>
-  </li>
-  <li>
-    <a href="https://www.minoru-sangyo.co.jp/" target="_blank">
-      <img class="iconStartMenu" src="{{ url_for('static', filename='image/photoMinoru.png') }}" />
-      <p class="iconStartMenu">みのる産業</p>
-    </a>
-  </li>
-</ul>
+<div class="jumbotron">
+  <h1 class="display-4">
+    ようこそ！
+  </h1>
+  <p class="lead">こちらは、データベースを閲覧するシステムです。</p>
+  <hr class="my-2">
+  下記のリンクから目的のページを選択してください。
+</div><!-- .jumbotron -->
+<div class="row justify-content-around row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1">
+  <div class="col">
+    <h2>簡単検索</h2>
+    <ul>
+      <li>
+        <a href="{{ url_for('search.sales') }}" onclick="showLoading()">
+          <img class="iconStartMenu" src="{{ url_for('static', filename='icon/sales.svg') }}" />
+          <p class="iconStartMenu">営業</p>
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('search.factory') }}" onclick="showLoading()">
+          <img class="iconStartMenu" src="{{ url_for('static', filename='icon/factory.svg') }}" />
+          <p class="iconStartMenu">工場</p>
+        </a>
+      </li>
+    </ul>
+  </div><!-- .col -->
+  <div class="col">
+    <h2>詳細検索</h2>
+    <ul>
+      <li>
+        <a href="{{ url_for('search.sales') }}" onclick="showLoading()">
+          <img class="iconStartMenu" src="{{ url_for('static', filename='icon/sales.svg') }}" />
+          <p class="iconStartMenu">営業</p>
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('search.factory') }}" onclick="showLoading()">
+          <img class="iconStartMenu" src="{{ url_for('static', filename='icon/factory.svg') }}" />
+          <p class="iconStartMenu">工場</p>
+        </a>
+      </li>
+    </ul>
+    </ul>
+  </div><!-- .col -->
+  <div class="col">
+    <h2>設定</h2>
+    <ul>
+      <li>
+        <a href="{{ url_for('crud.index') }}" onclick="showLoading()">
+          <img class="iconStartMenu" src="{{ url_for('static', filename='icon/database.svg') }}" />
+          <p class="iconStartMenu">SQL</p>
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('crud.index') }}" onclick="showLoading()">
+          <img class="iconStartMenu" src="{{ url_for('static', filename='icon/setting.svg') }}" />
+          <p class="iconStartMenu">管理画面</p>
+        </a>
+      </li>
+    </ul>
+  </div><!-- .col -->
+  <div class="col">
+    <h2>その他リンク</h2>
+    <ul>
+      <li>
+        <a href="https://asp07.wawa.ne.jp/minoru/index.html" target="_blank">
+          <img class="iconStartMenu" src="{{ url_for('static', filename='icon/WaWaOffice.jpg') }}" />
+          <p class="iconStartMenu">WaWaOffice</p>
+        </a>
+      </li>
+      <li>
+        <a href="https://www.minoru-sangyo.co.jp/" target="_blank">
+          <img class="iconStartMenu" src="{{ url_for('static', filename='icon/Minoru.png') }}" />
+          <p class="iconStartMenu">みのる産業</p>
+        </a>
+      </li>
+    </ul>
+  </div><!-- .col -->
+</div><!-- row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 -->
 
 {% endblock %}
