@@ -19,7 +19,7 @@
 <div id="main-form">
   <h2>
     <a id="main-form-fadeout">
-      <img width="40px" src="{{ url_for('search.static', filename='icon/edit.svg') }}" />
+      <img width="40px" src="{{ url_for('search.static', filename='icon/cancel.svg') }}" />
       {{ tablename }}
     </a>
   </h2>
@@ -31,9 +31,9 @@
         {{ render_field(form.first_date) }}
         {{ render_field(form.last_date) }}
         {{ render_field(form.customer_code, master="得意先コードマスタ") }}
-        {{ render_field(form.buyer_code) }}
-        {{ render_field(form.destination_code) }}
-        {{ render_field(form.goods_sales_code) }}
+        {{ render_field(form.buyer_code, master="送荷先コードマスタ") }}
+        {{ render_field(form.destination_code, master="送荷先コードマスタ") }}
+        {{ render_field(form.goods_sales_code, master="品目コードマスタ（営業）") }}
         {{ render_field(form.goods_sales_flg) }}
         {{ render_field(form.shipping_slip_number) }}
     </dl>
