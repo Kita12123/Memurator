@@ -30,8 +30,8 @@ def sales():
         df_lists = df.values.tolist()
         return render_template(
             "search/sales.html",
-            form=form,
             tablename=tablename,
+            form=form,
             df_lists=df_lists
         )
     return render_template(
