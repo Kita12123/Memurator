@@ -16,6 +16,9 @@ SELECT
     ifnull(得意先担当者コードマスタ.name, '') AS 担当者名,
     customer_code AS 得意先コード,
     customer_kana AS 得意先カナ,
+    得意先コードマスタ.name AS 得意先名,
+    得意先コードマスタ.address AS 得意先住所,
+    得意先コードマスタ.phone_number AS 得意先電話番号,
     CASE
         WHEN ( customer_code>=500000 AND customer_code< 600000 )
         OR   ( customer_code>=333800 AND customer_code<=333899 ) THEN buyer_code
@@ -23,14 +26,33 @@ SELECT
     END AS 雑コード,
     CASE
         WHEN ( customer_code>=500000 AND customer_code< 600000 )
-        OR   ( customer_code>=333800 AND customer_code<=333899 ) THEN 送荷先コードマスタ.kana
+        OR   ( customer_code>=333800 AND customer_code<=333899 ) THEN 雑コードマスタ.kana
         ELSE ''
-    END AS 雑カナ＊,
+    END AS 雑カナ,
+    CASE
+        WHEN ( customer_code>=500000 AND customer_code< 600000 )
+        OR   ( customer_code>=333800 AND customer_code<=333899 ) THEN 雑コードマスタ.name
+        ELSE ''
+    END AS 雑名,
+    CASE
+        WHEN ( customer_code>=500000 AND customer_code< 600000 )
+        OR   ( customer_code>=333800 AND customer_code<=333899 ) THEN 雑コードマスタ.address
+        ELSE ''
+    END AS 雑住所,
+    CASE
+        WHEN ( customer_code>=500000 AND customer_code< 600000 )
+        OR   ( customer_code>=333800 AND customer_code<=333899 ) THEN 雑コードマスタ.phone_number
+        ELSE ''
+    END AS 雑電話番号,
     destination_code AS 送荷先コード,
     destination_kana AS 送荷先カナ,
+    送荷先コードマスタ.name AS 送荷先名,
+    送荷先コードマスタ.address AS 送荷先住所,
+    送荷先コードマスタ.phone_number AS 送荷先電話番号,
     goods_sales_code AS 製品部品コード,
     goods_sales_kana AS 製品部品カナ,
     goods_sales_grade AS 級区分,
+    品目コードマスタ（営業）
     CASE shipping_category
         /* 返品,値引き*/
         WHEN 30 OR 90 THEN quantity*-1
@@ -44,12 +66,14 @@ SELECT
     END AS 金額,
     shipping_slip_number AS 出荷伝票番号,
     note AS 備考
-FROM 売上データ
+FROM {tablename}
 LEFT OUTER JOIN 伝票区分マスタ ON 伝票区分マスタ.category=shipping_category
 LEFT OUTER JOIN 委託区分マスタ ON 委託区分マスタ.category=consign_category
 LEFT OUTER JOIN 得意先担当者コードマスタ ON 得意先担当者コードマスタ.code=customer_manager_code
 LEFT OUTER JOIN 運送会社コードマスタ ON 運送会社コードマスタ.code=shipping_campany_code
 LEFT OUTER JOIN 運賃扱い区分マスタ ON 運賃扱い区分マスタ.category=fare_category
+LEFT OUTER JOIN 得意先コードマスタ ON 得意先コードマスタ.code=customer_code
+LEFT OUTER JOIN 送荷先コードマスタ 雑コードマスタ ON 雑コードマスタ.code=destination_code
 LEFT OUTER JOIN 送荷先コードマスタ ON 送荷先コードマスタ.code=destination_code
 WHERE 
     {where}

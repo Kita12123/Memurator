@@ -5,7 +5,6 @@
 {% block head %}
 
 <link rel="stylesheet" href="{{ url_for('search.static', filename='css/style.css') }}" />
-<link rel="stylesheet" href="{{ url_for('search.static', filename='sass/style.scss.css') }}" />
 
 {% endblock %}
 
@@ -15,7 +14,7 @@
   <a class="btn" onclick="toggleID('#main-form')">
     <img width="30px" src="{{ url_for('search.static', filename='icon/edit.svg') }}" />
   </a>
-  {{ tablename }}
+  フォーム
   <a class="btn" onclick="clearClassValue('form-control')">
     <img width="30px" src="{{ url_for('search.static', filename='icon/clear.svg') }}" />
   </a>
@@ -35,54 +34,60 @@
         {{ render_field(form.destination_code, master="送荷先コードマスタ") }}
         {{ render_field(form.goods_sales_code, master="品目コードマスタ（営業）") }}
         {{ render_field(form.goods_sales_flg) }}
+        {{ render_field(form.shipping_category, master="伝票区分マスタ") }}
         {{ render_field(form.shipping_slip_number) }}
     </dl>
     <div class="row justify-content-around">
-      {{ form.submit(class_="col-1 btn btn-primary") }}
+      {{ form.submit_ok(class_="col-1 btn btn-primary") }}
+      {{ form.submit_download(class_="col-1 btn btn-primary") }}
     </div>
   </form>
 </div><!-- #main-form -->
+{% if tablename %}
 <h2>
   <a class="btn" onclick="toggleID('#main-table')">
     <img width="30px" src="{{ url_for('search.static', filename='icon/documents.svg') }}" />
   </a>
-  明細データ
+  {{ tablename }}
 </h2>
-<table id="main-table" class="talbe table-striped table-bordered table-hover">
-  <thead class="table-dark">
-    <tr>
-      <th>伝票日付</th>
-      <th>伝票区分名</th>
-      <th>委託区分名</th>
-      <th>扱い区分名</th>
-      <th>運送会社名</th>
-      <th>担当者名</th>
-      <th>得意先コード</th>
-      <th>得意先カナ</th>
-      <th>雑コード</th>
-      <th>雑カナ</th>
-      <th>送荷先コード</th>
-      <th>送荷先カナ</th>
-      <th>製品部品コード</th>
-      <th>製品部品カナ</th>
-      <th>級区分</th>
-      <th>数量</th>
-      <th>単価</th>
-      <th>金額</th>
-      <th>出荷伝票番号</th>
-      <th>備考</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for list in df_lists %}
-    <tr>
-      {% for d in list %}
-      <td>{{ d }}</td>
+<div id="main-table">
+  <table class="talbe table-striped table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>伝票日付</th>
+        <th>伝区</th>
+        <th>委託</th>
+        <th>扱い</th>
+        <th>運送会社</th>
+        <th>担当者</th>
+        <th>得意先CD</th>
+        <th>得意先名</th>
+        <th>雑CD</th>
+        <th>雑名</th>
+        <th>送荷先CD</th>
+        <th>送荷先名</th>
+        <th>製品部品CD</th>
+        <th>製品部品名</th>
+        <th>級区分</th>
+        <th>数量</th>
+        <th>単価</th>
+        <th>金額</th>
+        <th>出荷伝票番号</th>
+        <th>備考</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for list in df_lists %}
+      <tr>
+        {% for d in list %}
+        <td>{{ d }}</td>
+        {% endfor %}
+      </tr>
       {% endfor %}
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div><!-- #main-table -->
+{% endif %}
 
 {% endblock %}
 

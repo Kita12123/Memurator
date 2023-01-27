@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 
 from apps import controller
 from apps.crud.forms import ReadForm
+from apps.search import controller as search_controller
 from apps.search.forms import SalesForm
 
 search = Blueprint(
@@ -26,17 +27,19 @@ def sales():
     if form.validate_on_submit():
         tablename = form.tablename.data
         where = form.create_where()
-        df = controller.create_df(tablename, where)
-        df_lists = df.values.tolist()
+        df, messages = search_controller.create_df_sales(tablename, where)
+        df_dsp = df[
+            list(search_controller.SALES_COLUMNS_DIC.keys())
+        ].rename(search_controller.SALES_COLUMNS_DIC)
         return render_template(
             "search/sales.html",
             tablename=tablename,
             form=form,
-            df_lists=df_lists
+            df_lists=df_dsp.values.tolist(),
+            messages=messages
         )
     return render_template(
         "search/sales.html",
-        tablename="フォーム",
         form=form,
         df_lists=df_lists
     )
@@ -49,7 +52,7 @@ def factory():
     if form.validate_on_submit():
         tablename = form.tablename.data
         where = form.create_where()
-        df = controller.create_df(tablename, where).to_html()
+        df = search_controller.create_df(tablename, where).to_html()
         read_form = ReadForm(
             tablename=tablename,
             where=where

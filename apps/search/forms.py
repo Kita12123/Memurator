@@ -42,18 +42,29 @@ class SalesForm(FlaskForm):
         "製品部品フィルター",
         choices=["", "製品のみ", "部品のみ"]
     )
+    shipping_category = StringField(
+        "伝票区分"
+    )
     shipping_slip_number = StringField(
         "出荷伝票番号"
     )
 
-    submit = SubmitField("決定")
+    submit_ok = SubmitField(
+        "決定",
+        name="ok"
+    )
+
+    submit_download = SubmitField(
+        "ダウンロード",
+        name="download"
+    )
 
     def create_where(self) -> str:
         wheres = []
 
         first_date = int(self.first_date.data.strftime(r"%Y%m%d"))
         last_date = int(self.last_date.data.strftime(r"%Y%m%d"))
-        wheres.append(f"{first_date}<=伝票日付<={last_date}")
+        wheres.append(f"{first_date}<=伝票日付 AND 伝票日付<={last_date}")
 
         if not self.customer_code:
             pass
@@ -62,7 +73,8 @@ class SalesForm(FlaskForm):
             first_customer_code = self.customer_code.data + ("0"*i)
             last_customer_code = self.customer_code.data + ("9"*i)
             wheres.append(
-                f"{first_customer_code}<=得意先コード<={last_customer_code}"
+                f"""{first_customer_code}<=得意先コード
+                    AND 得意先コード<={last_customer_code}"""
             )
         else:
             wheres.append(f"得意先コード={self.customer_code.data}")
@@ -89,5 +101,11 @@ class SalesForm(FlaskForm):
             wheres.append(f"製品部品コード<{10*8}")
         elif self.goods_sales_flg.data == "部品のみ":
             wheres.append(f"製品部品コード>={10*8}")
+
+        if self.shipping_category.data:
+            wheres.append(f"伝票区分={self.shipping_category.data}")
+
+        if self.shipping_slip_number.data:
+            wheres.append(f"出荷伝票番号={self.shipping_category.data}")
 
         return " AND ".join(wheres)
