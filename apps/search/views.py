@@ -1,9 +1,8 @@
-from flask import Blueprint, render_template
-
 from apps import controller
 from apps.crud.forms import ReadForm
 from apps.search import controller as search_controller
 from apps.search.forms import SalesForm
+from flask import Blueprint, render_template
 
 search = Blueprint(
     "search",

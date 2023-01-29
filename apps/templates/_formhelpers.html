@@ -2,8 +2,9 @@
 <div class="col form-group">
   <dt>
     {{ field.label }}
+    <!-- マスタ検索 -->
     {% if master %}
-    <a href="{{ url_for('search.master', tablename=master ) }}">
+    <a href="{{ url_for('search.master', tablename=master) }}">
       <img width="21px" src="{{ url_for('search.static', filename='icon/search.svg') }}" />
       検索
     </a>

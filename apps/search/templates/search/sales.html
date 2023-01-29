@@ -29,14 +29,15 @@
         {{ render_field(form.tablename) }}
         {{ render_field(form.first_date) }}
         {{ render_field(form.last_date) }}
-        {{ render_field(form.customer_code, master="得意先コードマスタ") }}
-        {{ render_field(form.buyer_code, master="送荷先コードマスタ") }}
-        {{ render_field(form.destination_code, master="送荷先コードマスタ") }}
-        {{ render_field(form.goods_sales_code, master="品目コードマスタ（営業）") }}
-        {{ render_field(form.goods_sales_flg) }}
         {{ render_field(form.shipping_category, master="伝票区分マスタ") }}
+        {{ render_field(form.customer, master="得意先コードマスタ") }}
+        {{ render_field(form.buyer, master="送荷先コードマスタ") }}
+        {{ render_field(form.destination, master="送荷先コードマスタ") }}
+        {{ render_field(form.goods_sales, master="品目コードマスタ（営業）") }}
+        {{ render_field(form.goods_sales_filter) }}
+        {{ render_field(form.shipping_category_filter) }}
         {{ render_field(form.shipping_slip_number) }}
-    </dl>
+      </dl>
     <div class="row justify-content-around">
       {{ form.submit_ok(class_="col-1 btn btn-primary") }}
       {{ form.submit_download(class_="col-1 btn btn-primary") }}

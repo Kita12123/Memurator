@@ -52,7 +52,6 @@ SELECT
     goods_sales_code AS 製品部品コード,
     goods_sales_kana AS 製品部品カナ,
     goods_sales_grade AS 級区分,
-    品目コードマスタ（営業）
     CASE shipping_category
         /* 返品,値引き*/
         WHEN 30 OR 90 THEN quantity*-1
