@@ -8,7 +8,7 @@ from wtforms.validators import ValidationError
 kana = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾜｦﾝｧｨｩｪｫｯｬｭｮ"
 abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 num = "0123456789"
-flg = ", "
+flg = r",.!#$%&'()=~|¥_?/><\[]{} "
 
 
 def init_value(value: str, /) -> list[str]:
