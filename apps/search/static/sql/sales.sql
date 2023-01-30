@@ -16,9 +16,9 @@ SELECT
     ifnull(得意先担当者コードマスタ.name, '') AS 担当者名,
     customer_code AS 得意先コード,
     customer_kana AS 得意先カナ,
-    得意先コードマスタ.name AS 得意先名,
-    得意先コードマスタ.address AS 得意先住所,
-    得意先コードマスタ.phone_number AS 得意先電話番号,
+    ifnull(得意先コードマスタ.name, '') AS 得意先名,
+    ifnull(得意先コードマスタ.address, '') AS 得意先住所,
+    ifnull(得意先コードマスタ.phone_number, '') AS 得意先電話番号,
     CASE
         WHEN ( customer_code>=500000 AND customer_code< 600000 )
         OR   ( customer_code>=333800 AND customer_code<=333899 ) THEN buyer_code
@@ -46,9 +46,9 @@ SELECT
     END AS 雑電話番号,
     destination_code AS 送荷先コード,
     destination_kana AS 送荷先カナ,
-    送荷先コードマスタ.name AS 送荷先名,
-    送荷先コードマスタ.address AS 送荷先住所,
-    送荷先コードマスタ.phone_number AS 送荷先電話番号,
+    ifnull(送荷先コードマスタ.name, '') AS 送荷先名,
+    ifnull(送荷先コードマスタ.address, '') AS 送荷先住所,
+    ifnull(送荷先コードマスタ.phone_number, '') AS 送荷先電話番号,
     goods_sales_code AS 製品部品コード,
     goods_sales_kana AS 製品部品カナ,
     goods_sales_grade AS 級区分,

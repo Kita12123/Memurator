@@ -1,13 +1,16 @@
 from pathlib import Path
 
 import pandas as pd
+
 from apps.app import db
+
+MAX_ROWS = 500
 
 SALES_COLUMNS_DIC = {
     "伝票日付": "伝票日付",
     "伝票区分名": "伝区",
     "委託区分名": "委託",
-    "扱い区分": "扱い",
+    "扱い区分名": "扱い",
     "運送会社名": "運送会社",
     "担当者名": "担当",
     "得意先コード": "得意先CD",
@@ -23,7 +26,7 @@ SALES_COLUMNS_DIC = {
     "単価": "単価",
     "金額": "金額",
     "出荷伝票番号": "伝票NO",
-    "備考": "備考"
+    "備考": "備考",
 }
 
 
@@ -41,12 +44,17 @@ def create_df_sales(tablename, where="true", /) -> tuple[pd.DataFrame, list]:
         where=where
     )
     df = pd.read_sql_query(sql=sql, con=db.engine)
-    messages = (
-        f"件数: {len(df)}",
+    row_count = len(df)
+    if row_count > MAX_ROWS:
+        count_message = f"件数: {row_count}(表示件数: {MAX_ROWS})"
+    else:
+        count_message = f"件数: {row_count}"
+    messages = [
+        count_message,
         f"合計数量: {df['数量'].sum():,}",
-        f"合計金額: {df['金額'].sum():,}"
+        f"合計金額: ¥{df['金額'].sum():,}"
 
-    )
+    ]
     df.loc[:, ("数量", "単価", "金額")] = (
         df[["数量", "単価", "金額"]].applymap("{:,}".format)
     )

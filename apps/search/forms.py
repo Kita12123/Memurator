@@ -6,7 +6,7 @@ from wtforms import DateField, SelectField, StringField, SubmitField
 from wtforms.validators import ValidationError
 
 kana = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾜｦﾝｧｨｩｪｫｯｬｭｮ"
-abc = "ABCDEFGHIJELMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 num = "0123456789"
 flg = ", "
 
@@ -51,7 +51,7 @@ class SalesForm(FlaskForm):
     )
     shipping_category_filter = SelectField(
         "伝票区分フィルター",
-        choices=["", "売上関係", "在庫関係"]
+        choices=["", "売上関係", "在庫関係", "委託関係"]
     )
     customer = StringField(
         "得意先ｺｰﾄﾞ,ｶﾅ,名"
@@ -117,9 +117,16 @@ class SalesForm(FlaskForm):
             wheres.append(f"( {' OR '.join(w)} )")
         # 伝票区分フィルター
         if self.shipping_category_filter.data == "売上関係":
-            wheres.append("伝票区分 in (10, 21, 30, 90)")
+            wheres.append("伝票区分 in (10, 21, 23, 30, 40, 60, 90)")
         elif self.shipping_category_filter.data == "在庫関係":
-            wheres.append("伝票区分 in (10, 20, 21, 30, 90)")
+            wheres.append(
+                """伝票区分 in (10, 12, 13, 14, 15, 16, 17, 18, 19,
+                20, 30, 40, 60, 95, 90)"""
+            )
+        elif self.shipping_category_filter.data == "委託関係":
+            wheres.append(
+                "伝票区分 in (20, 21, 22, 23, 24, 25, 26, 28, 29)"
+            )
 
         # 得意先
         w = []
@@ -196,7 +203,17 @@ class SalesForm(FlaskForm):
             wheres.append(f"製品部品コード>={10**8}")
 
         # 出荷伝票NO
-        if self.shipping_slip_number.data:
-            wheres.append(f"出荷伝票番号={self.shipping_category.data}")
+        w = []
+        for v in init_value(self.shipping_slip_number.data):
+            if not v:
+                continue
+            elif is_halfsize(v):
+                w.append(f"出荷伝票番号 LIKE'%{v}%'")
+        if w:
+            wheres.append(f"( {' OR '.join(w)} )")
 
         return " AND ".join(wheres)
+
+
+class FactoryForm(FlaskForm):
+    pass
