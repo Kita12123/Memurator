@@ -2,7 +2,7 @@ from flask import Blueprint, render_template
 
 from apps import controller
 from apps.search import controller as search_controller
-from apps.search.forms import SalesForm
+from apps.search.forms import FactoryForm, SalesForm
 
 search = Blueprint(
     "search",
@@ -45,7 +45,26 @@ def sales():
 
 @search.route("/factory", methods=["GET", "POST"])
 def factory():
-    pass
+    form = FactoryForm()
+    if form.validate_on_submit():
+        tablename = form.tablename.data
+        where = form.create_where()
+        df, messages = search_controller.create_df_factory(tablename, where)
+        df_dsp = df[
+            list(search_controller.FACTORY_COLUMNS_DIC.keys())
+        ].rename(columns=search_controller.FACTORY_COLUMNS_DIC)
+        return render_template(
+            "search/factory.html",
+            tablename=tablename,
+            form=form,
+            messages=messages,
+            table_columns=df_dsp.columns,
+            table_data=df_dsp.values.tolist(),
+        )
+    return render_template(
+        "search/factory.html",
+        form=form
+    )
 
 
 @search.route("/master/<tablename>")

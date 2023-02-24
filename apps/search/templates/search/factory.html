@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}工場フォーム{% endblock %}
+
+{% block head %}
+
+<link rel="stylesheet" href="{{ url_for('search.static', filename='css/style.css') }}" />
+
+{% endblock %}
+
+{% block content %}
+
+<h2>
+  <a class="btn" onclick="toggleID('#main-form');">
+    <img width="30px" src="{{ url_for('search.static', filename='icon/edit.svg') }}" />
+  </a>
+  フォーム
+  <a class="btn" onclick="clearClassValue('form-control');setDefaultValue();">
+    <img width="30px" src="{{ url_for('search.static', filename='icon/clear.svg') }}" />
+  </a>
+</h2>
+<div id="main-form">
+  <form action="{{ url_for('search.factory') }}" method="POST" novalidate="novalidate">
+    {{ form.csrf_token }}
+      <dl class="row
+        row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1"
+      >
+        {% from "_formhelpers.html" import render_field %}
+        {{ render_field(form.tablename) }}
+        {{ render_field(form.first_date, id="first_date") }}
+        {{ render_field(form.last_date, id="last_date") }}
+        {{ render_field(form.supplier, master="仕入先コードマスタ") }}
+        {{ render_field(form.goods_factory, master="品目コードマスタ（工場）") }}
+      </dl>
+    <div class="row justify-content-around">
+      {{ form.submit_ok(class_="col-1 btn btn-primary", onclick="showLoading();") }}
+      {{ form.submit_download(class_="col-1 btn btn-primary") }}
+    </div>
+  </form>
+</div><!-- #main-form -->
+{% if tablename %}
+<h2>
+  <a class="btn" onclick="toggleID('#main-table')">
+    <img width="30px" src="{{ url_for('search.static', filename='icon/documents.svg') }}" />
+  </a>
+  {{ tablename }}
+</h2>
+<div id="main-table">
+  {% for message in messages %}
+  {{ message }}&nbsp;&nbsp;
+  {% endfor %}
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+      <tr>
+        {% for c in table_columns %}
+        <a>
+          <th>{{ c }}</th>
+        </a>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for list in table_data %}
+      <tr>
+        {% for l in list %}
+        {% if 15 <= loop.index <= 19 %}
+        <td class="text-right">{{ l }}</td>
+        {% else %}
+        <td>{{ l }}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div><!-- #main-table -->
+{% endif %}
+
+{% endblock %}
+
+{% block script %}
+
+<script type="text/javascript" src="{{ url_for('search.static', filename='js/scripts.js') }}"></script>
+<!-- テーブルにソート機能追加 -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".table").tablesorter();
+  });
+</script>
+{% endblock %}

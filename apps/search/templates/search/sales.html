@@ -11,11 +11,11 @@
 {% block content %}
 
 <h2>
-  <a class="btn" onclick="toggleID('#main-form')">
+  <a class="btn" onclick="toggleID('#main-form');">
     <img width="30px" src="{{ url_for('search.static', filename='icon/edit.svg') }}" />
   </a>
   フォーム
-  <a class="btn" onclick="clearClassValue('form-control')">
+  <a class="btn" onclick="clearClassValue('form-control');setDefaultValue();">
     <img width="30px" src="{{ url_for('search.static', filename='icon/clear.svg') }}" />
   </a>
 </h2>
@@ -27,8 +27,8 @@
       >
         {% from "_formhelpers.html" import render_field %}
         {{ render_field(form.tablename) }}
-        {{ render_field(form.first_date) }}
-        {{ render_field(form.last_date) }}
+        {{ render_field(form.first_date, id="first_date") }}
+        {{ render_field(form.last_date, id="last_date") }}
         {{ render_field(form.goods_sales_filter) }}
         {{ render_field(form.shipping_category_filter) }}
         {{ render_field(form.shipping_category, master="伝票区分マスタ") }}

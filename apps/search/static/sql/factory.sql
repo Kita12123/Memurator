@@ -15,6 +15,7 @@ SELECT
     END AS 発注区分,
     T.goods_factory_code AS 品目コード,
     T.goods_factory_kana AS 品目カナ,
+    品目.name AS 品目名,
     品目.specification AS 品目仕様,
     品目.diagram AS 品目図番,
     T.quantity AS 数量,

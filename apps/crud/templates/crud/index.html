@@ -9,33 +9,20 @@
 <h2>データ参照</h2>
 <form action="{{ url_for('crud.read') }}" method="POST" novalidate="novalidate">
   {{ read_form.csrf_token }}
-  <p>{{ read_form.tablename.label }} {{ read_form.tablename }}</p>
-  {% for error in read_form.tablename.errors %}
-  <span style="color: red;">{{ error }}</span>
-  {% endfor %}
-  <p>{{ read_form.where.label }} {{ read_form.where }}</p>
-  {% for error in read_form.where.errors %}
-  <span style="color: red;">{{ error }}</span>
-  {% endfor %}
-  <p>{{ read_form.submit() }}</p>
+  {% from "_formhelpers.html" import render_field %}
+  {{ render_field(read_form.tablename) }}
+  {{ render_field(read_form.where) }}
+  <p>{{ read_form.submit(class_="btn btn-primary", onclick="showLoading();") }}</p>
 </form>
 
 <h2>データ同期</h2>
-<form action="{{ url_for('crud.create') }}" method="POST" novalidate="novalidate">
+<form action="{{ url_for('crud.index') }}" method="POST" novalidate="novalidate">
   {{ create_form.csrf_token }}
-  <p>{{ create_form.first_date.label }} {{ create_form.first_date }}</p>
-  {% for error in create_form.first_date.errors %}
-  <span style="color: red;">{{ error }}</span>
-  {% endfor %}
-  <p>{{ create_form.last_date.label }} {{ create_form.last_date }}</p>
-  {% for error in create_form.last_date.errors %}
-  <span style="color: red;">{{ error }}</span>
-  {% endfor %}
-  <p>{{ create_form.db_name.label }} {{ create_form.db_name }}</p>
-  {% for error in create_form.db_name.errors %}
-  <span style="color: red;">{{ error }}</span>
-  {% endfor %}
-  <p>{{ create_form.submit() }}</p>
+  {% from "_formhelpers.html" import render_field %}
+  {{ render_field(create_form.first_date) }}
+  {{ render_field(create_form.last_date) }}
+  {{ render_field(create_form.db_name) }}
+  <p>{{ create_form.submit(class_="btn btn-primary", onclick="showLoading();") }}</p>
 </form>
 
 <h2>お問い合わせ先</h2>

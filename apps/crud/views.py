@@ -1,7 +1,8 @@
 import pandas as pd
+from flask import Blueprint, render_template
+
 from apps import controller
 from apps.crud.forms import CreateForm, ReadForm
-from flask import Blueprint, render_template
 
 # Blueprintでアプリを作成する
 crud = Blueprint(
@@ -16,20 +17,10 @@ crud = Blueprint(
 def index():
     read_form = ReadForm()
     create_form = CreateForm()
-    return render_template(
-        "crud/index.html",
-        read_form=read_form,
-        create_form=create_form
-    )
-
-
-@crud.route("/create", methods=["GET", "POST"])
-def create():
-    form = CreateForm()
-    if form.validate_on_submit():
-        first_date_ = form.first_date.data.strftime(r"%Y%m%d")
-        last_date_ = form.last_date.data.strftime(r"%Y%m%d")
-        db_name = form.db_name.data
+    if create_form.validate_on_submit():
+        first_date_ = create_form.first_date.data.strftime(r"%Y%m%d")
+        last_date_ = create_form.last_date.data.strftime(r"%Y%m%d")
+        db_name = create_form.db_name.data
         first_date = int(first_date_) - 19500000
         last_date = int(last_date_) - 19500000
         if db_name == "すべて":
@@ -43,7 +34,11 @@ def create():
                 first_date=first_date,
                 last_date=last_date
             )
-    return render_template("crud/create.html", form=form)
+    return render_template(
+        "crud/index.html",
+        read_form=read_form,
+        create_form=create_form
+    )
 
 
 @crud.route("/read", methods=["GET", "POST"])

@@ -28,6 +28,18 @@ SALES_COLUMNS_DIC = {
     "出荷伝票番号": "伝票NO",
     "備考": "備考",
 }
+FACTORY_COLUMNS_DIC = {
+    "伝票日付": "伝票日付",
+    "仕入先コード": "仕入先CD",
+    "仕入先名": "仕入先名",
+    "発注区分": "発注",
+    "品目コード": "品目CD",
+    "品目カナ": "品目カナ",
+    "品目仕様": "仕様",
+    "品目図番": "図番",
+    "数量": "数量",
+    "金額": "金額"
+}
 
 
 def _real_sql(filename: str, /) -> str:
@@ -57,5 +69,28 @@ def create_df_sales(tablename, where="true", /) -> tuple[pd.DataFrame, list]:
     ]
     df.loc[:, ("数量", "単価", "金額")] = (
         df[["数量", "単価", "金額"]].applymap("{:,}".format)
+    )
+    return df, messages
+
+
+def create_df_factory(tablename, where="true", /) -> tuple[pd.DataFrame, list]:
+    sql = _real_sql("factory").format(
+        tablename=tablename,
+        where=where
+    )
+    df = pd.read_sql_query(sql=sql, con=db.engine)
+    row_count = len(df)
+    if row_count > MAX_ROWS:
+        count_message = f"件数: {row_count}(表示件数: {MAX_ROWS})"
+    else:
+        count_message = f"件数: {row_count}"
+    messages = [
+        count_message,
+        f"合計数量: {df['数量'].sum():,}",
+        f"合計金額: ¥{df['金額'].sum():,}"
+
+    ]
+    df.loc[:, ("数量", "金額")] = (
+        df[["数量", "金額"]].applymap("{:,}".format)
     )
     return df, messages

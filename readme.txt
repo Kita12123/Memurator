@@ -12,3 +12,7 @@
     pip install -r requirements.txt
     (Mac)pip uninstall pyodbc
     .venv/lib/...site-packagesにpyodbcフォルダを追加する --- pyodbcはMacで使えないため、存在するように認識させる必要がある
+
+テーブル
+    flask db migrate -m "<message>" --- migrate生成
+    flask db upgrade --- テーブル更新

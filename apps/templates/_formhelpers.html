@@ -1,4 +1,4 @@
-{% macro render_field(field, master=false) %}
+{% macro render_field(field, id=None, master=false) %}
 <div class="col form-group">
   <dt>
     {{ field.label }}
@@ -10,7 +10,7 @@
     </a>
     {% endif %}
     <dd>
-      {{ field(class_="form-control")|safe }}
+      {{ field(id=id, class_="form-control")|safe }}
       {% if field.errors %}
         <ul class=errors>
         {% for error in field.errors %}

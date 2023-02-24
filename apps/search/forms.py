@@ -5,7 +5,8 @@ from flask_wtf import FlaskForm
 from wtforms import DateField, SelectField, StringField, SubmitField
 from wtforms.validators import ValidationError
 
-kana = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾜｦﾝｧｨｩｪｫｯｬｭｮ"
+kana = "ｱｲｳｴｵｶｷｸｹｺｶﾞｷﾞｸﾞｹﾞｺﾞｻｼｽｾｿｻﾞｼﾞｽﾞｾﾞｿﾞﾀﾁﾂﾃﾄﾀﾞﾁﾞﾂﾞﾃﾞﾄﾞ" \
+    + "ﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾊﾞﾋﾞﾌﾞﾍﾞﾎﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝｧｨｩｪｫｯｬｭｮ"
 abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 num = "0123456789"
 flg = ", "
@@ -216,4 +217,71 @@ class SalesForm(FlaskForm):
 
 
 class FactoryForm(FlaskForm):
-    pass
+
+    tablename = SelectField(
+        "データ名",
+        choices=[
+            "仕入データ",
+        ]
+    )
+    first_date = DateField(
+        "開始日付",
+        default=datetime.now(),
+        validators=[]
+    )
+    last_date = DateField(
+        "終了日付",
+        default=datetime.now()
+    )
+    supplier = StringField(
+        "仕入先ｺｰﾄﾞ,ｶﾅ,名"
+    )
+    goods_factory = StringField(
+        "品目ｺｰﾄﾞ,ｶﾅ,名"
+    )
+    submit_ok = SubmitField(
+        "決定",
+        name="ok"
+    )
+    submit_download = SubmitField(
+        "ダウンロード",
+        name="download"
+    )
+
+    def create_where(self) -> str:
+        wheres = []
+
+        # 日付
+        first_date = int(self.first_date.data.strftime(r"%Y%m%d"))
+        last_date = int(self.last_date.data.strftime(r"%Y%m%d"))
+        wheres.append(f"{first_date}<=伝票日付 AND 伝票日付<={last_date}")
+
+        # 仕入先
+        w = []
+        for v in init_value(self.supplier.data):
+            if not v:
+                continue
+            elif v.isdigit():
+                w.append(f"仕入先コード={v}")
+            elif is_halfsize(v):
+                w.append(f"仕入先カナ LIKE'%{v}%'")
+            else:
+                w.append(f"仕入先名 LIKE'%{v}%'")
+        if w:
+            wheres.append(f"( {' OR '.join(w)} )")
+
+        # 品目（工場）
+        w = []
+        for v in init_value(self.goods_factory.data):
+            if not v:
+                continue
+            elif v.isdigit():
+                w.append(f"品目コード='{v}'")
+            elif is_halfsize(v):
+                w.append(f"品目カナ LIKE '%{v}%'")
+            else:
+                w.append(f"品目名 LIKE '%{v}%'")
+        if w:
+            wheres.append(f"( {' OR '.join(w)} )")
+
+        return " AND ".join(wheres)
