@@ -9,7 +9,7 @@ kana = "ｱｲｳｴｵｶｷｸｹｺｶﾞｷﾞｸﾞｹﾞｺﾞｻｼｽｾ
     + "ﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾊﾞﾋﾞﾌﾞﾍﾞﾎﾞﾊﾟﾋﾟﾌﾟﾍﾟﾎﾟﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝｧｨｩｪｫｯｬｭｮ"
 abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 num = "0123456789"
-flg = ", "
+flg = r",.!#$%&'()=~|¥_?/><\[]{} "
 
 
 def init_value(value: str, /) -> list[str]:
@@ -285,3 +285,4 @@ class FactoryForm(FlaskForm):
             wheres.append(f"( {' OR '.join(w)} )")
 
         return " AND ".join(wheres)
+
